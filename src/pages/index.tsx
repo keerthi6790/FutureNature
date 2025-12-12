@@ -98,23 +98,13 @@ export default function Home() {
               style={{
                 fontSize: "42px",
                 fontWeight: "700",
-                color: "#1f2937",
+                color: "#fbbf24",
                 margin: "0 0 12px 0",
                 letterSpacing: "0.5px",
               }}
             >
-              Honey Created In The Laps Of Nature
+              Honey Gallery
             </h2>
-            <p
-              style={{
-                fontSize: "16px",
-                color: "#9ca3af",
-                margin: 0,
-                fontStyle: "italic",
-              }}
-            >
-              (From Beehive To Bottle)
-            </p>
           </div>
 
           {/* Tile Grid Layout */}

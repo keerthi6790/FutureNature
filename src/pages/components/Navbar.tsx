@@ -3,10 +3,13 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import AuthModal from "./AuthModal";
+import { useCart } from "./CartContext";
 
 export default function Navbar() {
   const router = useRouter();
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const { getTotalItems } = useCart();
+  const cartItemCount = getTotalItems();
   
   return (
     <nav style={{
@@ -127,12 +130,14 @@ export default function Navbar() {
             fontWeight: '400',
             cursor: 'pointer',
             transition: 'all 0.2s',
-            textDecoration: 'none'
+            textDecoration: 'none',
+            position: 'relative'
           }}>
             <div style={{
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
+              position: 'relative'
             }}>
               <Image
                 src="/Assets/Svg/cart.svg"
@@ -140,6 +145,25 @@ export default function Navbar() {
                 width={42}
                 height={42}
               />
+              {cartItemCount > 0 && (
+                <span style={{
+                  position: 'absolute',
+                  top: '-8px',
+                  right: '-8px',
+                  backgroundColor: '#f59e0b',
+                  color: 'white',
+                  borderRadius: '50%',
+                  width: '24px',
+                  height: '24px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '12px',
+                  fontWeight: 'bold'
+                }}>
+                  {cartItemCount}
+                </span>
+              )}
             </div>
             Cart
           </Link>
