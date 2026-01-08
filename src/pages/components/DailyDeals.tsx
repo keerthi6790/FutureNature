@@ -1,6 +1,14 @@
 import Image from "next/image";
+import { useState } from "react";
+import { useCart } from "./CartContext";
 
 export default function DailyDeals() {
+  const { addToCart } = useCart();
+  const [quantities, setQuantities] = useState<{[key: number]: number}>({
+    1: 1,
+    2: 1,
+    3: 1
+  });
   const products = [
     {
       id: 1,
@@ -74,7 +82,7 @@ export default function DailyDeals() {
       <h2 style={{
         fontSize: '36px',
         fontWeight: '700',
-        color: '#111827',
+        color: '#fbbf24',
         textAlign: 'center',
         marginBottom: '50px',
         letterSpacing: '1px'
@@ -249,6 +257,13 @@ export default function DailyDeals() {
                   cursor: 'pointer',
                   transition: 'all 0.2s',
                   whiteSpace: 'nowrap'
+                }}
+                onClick={() => {
+                  addToCart(product.id, quantities[product.id] || 1);
+                  setQuantities(prev => ({
+                    ...prev,
+                    [product.id]: 1
+                  }));
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.backgroundColor = '#000';

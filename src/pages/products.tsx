@@ -3,26 +3,52 @@ import Image from "next/image";
 import { useState } from "react";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import ViewProduct from "./components/ViewProduct";
+import { useCart } from "./components/CartContext";
+
+interface Product {
+  id: number;
+  name: string;
+  nameTamil: string;
+  image: string;
+  rating: number;
+  weight: string;
+  price: number;
+  originalPrice: number;
+  description: string;
+  descriptionTamil: string;
+  benefits: string[];
+  benefitsTamil: string[];
+  isBestSeller?: boolean;
+  discount?: number;
+}
 
 export default function Products() {
-  const [quantities, setQuantities] = useState<{[key: number]: number}>({
-    1: 1,
-    2: 1,
-    3: 1
-  });
+  const { addToCart } = useCart();
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
-  const [cart, setCart] = useState<{[key: number]: number}>({});
-
-  const products = [
+  const products: Product[] = [
     {
       id: 1,
-      name: "Moringa Atta",
-      nameTamil: "(முருங்கை கீரை)",
+      name: "Cavity Honey",
+      nameTamil: "(அருங்குக்கு தேன்)",
       image: "/Assets/Products/3.png",
-      rating: 4.5,
-      weight: "100 gms",
-      price: 800,
-      originalPrice: 1000
+      rating: 3.5,
+      weight: "250 gms",
+      price: 1000,
+      originalPrice: 1300,
+      isBestSeller: true,
+      discount: 23,
+      description: "Cavity honey is typically harvested directly from the wild with minimal human intervention.",
+      descriptionTamil: "குகையில் நேரடியாக இயற்கைப் பாதுகாக்கப்பட்ட மனித குறைந்தபட்ச தலையிடுதலுடன் அறுவடை செய்யப்படும் தேன்.",
+      benefits: [
+        "The flavor of cavity honey is influenced by the local flora where the bees forage. As a result, it can have a richer, more complex taste compared to farmed honey, often making it a premium choice for honey enthusiasts.",
+        "This product goes beyond being just a sweetener. In fact, it supports oral hygiene through natural ingredients, making it ideal for oil pulling or even daily use. Moreover, by promoting gum health and helping prevent tooth decay, it actively contributes to maintaining a healthy mouth with its gentle yet effective properties."
+      ],
+      benefitsTamil: [
+        "குழி தேன் சுவை உள்ளாடாக்கு தளங்களுக்கு வழிநடத்தும் மலர்கள் குறித்துள்ளது. இதனால் விவசாய தேன் ஒப்பிடும்போது ஒரு பணக்கார, முடிவுசெய்யும் சுவை கொடுக்கும், வேளாண்மை நகரங்களை விட பெரும் விருப்பத்தை அளிக்கலாம்.",
+        "இந்த தயாரிப்பு இனிப்பு உடல் மட்டுமல்லாமல், உண்மையில், அது இயற்கை பொருட்கள் மூலம் வாய் சுகாதாரத்தையும் ஆதரிக்கிறது, எண்ணெய் இழுப்பிற்கு அல்லது தினமும் உபயோகத்திற்கு சிறந்தது. மேலும், ஈறுகள் நலத்தை மேம்படுத்த மற்றும் பல் அழுக்கு தடுக்கும் முயற்சிகளில், அது நிலையான வாயை பராமரிப்பதற்கு அமைதியான ஆனால் திறமையான பண்புகளால் பங்களிக்கிறது."
+      ]
     },
     {
       id: 2,
@@ -32,7 +58,17 @@ export default function Products() {
       rating: 3.3,
       weight: "100 gms",
       price: 800,
-      originalPrice: 1000
+      originalPrice: 1000,
+      description: "Fresh moringa flour packed with essential nutrients and minerals for healthy living.",
+      descriptionTamil: "ஆரோக்கியமான வாழ்விற்கு அத்தியாவசிய ஊட்டச்சத்து மற்றும் தாது உப்புகள் நிறைந்த புதிய முருங்கை மாவு.",
+      benefits: [
+        "Rich in vitamins and minerals, supports immune health and overall wellness.",
+        "Natural antioxidants help protect cells from damage."
+      ],
+      benefitsTamil: [
+        "வைட்டமின்கள் மற்றும் தாதுக்கள் நிறைந்தது, நோய் எதிர்ப்பு சக்தி மற்றும் ஒட்டுமொத்த நலத்தை ஆதரிக்கிறது.",
+        "இயற்கை ஆக்ஸிஜனேற்றிகள் செல்களை சேதத்திலிருந்து பாதுகாக்க உதவுகின்றன."
+      ]
     },
     {
       id: 3,
@@ -42,46 +78,31 @@ export default function Products() {
       rating: 3.5,
       weight: "100 gms",
       price: 800,
-      originalPrice: 1000
+      originalPrice: 1000,
+      description: "Fresh moringa flour packed with essential nutrients and minerals for healthy living.",
+      descriptionTamil: "ஆரோக்கியமான வாழ்விற்கு அத்தியாவசிய ஊட்டச்சத்து மற்றும் தாது உப்புகள் நிறைந்த புதிய முருங்கை மாவு.",
+      benefits: [
+        "Rich in vitamins and minerals, supports immune health and overall wellness.",
+        "Natural antioxidants help protect cells from damage."
+      ],
+      benefitsTamil: [
+        "வைட்டமின்கள் மற்றும் தாதுக்கள் நிறைந்தது, நோய் எதிர்ப்பு சக்தி மற்றும் ஒட்டுமொத்த நலத்தை ஆதரிக்கிறது.",
+        "இயற்கை ஆக்ஸிஜனேற்றிகள் செல்களை சேதத்திலிருந்து பாதுகாக்க உதவுகின்றன."
+      ]
     }
   ];
 
   const handleQuantityChange = (productId: number, change: number) => {
-    setQuantities(prev => {
-      const newQuantity = Math.max(0, (prev[productId] || 1) + change);
-      
-      // If quantity reaches 0, remove from cart
-      if (newQuantity === 0) {
-        setCart(prevCart => {
-          const newCart = { ...prevCart };
-          delete newCart[productId];
-          return newCart;
-        });
-      }
-      
-      return {
-        ...prev,
-        [productId]: newQuantity === 0 ? 1 : newQuantity
-      };
-    });
+    // Removed - no longer needed
   };
 
   const handleAddToCart = (productId: number) => {
-    const quantity = quantities[productId] || 1;
-    setCart(prev => ({
-      ...prev,
-      [productId]: (prev[productId] || 0) + quantity
-    }));
-    
-    // Reset quantity to 1 after adding
-    setQuantities(prev => ({
-      ...prev,
-      [productId]: 1
-    }));
+    addToCart(productId, 1);
   };
 
   const isInCart = (productId: number) => {
-    return cart[productId] && cart[productId] > 0;
+    // Removed - no longer needed
+    return false;
   };
 
   const renderStars = (rating: number) => {
@@ -113,12 +134,19 @@ export default function Products() {
 
   return (
     <>
-      <Head>
-        <title>Products - FutureNature</title>
-        <meta name="description" content="Browse our natural honey products" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+      {selectedProduct ? (
+        <ViewProduct 
+          product={selectedProduct} 
+          onClose={() => setSelectedProduct(null)} 
+        />
+      ) : (
+        <>
+          <Head>
+            <title>Products - FutureNature</title>
+            <meta name="description" content="Browse our natural honey products" />
+            <meta name="viewport" content="width=device-width, initial-scale=1" />
+            <link rel="icon" href="/favicon.ico" />
+          </Head>
 
       <div style={{ minHeight: '100vh', backgroundColor: '#f9fafb' }}>
         <Navbar />
@@ -202,8 +230,10 @@ export default function Products() {
                   borderRadius: '16px',
                   overflow: 'hidden',
                   boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)',
-                  transition: 'all 0.3s'
+                  transition: 'all 0.3s',
+                  cursor: 'pointer'
                 }}
+                onClick={() => setSelectedProduct(product)}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.transform = 'translateY(-8px)';
                   e.currentTarget.style.boxShadow = '0 12px 24px rgba(0, 0, 0, 0.12)';
@@ -308,100 +338,33 @@ export default function Products() {
                     </div>
                   </div>
 
-                  {/* Quantity Selector or Add to Cart */}
-                  {isInCart(product.id) ? (
-                    <div style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      gap: '0',
-                      border: '1px solid #e5e7eb',
+                  {/* Add to Cart Button */}
+                  <button 
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleAddToCart(product.id);
+                    }}
+                    style={{
+                      width: '100%',
+                      backgroundColor: '#f59e0b',
+                      color: 'white',
+                      border: 'none',
                       borderRadius: '8px',
-                      overflow: 'hidden'
-                    }}>
-                      <button
-                        onClick={() => handleQuantityChange(product.id, -1)}
-                        style={{
-                          backgroundColor: 'white',
-                          border: 'none',
-                          padding: '12px 20px',
-                          fontSize: '18px',
-                          fontWeight: '600',
-                          color: '#374151',
-                          cursor: 'pointer',
-                          transition: 'background-color 0.2s',
-                          flex: 1
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.backgroundColor = '#f3f4f6';
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.backgroundColor = 'white';
-                        }}
-                      >
-                        -
-                      </button>
-                      <div style={{
-                        padding: '12px 24px',
-                        fontSize: '16px',
-                        fontWeight: '600',
-                        color: '#111827',
-                        backgroundColor: '#f9fafb',
-                        borderLeft: '1px solid #e5e7eb',
-                        borderRight: '1px solid #e5e7eb',
-                        minWidth: '60px',
-                        textAlign: 'center'
-                      }}>
-                        {quantities[product.id]}
-                      </div>
-                      <button
-                        onClick={() => handleQuantityChange(product.id, 1)}
-                        style={{
-                          backgroundColor: 'white',
-                          border: 'none',
-                          padding: '12px 20px',
-                          fontSize: '18px',
-                          fontWeight: '600',
-                          color: '#374151',
-                          cursor: 'pointer',
-                          transition: 'background-color 0.2s',
-                          flex: 1
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.backgroundColor = '#f3f4f6';
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.backgroundColor = 'white';
-                        }}
-                      >
-                        +
-                      </button>
-                    </div>
-                  ) : (
-                    <button 
-                      onClick={() => handleAddToCart(product.id)}
-                      style={{
-                        width: '100%',
-                        backgroundColor: '#f59e0b',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '8px',
-                        padding: '14px 24px',
-                        fontSize: '16px',
-                        fontWeight: '600',
-                        cursor: 'pointer',
-                        transition: 'all 0.2s'
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = '#000';
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = '#f59e0b';
-                      }}
-                    >
-                      Add to Cart
-                    </button>
-                  )}
+                      padding: '14px 24px',
+                      fontSize: '16px',
+                      fontWeight: '600',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = '#000';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = '#f59e0b';
+                    }}
+                  >
+                    Add to Cart
+                  </button>
                 </div>
               </div>
             ))}
@@ -409,6 +372,8 @@ export default function Products() {
         </div>
       </div>
       <Footer />
+        </>
+      )}
     </>
   );
 }

@@ -52,7 +52,7 @@ export default function HoneyProcess() {
           style={{
             fontSize: "48px",
             fontWeight: "700",
-            color: "#1f2937",
+            color: "#fbbf24",
             margin: "0 0 16px 0",
             letterSpacing: "0.5px",
           }}
