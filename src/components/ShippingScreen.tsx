@@ -5,6 +5,7 @@ import { addressApi, AddressData } from "../api/addressApi";
 import AddressList from "./AddressList";
 import AddressForm from "./AddressForm";
 import axios from "axios";
+import { useRouter } from "next/router";
 import { useCart } from "./CartContext";
 
 // Extend the Window interface to include Razorpay
@@ -44,6 +45,7 @@ const ShippingScreen: React.FC<ShippingScreenProps> = ({
   const [selectedAddress, setSelectedAddress] = useState<
     AddressData | undefined
   >(undefined);
+  const router = useRouter();
   const { cartId, clearCart } = useCart();
 
   useEffect(() => {
@@ -165,12 +167,13 @@ const ShippingScreen: React.FC<ShippingScreenProps> = ({
       }
 
       // Create Order
-      const orderUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/payment/create-order`;
+      const orderUrl = `${process.env.NEXT_PUBLIC_API_URL}/payment/create-order`;
       const { data: orderData } = await axios.post(
         orderUrl,
         {
           cartId: cartId,
           currency: "INR",
+          addressId: selectedAddress.id, // Pass selected address ID
         },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -183,16 +186,17 @@ const ShippingScreen: React.FC<ShippingScreenProps> = ({
         return;
       }
 
-      const { amount, id: order_id, currency } = orderData.data;
+      const { amount, id: razorpay_order_id, currency } = orderData.data;
+      const internalOrderId = orderData.orderId; // Our internal DB order ID
 
       const options = {
-        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID, // Enter the Key ID generated from the Dashboard
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
         amount: amount.toString(),
         currency: currency,
         name: "FutureNature",
-        description: "Test Transaction",
+        description: "Pure Honey & Nature's Best",
         image: "/Assets/futurenature-logo.png",
-        order_id: order_id,
+        order_id: razorpay_order_id,
         handler: async function (response: {
           razorpay_payment_id: string;
           razorpay_order_id: string;
@@ -206,15 +210,16 @@ const ShippingScreen: React.FC<ShippingScreenProps> = ({
 
           // Verify Payment
           try {
-            const verifyUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/payment/verify-payment`;
+            const verifyUrl = `${process.env.NEXT_PUBLIC_API_URL}/payment/verify-payment`;
             const verifyRes = await axios.post(verifyUrl, data, {
               headers: { Authorization: `Bearer ${token}` },
             });
 
             if (verifyRes.data.status) {
               toast.success("Payment Successful!");
-              clearCart(); // Clear cart after successful payment
-              if (onContinue) onContinue();
+              clearCart();
+              // Redirect to confirmation page with orderId
+              router.push(`/order/confirmation?orderId=${internalOrderId}`);
             } else {
               toast.error("Payment verification failed");
             }

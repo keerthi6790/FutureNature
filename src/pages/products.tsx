@@ -18,7 +18,6 @@ interface Product {
     nameTamil: string;
     image: string;
     rating: number;
-    weight: string;
     price: number;
     originalPrice: number;
     description: string;
@@ -28,7 +27,7 @@ interface Product {
     isBestSeller?: boolean;
     discount?: number;
     reviewCount?: number;
-    variantId: string;
+    availableQuantity: number;
 }
 
 interface BackendProduct {
@@ -38,15 +37,12 @@ interface BackendProduct {
     imageUrl: string[];
     overall_rating?: number;
     review_count?: number;
-    variants: {
-        id: string;
-        attribute_name: string;
-    }[];
     selling_price: string;
     price: string;
     description: string;
     description_tamil: string;
     discounted_amount: string;
+    available_quantity: number;
 }
 
 export default function Products({ products = [] }: { products: Product[] }) {
@@ -54,7 +50,7 @@ export default function Products({ products = [] }: { products: Product[] }) {
     const [quantities, setQuantities] = useState<{ [key: string]: number }>({});
     const [wishlistIds, setWishlistIds] = useState<string[]>([]);
     const [pendingWishlistId, setPendingWishlistId] = useState<string | null>(null);
-
+    console.log({ products })
     // --- Wishlist Logic ---
     useEffect(() => {
         const fetchWishlist = async () => {
@@ -112,26 +108,25 @@ export default function Products({ products = [] }: { products: Product[] }) {
     }, [pendingWishlistId, handleToggleWishlist]);
 
     // --- Cart Logic ---
-    const handleQuantityChange = (productId: string, variantId: string, change: number) => {
-        const currentQty = quantities[variantId] || 1;
+    const handleQuantityChange = (productId: string, change: number) => {
+        const currentQty = quantities[productId] || 1;
         const newQty = currentQty + change;
 
         if (newQty === 0) {
-            setQuantities(prev => ({ ...prev, [variantId]: 1 }));
-            updateQuantity(productId, variantId, 0);
+            setQuantities(prev => ({ ...prev, [productId]: 1 }));
+            updateQuantity(productId, 0);
         } else {
-            setQuantities(prev => ({ ...prev, [variantId]: newQty }));
-            updateQuantity(productId, variantId, newQty);
+            setQuantities(prev => ({ ...prev, [productId]: newQty }));
+            updateQuantity(productId, newQty);
         }
     };
 
     const handleAddToCart = (product: Product) => {
-        setQuantities(prev => ({ ...prev, [product.variantId]: 1 }));
-        addToCart(product.id, product.variantId, 1, {
+        setQuantities(prev => ({ ...prev, [product.id]: 1 }));
+        addToCart(product.id, 1, {
             name: product.name,
             price: product.price,
             image: product.image,
-            weight: product.weight
         });
         toast.success("Added to cart");
     };
@@ -196,13 +191,32 @@ export default function Products({ products = [] }: { products: Product[] }) {
                                         </button>
 
                                         {/* Discount Tag */}
-                                        {product.discount && product.discount > 0 && (
+                                        {product.discount && product.discount > 0 && product.availableQuantity > 0 && (
                                             <div className={styles.discountTag}>
                                                 -{Math.round(product.discount)}%
                                             </div>
                                         )}
-                                    </div>
 
+                                        {/* Out of Stock Badge */}
+                                        {product.availableQuantity <= 0 && (
+                                            <div style={{
+                                                position: 'absolute',
+                                                top: '50%',
+                                                left: '50%',
+                                                transform: 'translate(-50%, -50%)',
+                                                backgroundColor: 'rgba(0,0,0,0.7)',
+                                                color: 'white',
+                                                padding: '8px 16px',
+                                                borderRadius: '4px',
+                                                fontWeight: 'bold',
+                                                zIndex: 2,
+                                                textTransform: 'uppercase',
+                                                letterSpacing: '1px'
+                                            }}>
+                                                Out of Stock
+                                            </div>
+                                        )}
+                                    </div>
                                     {/* Content Area */}
                                     <div className={styles.cardContent}>
                                         <div className={styles.contentTop}>
@@ -215,7 +229,6 @@ export default function Products({ products = [] }: { products: Product[] }) {
                                                 <Rating initialValue={product.rating} readonly size={14} allowFraction fillColor="#d97706" />
                                                 <span className={styles.ratingNum}>({product.reviewCount || 0})</span>
                                             </div>
-                                            <span className={styles.weightBadge}>{product.weight}</span>
                                         </div>
 
                                         <div className={styles.cardFooter}>
@@ -227,7 +240,15 @@ export default function Products({ products = [] }: { products: Product[] }) {
                                             </div>
 
                                             {/* Cart Actions */}
-                                            {!cart.find(item => item.variantId === product.variantId) ? (
+                                            {product.availableQuantity <= 0 ? (
+                                                <button
+                                                    disabled
+                                                    className={styles.btnPrimary}
+                                                    style={{ backgroundColor: '#9ca3af', cursor: 'not-allowed' }}
+                                                >
+                                                    Sold Out
+                                                </button>
+                                            ) : !cart.find(item => item.id === product.id) ? (
                                                 <button
                                                     onClick={(e) => {
                                                         e.preventDefault();
@@ -250,18 +271,18 @@ export default function Products({ products = [] }: { products: Product[] }) {
                                                         onClick={(e) => {
                                                             e.preventDefault();
                                                             e.stopPropagation();
-                                                            handleQuantityChange(product.id, product.variantId, -1);
+                                                            handleQuantityChange(product.id, -1);
                                                         }}
                                                         className={styles.qtyBtn}
                                                     >−</button>
                                                     <span className={styles.qtyVal}>
-                                                        {cart.find(item => item.variantId === product.variantId)?.quantity || 1}
+                                                        {cart.find(item => item.id === product.id)?.quantity || 1}
                                                     </span>
                                                     <button
                                                         onClick={(e) => {
                                                             e.preventDefault();
                                                             e.stopPropagation();
-                                                            handleQuantityChange(product.id, product.variantId, 1);
+                                                            handleQuantityChange(product.id, 1);
                                                         }}
                                                         className={styles.qtyBtn}
                                                     >+</button>
@@ -285,6 +306,7 @@ export const getServerSideProps = async () => {
     try {
         const response = await productApi.getAllProducts();
         const data = response.data;
+        console.log({ response })
         let products: Product[] = [];
 
         if (data && data.status && Array.isArray(data.data)) {
@@ -292,6 +314,7 @@ export const getServerSideProps = async () => {
                 const parsed = parseFloat(val);
                 return isNaN(parsed) ? 0 : parsed;
             };
+            console.log({ data })
 
             products = data.data.map((item: BackendProduct) => ({
                 id: item.id?.toString() || "",
@@ -302,12 +325,6 @@ export const getServerSideProps = async () => {
                     : "/Assets/Products/15.png",
                 rating: item.overall_rating || 0,
                 reviewCount: item.review_count || 0,
-                weight: Array.isArray(item.variants) && item.variants.length > 0
-                    ? item.variants[0].attribute_name
-                    : "Standard",
-                variantId: Array.isArray(item.variants) && item.variants.length > 0
-                    ? item.variants[0].id
-                    : `fallback-${item.id}`,
                 price: safeParseFloat(item.selling_price),
                 originalPrice: safeParseFloat(item.price),
                 description: item.description || "",
@@ -315,7 +332,8 @@ export const getServerSideProps = async () => {
                 benefits: [],
                 benefitsTamil: [],
                 discount: safeParseFloat(item.discounted_amount),
-                isBestSeller: false
+                isBestSeller: false,
+                availableQuantity: item.available_quantity || 0
             }));
         }
         return { props: { products } };

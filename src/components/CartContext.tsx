@@ -6,21 +6,19 @@ import { useAuth } from './AuthContext';
 
 export interface CartItem {
     id: string; // Product ID
-    variantId: string; // Attribute ID
     quantity: number;
     name?: string;
     price?: number;
     image?: string;
-    weight?: string;
     cartItemId?: string; // Backend CartItem ID
 }
 
 interface CartContextType {
     cart: CartItem[];
     cartId: string | null;
-    addToCart: (productId: string, variantId: string, quantity: number, productDetails?: Partial<CartItem>) => Promise<void>;
-    removeFromCart: (productId: string, variantId: string, cartItemId?: string) => Promise<void>;
-    updateQuantity: (productId: string, variantId: string, quantity: number) => Promise<void>;
+    addToCart: (productId: string, quantity: number, productDetails?: Partial<CartItem>) => Promise<void>;
+    removeFromCart: (productId: string, cartItemId?: string) => Promise<void>;
+    updateQuantity: (productId: string, quantity: number) => Promise<void>;
     clearCart: () => void;
     getTotalItems: () => number;
 }
@@ -34,27 +32,21 @@ export interface BackendCartItem {
     discounted_price: string;
     mrp_price: string;
     cartId: string;
-    productId: string; // This is the AttributeProduct ID
+    productId: string;
     product: {
         id: string;
-        attribute_name: string;
+        product_name: string;
+        imageUrl: string[];
         selling_price: string;
-        Product: {
-            id: string;
-            product_name: string;
-            imageUrl: string[];
-        };
     };
 }
 
 const mapBackendItemToCartItem = (item: BackendCartItem): CartItem => ({
-    id: item.product.Product.id,
-    variantId: item.productId,
+    id: item.productId,
     quantity: parseInt(item.selected_quantity),
-    name: `${item.product.Product.product_name} - ${item.product.attribute_name}`,
+    name: item.product.product_name,
     price: parseFloat(item.product.selling_price),
-    image: item.product.Product.imageUrl[0] || "",
-    weight: item.product.attribute_name,
+    image: item.product.imageUrl[0] || "",
     cartItemId: item.id
 });
 
@@ -71,11 +63,17 @@ export function CartProvider({ children }: { children: ReactNode }) {
             if (token) {
                 try {
                     const response = await cartApi.getCart();
-                    if (response.data.status && response.data.data) {
+                    if (response.data.status) {
                         const backendCart = response.data.data;
-                        setCartId(backendCart.id);
-                        const mappedItems: CartItem[] = backendCart.cart_item.map(mapBackendItemToCartItem);
-                        setCart(mappedItems);
+                        const newCartId = response.data.cartId || (backendCart ? backendCart.id : null);
+                        setCartId(newCartId === "0" ? null : newCartId);
+
+                        if (backendCart) {
+                            const mappedItems: CartItem[] = backendCart.cart_item.map(mapBackendItemToCartItem);
+                            setCart(mappedItems);
+                        } else {
+                            setCart([]);
+                        }
                     }
                 } catch (error) {
                     console.error("Error fetching backend cart:", error);
@@ -88,26 +86,32 @@ export function CartProvider({ children }: { children: ReactNode }) {
         fetchBackendCart();
     }, []);
 
-    const addToCart = async (productId: string, variantId: string, quantity: number, productDetails?: Partial<CartItem>) => {
+    const addToCart = async (productId: string, quantity: number, productDetails?: Partial<CartItem>) => {
         const token = Cookies.get('token');
 
         if (token) {
             try {
                 const response = await cartApi.addToCart({
                     productId,
-                    attributeId: variantId,
                     cartId: cartId || undefined
                 });
 
                 if (response.data.status) {
-                    const newCartData = response.data.data;
-                    setCartId(newCartData.id);
+                    const newCartId = response.data.cartId || (response.data.data ? response.data.data.id : cartId);
+                    setCartId(newCartId === "0" ? null : newCartId);
 
                     const allCartResponse = await cartApi.getCart();
-                    if (allCartResponse.data.status && allCartResponse.data.data) {
+                    if (allCartResponse.data.status) {
                         const backendCart = allCartResponse.data.data;
-                        const mappedItems: CartItem[] = backendCart.cart_item.map(mapBackendItemToCartItem);
-                        setCart(mappedItems);
+                        const syncCartId = allCartResponse.data.cartId || (backendCart ? backendCart.id : null);
+                        setCartId(syncCartId === "0" ? null : syncCartId);
+
+                        if (backendCart) {
+                            const mappedItems: CartItem[] = backendCart.cart_item.map(mapBackendItemToCartItem);
+                            setCart(mappedItems);
+                        } else {
+                            setCart([]);
+                        }
                     }
                     toast.success("Added to cart");
                 }
@@ -119,24 +123,26 @@ export function CartProvider({ children }: { children: ReactNode }) {
             // Not logged in, open login modal with callback
             openLoginModal(() => {
                 // This callback runs after successful login
-                addToCart(productId, variantId, quantity, productDetails);
+                addToCart(productId, quantity, productDetails);
             });
         }
     };
 
-    const removeFromCart = async (productId: string, variantId: string, cartItemId?: string) => {
+    const removeFromCart = async (productId: string, cartItemId?: string) => {
         const token = Cookies.get('token');
 
         if (token && cartId) {
             try {
                 const response = await cartApi.deleteCartItem({
-                    cartItemId: cartItemId || variantId, // Fallback to variantId if cartItemId not provided
-                    attributeId: variantId,
+                    cartItemId: cartItemId || productId, // Fallback to productId if cartItemId not provided
                     cartId: cartId
                 });
 
                 if (response.data.status) {
-                    setCart((prevCart) => prevCart.filter((item) => item.variantId !== variantId));
+                    const newCartId = response.data.cartId;
+                    setCartId(newCartId === "0" ? null : newCartId);
+
+                    setCart((prevCart) => prevCart.filter((item) => item.id !== productId));
                     toast.success("Removed from cart");
                 }
             } catch (error) {
@@ -146,39 +152,42 @@ export function CartProvider({ children }: { children: ReactNode }) {
         }
     };
 
-    const updateQuantity = async (productId: string, variantId: string, quantity: number) => {
+    const updateQuantity = async (productId: string, quantity: number) => {
         const token = Cookies.get('token');
 
-        if (token) {
+        if (token && cartId) {
             if (quantity <= 0) {
-                const item = cart.find(i => i.variantId === variantId);
-                await removeFromCart(productId, variantId, item?.cartItemId);
+                const item = cart.find(i => i.id === productId);
+                await removeFromCart(productId, item?.cartItemId);
                 return;
             }
 
-            const currentItem = cart.find(i => i.variantId === variantId);
-            if (currentItem && quantity > currentItem.quantity) {
-                await addToCart(productId, variantId, quantity - currentItem.quantity);
-            } else if (currentItem && quantity < currentItem.quantity) {
-                // Backend limitation: no easy way to decrease quantity via add API if it increments.
-                // Assuming we can't easily decrease without a specific API or removing and re-adding.
-                // For now, let's assume we can only increment or remove. 
-                // Or if the backend supports setting quantity directly, we should use that.
-                // Based on previous code, it seems we only had addToCart which increments.
-                // Let's keep the logic consistent with previous implementation but only for authenticated users.
+            try {
+                const item = cart.find(i => i.id === productId);
+                const response = await cartApi.updateQuantity({
+                    cartId,
+                    cartItemId: item?.cartItemId || productId, // Fallback to productId
+                    quantity
+                });
 
-                // If we can't decrease, we might need to remove and add back? 
-                // Or maybe the backend handles negative quantity in add? Unlikely.
-                // For now, we'll just update local state to reflect UI, but this might be out of sync.
-                // Ideally we need a updateCartItem API.
-
-                // Reverting to previous behavior: update local state
-                setCart((prevCart) =>
-                    prevCart.map((item) =>
-                        item.variantId === variantId ? { ...item, quantity } : item
-                    )
-                );
+                if (response.data.status) {
+                    const backendCart = response.data.data;
+                    if (backendCart) {
+                        const mappedItems: CartItem[] = backendCart.cart_item.map(mapBackendItemToCartItem);
+                        setCart(mappedItems);
+                    }
+                }
+            } catch (error) {
+                console.error("Error updating quantity:", error);
+                toast.error("Failed to update quantity");
             }
+        } else {
+            // Local state update for guests (if applicable) or if cartId missing
+            setCart((prevCart) =>
+                prevCart.map((item) =>
+                    item.id === productId ? { ...item, quantity } : item
+                )
+            );
         }
     };
 

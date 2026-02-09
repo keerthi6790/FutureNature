@@ -6,6 +6,7 @@ import { useCart } from "./CartContext";
 import Cookies from "js-cookie";
 import { useAuth } from "./AuthContext";
 import AdminPanel from "./AdminPanel";
+import { isAdminUser } from "@/utils/authUtils";
 
 export default function Navbar() {
   const router = useRouter();
@@ -15,6 +16,7 @@ export default function Navbar() {
   const { getTotalItems } = useCart();
   const cartItemCount = getTotalItems();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const profileMenuRef = useRef<HTMLDivElement>(null);
 
@@ -22,6 +24,7 @@ export default function Navbar() {
     const checkLoginStatus = () => {
       const token = Cookies.get("token");
       setIsLoggedIn(!!token);
+      setIsAdmin(isAdminUser(token));
     };
 
     // Check initially
@@ -290,40 +293,42 @@ export default function Navbar() {
             gap: "20px",
           }}
         >
-          <button
-            onClick={() => setIsAdminPanelOpen(true)}
-            className="navbar-admin-button"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "12px",
-              backgroundColor: "transparent",
-              color: "#000",
-              border: "none",
-              padding: "0",
-              fontSize: "18px",
-              fontWeight: "400",
-              cursor: "pointer",
-              transition: "all 0.2s",
-              textDecoration: "none",
-            }}
-          >
-            <div
+          {isAdmin && (
+            <button
+              onClick={() => setIsAdminPanelOpen(true)}
+              className="navbar-admin-button"
               style={{
                 display: "flex",
                 alignItems: "center",
-                justifyContent: "center",
+                gap: "12px",
+                backgroundColor: "transparent",
+                color: "#000",
+                border: "none",
+                padding: "0",
+                fontSize: "18px",
+                fontWeight: "400",
+                cursor: "pointer",
+                transition: "all 0.2s",
+                textDecoration: "none",
               }}
             >
-              <Image
-                src="/Assets/Svg/profile.svg"
-                alt="Admin"
-                width={42}
-                height={42}
-              />
-            </div>
-            <span className="navbar-admin-text">Admins</span>
-          </button>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Image
+                  src="/Assets/Svg/profile.svg"
+                  alt="Admin"
+                  width={42}
+                  height={42}
+                />
+              </div>
+              <span className="navbar-admin-text">Admins</span>
+            </button>
+          )}
           <Link
             href="/cart"
             className="navbar-cart-link"

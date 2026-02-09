@@ -3,9 +3,11 @@ import { useRouter } from "next/router";
 import Image from "next/image";
 import toast, { Toaster } from "react-hot-toast";
 import { productApi } from "@/api/productApi";
+import apiClient from "@/api/apiClient";
 import { isAdminUser } from "@/utils/authUtils";
 import Cookies from "js-cookie";
 import styles from "@/styles/ManageProducts.module.scss";
+import AdminGuard from "@/components/AdminGuard";
 
 interface Product {
     id: string;
@@ -13,27 +15,24 @@ interface Product {
     product_name_tamil: string;
     imageUrl: string[];
     selling_price: string;
+    isDailyDeals: boolean;
+    isDeleted?: boolean;
 }
 
 export default function ManageProducts() {
     const router = useRouter();
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
+    const [showDeleted, setShowDeleted] = useState(false);
 
     useEffect(() => {
-        const token = Cookies.get("token");
-        if (!token || !isAdminUser(token)) {
-            toast.error("Unauthorized access");
-            router.push("/");
-            return;
-        }
         fetchProducts();
-    }, [router]);
+    }, [showDeleted])
 
     const fetchProducts = async () => {
         setLoading(true);
         try {
-            const response = await productApi.getAllProducts();
+            const response = await apiClient.get(`/product/products?includeDeleted=${showDeleted}`);
             if (response.data.status) {
                 setProducts(response.data.data);
             }
@@ -42,6 +41,20 @@ export default function ManageProducts() {
             toast.error("Failed to load products");
         } finally {
             setLoading(false);
+        }
+    };
+
+    const handleToggleDailyDeal = async (product: Product) => {
+        try {
+            const newStatus = !product.isDailyDeals;
+            const response = await productApi.toggleDailyDeal(product.id, newStatus);
+            if (response.data.status) {
+                toast.success(response.data.message);
+                setProducts(products.map(p => p.id === product.id ? { ...p, isDailyDeals: newStatus } : p));
+            }
+        } catch (error) {
+            console.error("Error toggling daily deal:", error);
+            toast.error("Failed to update daily deal status");
         }
     };
 
@@ -66,65 +79,107 @@ export default function ManageProducts() {
         }
     };
 
-    return (
-        <div className={styles.pageWrapper}>
-            <Toaster />
-            <div className={styles.container}>
-                <div className={styles.header}>
-                    <div>
-                        <button onClick={() => router.push("/")} className={styles.backBtn}>
-                            &larr; Back to Home
-                        </button>
-                        <h1 className={styles.title}>Manage Products</h1>
-                    </div>
-                    <button
-                        onClick={() => router.push("/admin/addProduct")}
-                        className={styles.addBtn}
-                    >
-                        + Add New Product
-                    </button>
-                </div>
+    const handleRestore = async (id: string) => {
+        try {
+            const response = await productApi.restoreProduct(id);
+            if (response.data.status) {
+                toast.success("Product restored successfully");
+                fetchProducts();
+            }
+        } catch (error) {
+            console.error("Error restoring product:", error);
+            toast.error("Failed to restore product");
+        }
+    };
 
-                {loading ? (
-                    <div className={styles.loadingState}>Loading products...</div>
-                ) : products.length === 0 ? (
-                    <div className={styles.emptyState}>No products found.</div>
-                ) : (
-                    <div className={styles.productGrid}>
-                        {products.map((product) => (
-                            <div key={product.id} className={styles.productCard}>
-                                <div className={styles.imageArea}>
-                                    <Image
-                                        src={product.imageUrl?.[0] || "/Assets/Products/15.png"}
-                                        alt={product.product_name}
-                                        fill
-                                        style={{ objectFit: "cover" }}
-                                    />
-                                </div>
-                                <div className={styles.cardContent}>
-                                    <h2 className={styles.productTitle}>{product.product_name}</h2>
-                                    <p className={styles.tamilTitle}>{product.product_name_tamil}</p>
-                                    <span className={styles.price}>₹{product.selling_price}</span>
-                                    <div className={styles.actions}>
-                                        <button
-                                            onClick={() => handleEdit(product.id)}
-                                            className={styles.editBtn}
-                                        >
-                                            Edit
-                                        </button>
-                                        <button
-                                            onClick={() => handleDelete(product.id)}
-                                            className={styles.deleteBtn}
-                                        >
-                                            Delete
-                                        </button>
+    return (
+        <AdminGuard>
+            <div className={styles.pageWrapper}>
+                <Toaster />
+                <div className={styles.container}>
+                    <div className={styles.header}>
+                        <div>
+                            <button onClick={() => router.push("/")} className={styles.backBtn}>
+                                &larr; Back to Home
+                            </button>
+                            <h1 className={styles.title}>Manage Products</h1>
+                        </div>
+                        <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
+                            <label style={{ display: "flex", alignItems: "center", gap: "8px", cursor: "pointer", fontSize: "14px", color: "#6b7280" }}>
+                                <input
+                                    type="checkbox"
+                                    checked={showDeleted}
+                                    onChange={(e) => setShowDeleted(e.target.checked)}
+                                />
+                                Show Deleted
+                            </label>
+                            <button
+                                onClick={() => router.push("/admin/addProduct")}
+                                className={styles.addBtn}
+                            >
+                                + Add New Product
+                            </button>
+                        </div>
+                    </div>
+
+                    {loading ? (
+                        <div className={styles.loadingState}>Loading products...</div>
+                    ) : products.length === 0 ? (
+                        <div className={styles.emptyState}>No products found.</div>
+                    ) : (
+                        <div className={styles.productGrid}>
+                            {products.map((product) => (
+                                <div key={product.id} className={styles.productCard}>
+                                    <div className={styles.imageArea}>
+                                        <Image
+                                            src={product.imageUrl?.[0] || "/Assets/Products/15.png"}
+                                            alt={product.product_name}
+                                            fill
+                                            style={{ objectFit: "cover" }}
+                                        />
+                                    </div>
+                                    <div className={styles.cardContent}>
+                                        <h2 className={styles.productTitle}>{product.product_name}</h2>
+                                        <p className={styles.tamilTitle}>{product.product_name_tamil}</p>
+                                        <span className={styles.price}>₹{product.selling_price}</span>
+                                        <div className={styles.actions}>
+                                            {product.isDeleted ? (
+                                                <button
+                                                    onClick={() => handleRestore(product.id)}
+                                                    className={styles.restoreBtn}
+                                                >
+                                                    Restore
+                                                </button>
+                                            ) : (
+                                                <>
+                                                    <button
+                                                        onClick={() => handleToggleDailyDeal(product)}
+                                                        className={product.isDailyDeals ? styles.dealBtnActive : styles.dealBtn}
+                                                    >
+                                                        {product.isDailyDeals ? "Remove Deal" : "Add Deal"}
+                                                    </button>
+                                                    <button
+                                                        onClick={() => handleEdit(product.id)}
+                                                        className={styles.editBtn}
+                                                    >
+                                                        Edit
+                                                    </button>
+                                                    <button
+                                                        onClick={() => handleDelete(product.id)}
+                                                        className={styles.deleteBtn}
+                                                    >
+                                                        Delete
+                                                    </button>
+                                                </>
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        ))}
-                    </div>
-                )}
+                            ))}
+                        </div>
+                    )}
+                </div>
             </div>
-        </div>
+        </AdminGuard>
     );
 }

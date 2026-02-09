@@ -27,12 +27,6 @@ interface Product {
     available_quantity: number
     overall_rating: number
     review_count: number
-    variants: {
-        id: string;
-        attribute_name: string;
-        selling_price: string;
-        price: string;
-    }[]
     reviews: {
         id: string;
         rating: number;
@@ -50,7 +44,6 @@ interface Product {
 export default function ViewProduct({ product }: { product: Product }) {
     const { cart, addToCart, updateQuantity } = useCart();
     const [quantity, setQuantity] = useState(1);
-    const [selectedVariant, setSelectedVariant] = useState(product.variants && product.variants.length > 0 ? product.variants[0] : null);
     const reviewsRef = useRef<HTMLDivElement>(null);
     const [reviews, setReviews] = useState(product.reviews || []);
     const [newReview, setNewReview] = useState("");
@@ -106,7 +99,7 @@ export default function ViewProduct({ product }: { product: Product }) {
     }, [pendingWishlist, handleToggleWishlist]);
 
     // Check if product is in cart
-    const cartItem = cart.find(item => item.variantId === selectedVariant?.id);
+    const cartItem = cart.find(item => item.id === product.id);
     const isInCart = !!cartItem;
 
     // Sync quantity with cart
@@ -116,27 +109,24 @@ export default function ViewProduct({ product }: { product: Product }) {
         } else {
             setQuantity(1);
         }
-    }, [cartItem, selectedVariant]);
+    }, [cartItem]);
 
     const handleQuantityChange = (change: number) => {
-        if (!selectedVariant) return;
         const newQty = quantity + change;
         if (newQty <= 0) {
-            updateQuantity(product.id, selectedVariant.id, 0);
+            updateQuantity(product.id, 0);
             setQuantity(1);
         } else {
             setQuantity(newQty);
-            updateQuantity(product.id, selectedVariant.id, newQty);
+            updateQuantity(product.id, newQty);
         }
     };
 
     const handleAddToCart = () => {
-        if (!selectedVariant) return;
-        addToCart(product.id, selectedVariant.id, 1, {
+        addToCart(product.id, 1, {
             name: product.product_name,
-            price: parseFloat(selectedVariant.selling_price),
-            image: product.imageUrl[0],
-            weight: selectedVariant.attribute_name
+            price: parseFloat(product.selling_price),
+            image: product.imageUrl[0]
         });
         setQuantity(1);
     };
@@ -293,34 +283,30 @@ export default function ViewProduct({ product }: { product: Product }) {
                                 </p>
                             </div>
 
-                            {/* Weight Selection */}
-                            <div className={styles.variantSelector}>
-                                {product.variants?.map((variant) => (
-                                    <button
-                                        key={variant.id}
-                                        onClick={() => setSelectedVariant(variant)}
-                                        className={`${styles.variantBtn} ${selectedVariant?.id === variant.id ? styles.active : ""}`}
-                                    >
-                                        {variant.attribute_name}
-                                    </button>
-                                ))}
-                            </div>
-
                             {/* Price Section */}
                             <div className={styles.priceSection}>
                                 <div className={styles.sellingPrice}>
-                                    ₹{selectedVariant?.selling_price || product.price}
+                                    ₹{product.selling_price}
                                 </div>
                                 <div className={styles.originalPrice}>
-                                    ₹{selectedVariant?.price || product.price}
+                                    ₹{product.price}
                                 </div>
                                 {product.discounted_amount && (
                                     <div className={styles.discountBadge}>
                                         {product.discounted_amount}% Discount
                                     </div>
                                 )}
+                                {product.available_quantity <= 0 && (
+                                    <div style={{
+                                        color: '#dc2626',
+                                        fontWeight: '700',
+                                        fontSize: '18px',
+                                        marginTop: '10px'
+                                    }}>
+                                        Out of Stock
+                                    </div>
+                                )}
                             </div>
-
                             {/* Rating */}
                             <div className={styles.ratingSection}>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
@@ -379,12 +365,22 @@ export default function ViewProduct({ product }: { product: Product }) {
 
                             {/* Action Buttons */}
                             <div className={styles.actionRow}>
-                                <button
-                                    onClick={handleAddToCart}
-                                    className={styles.addToCartBtn}
-                                >
-                                    Add to Cart
-                                </button>
+                                {product.available_quantity <= 0 ? (
+                                    <button
+                                        disabled
+                                        className={styles.addToCartBtn}
+                                        style={{ backgroundColor: '#9ca3af', cursor: 'not-allowed' }}
+                                    >
+                                        Out of Stock
+                                    </button>
+                                ) : (
+                                    <button
+                                        onClick={handleAddToCart}
+                                        className={styles.addToCartBtn}
+                                    >
+                                        Add to Cart
+                                    </button>
+                                )}
                                 <button
                                     onClick={handleShare}
                                     className={styles.shareBtn}

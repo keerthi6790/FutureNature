@@ -10,7 +10,6 @@ interface IAddProductPayload {
   discountedAmount: string;
   imageUrl: string[];
   availableQuantity: string;
-  variants: never[];
 }
 
 export const productApi = {
@@ -22,4 +21,8 @@ export const productApi = {
   updateProduct: (id: string, data: Partial<IAddProductPayload>) =>
     apiClient.put(`/product/update/${id}`, data),
   deleteProduct: (id: string) => apiClient.delete(`/product/delete/${id}`),
+  restoreProduct: (id: string) => apiClient.post(`/product/restore/${id}`),
+  getDailyDeals: () => apiClient.get("/product/daily-deals"),
+  toggleDailyDeal: (id: string, isDailyDeals: boolean) =>
+    apiClient.post(`/product/toggle-daily-deal/${id}`, { isDailyDeals }),
 };

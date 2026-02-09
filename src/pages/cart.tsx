@@ -38,18 +38,18 @@ const EmptyCartSVG = () => (
     <circle cx="120" cy="100" r="90" fill="#FEF3C7" fillOpacity="0.5" />
     <circle cx="40" cy="60" r="10" fill="#FDE68A" />
     <circle cx="200" cy="140" r="15" fill="#FDE68A" />
-    
+
     {/* Basket */}
     <path d="M70 70 L170 70 L160 160 C160 171.046 151.046 180 140 180 H100 C88.9543 180 80 171.046 80 160 L70 70 Z" fill="white" stroke="#F59E0B" strokeWidth="4" />
-    
+
     {/* Handle */}
     <path d="M90 70 C90 70 90 30 120 30 C150 30 150 70 150 70" stroke="#F59E0B" strokeWidth="4" strokeLinecap="round" />
-    
+
     {/* Sad Face */}
     <circle cx="105" cy="120" r="4" fill="#F59E0B" />
     <circle cx="135" cy="120" r="4" fill="#F59E0B" />
     <path d="M105 145 C105 145 112 138 120 138 C128 138 135 145 135 145" stroke="#F59E0B" strokeWidth="3" strokeLinecap="round" />
-    
+
     {/* Dotted Line / Leaf */}
     <path d="M165 40 C175 30 190 35 195 45" stroke="#D97706" strokeWidth="2" strokeDasharray="4 4" />
   </svg>
@@ -65,7 +65,7 @@ export default function Cart() {
     return sum + ((item.price || 0) * item.quantity);
   }, 0);
 
-  const salesTax = Math.round(subtotal * 0.05); 
+  const salesTax = Math.round(subtotal * 0.05);
   const shippingThreshold = 5000;
   const isFreeShipping = subtotal >= shippingThreshold;
   const shippingCost = isFreeShipping ? 0 : 150;
@@ -101,10 +101,10 @@ export default function Cart() {
                 <div className={styles.illustrationArea}>
                   <EmptyCartSVG />
                 </div>
-                
+
                 <h1 className={styles.emptyTitle}>Your cart is empty</h1>
                 <p className={styles.emptySubtitle}>
-                  Looks like you haven&apos;t added any honey products yet. 
+                  Looks like you haven&apos;t added any honey products yet.
                   <br />Nature&apos;s sweetness is waiting for you!
                 </p>
 
@@ -119,7 +119,7 @@ export default function Cart() {
           ) : (
             /* --- CART CONTENT --- */
             <div className={styles.contentGrid}>
-              
+
               {/* LEFT COLUMN: Items */}
               <div className={styles.cartItemsSection}>
                 <div className={styles.headerRow}>
@@ -127,17 +127,7 @@ export default function Cart() {
                   <span className={styles.itemCount}>{cart.length} Items</span>
                 </div>
 
-                <div className={styles.shippingProgress}>
-                  <p>
-                    {isFreeShipping 
-                      ? "🎉 You've unlocked <strong>Free Shipping!</strong>" 
-                      : `Add <strong>₹${shippingThreshold - subtotal}</strong> more for Free Shipping`
-                    }
-                  </p>
-                  <div className={styles.progressBarBg}>
-                    <div className={styles.progressBarFill} style={{ width: `${progressPercent}%` }}></div>
-                  </div>
-                </div>
+
 
                 <div className={styles.itemsList}>
                   {cart.map((item: CartItem) => (
@@ -145,7 +135,7 @@ export default function Cart() {
                       <div className={styles.itemImage}>
                         <Image
                           src={item.image || "/Assets/Products/15.png"}
-                          alt={item.name || "Product Image"} 
+                          alt={item.name || "Product Image"}
                           fill
                           style={{ objectFit: 'contain' }}
                         />
@@ -156,21 +146,20 @@ export default function Cart() {
                           <Link href={`/product/${item.id}`} className={styles.itemName}>
                             {item.name}
                           </Link>
-                          <button 
-                            onClick={() => removeFromCart(item.id, item.variantId, item.cartItemId)}
+                          <button
+                            onClick={() => removeFromCart(item.id, item.cartItemId)}
                             className={styles.removeBtn}
                           >
                             <TrashIcon />
                           </button>
                         </div>
-                        
-                        <p className={styles.itemVariant}>{item.weight}</p>
+
 
                         <div className={styles.infoBottom}>
                           <div className={styles.qtyStepper}>
-                            <button onClick={() => updateQuantity(item.id, item.variantId, Math.max(1, item.quantity - 1))} disabled={item.quantity <= 1}>−</button>
+                            <button onClick={() => updateQuantity(item.id, Math.max(1, item.quantity - 1))} disabled={item.quantity <= 1}>−</button>
                             <span>{item.quantity}</span>
-                            <button onClick={() => updateQuantity(item.id, item.variantId, item.quantity + 1)}>+</button>
+                            <button onClick={() => updateQuantity(item.id, item.quantity + 1)}>+</button>
                           </div>
                           <div className={styles.itemPrice}>₹{(item.price || 0) * item.quantity}</div>
                         </div>
@@ -201,7 +190,7 @@ export default function Cart() {
             </div>
           )}
         </main>
-        
+
         <Footer />
       </div>
     </>

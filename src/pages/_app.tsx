@@ -6,6 +6,8 @@ import { AuthProvider, useAuth } from "@/components/AuthContext";
 import { Toaster } from "react-hot-toast";
 import AuthModal from "@/components/AuthModal";
 
+import { LoadingProvider } from "@/components/LoadingContext";
+
 function GlobalAuthModal() {
   const { isLoginModalOpen, closeLoginModal, onLoginSuccessCallback } = useAuth();
 
@@ -21,11 +23,13 @@ function GlobalAuthModal() {
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <AuthProvider>
-      <CartProvider>
-        <Toaster position="bottom-center" />
-        <GlobalAuthModal />
-        <Component {...pageProps} />
-      </CartProvider>
+      <LoadingProvider>
+        <CartProvider>
+          <Toaster position="bottom-center" />
+          <GlobalAuthModal />
+          <Component {...pageProps} />
+        </CartProvider>
+      </LoadingProvider>
     </AuthProvider>
   );
 }

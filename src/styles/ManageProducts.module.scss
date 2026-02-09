@@ -144,6 +144,36 @@
             background-color: #fee2e2;
         }
     }
+
+    .restoreBtn {
+        background-color: #ecfdf5;
+        color: #10b981;
+        border: 1px solid #d1fae5;
+
+        &:hover {
+            background-color: #d1fae5;
+        }
+    }
+
+    .dealBtn {
+        background-color: #fffbeb;
+        color: #d97706;
+        border: 1px solid #fde68a;
+
+        &:hover {
+            background-color: #fef3c7;
+        }
+    }
+
+    .dealBtnActive {
+        background-color: #f59e0b;
+        color: white;
+        border: 1px solid #d97706;
+
+        &:hover {
+            background-color: #d97706;
+        }
+    }
 }
 
 .loadingState,

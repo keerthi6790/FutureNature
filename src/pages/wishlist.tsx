@@ -18,7 +18,6 @@ interface Product {
   review_count: number;
   price: string;
   selling_price: string;
-  variants: any[];
 }
 
 export default function WishlistPage() {
