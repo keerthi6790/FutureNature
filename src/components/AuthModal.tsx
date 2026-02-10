@@ -246,6 +246,7 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }: AuthModal
                                 renderInput={(props) => (
                                     <input
                                         {...props}
+                                        type="number"
                                         className={`${styles.otpInput} ${errors.otp ? styles.error : ""}`}
                                     />
                                 )}

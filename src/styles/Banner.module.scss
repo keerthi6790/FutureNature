@@ -8,53 +8,85 @@ $c-white: #ffffff;
 
 // --- ANIMATIONS ---
 @keyframes flyAround {
-  0% { transform: translate(0, 0) rotate(0deg); }
-  25% { transform: translate(2em, -1.5em) rotate(5deg); } // Up right
-  50% { transform: translate(0, -3em) rotate(0deg); }     // Top center
-  75% { transform: translate(-2em, -1.5em) rotate(-5deg); } // Top left
-  100% { transform: translate(0, 0) rotate(0deg); }
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+
+  25% {
+    transform: translate(2em, -1.5em) rotate(5deg);
+  }
+
+  // Up right
+  50% {
+    transform: translate(0, -3em) rotate(0deg);
+  }
+
+  // Top center
+  75% {
+    transform: translate(-2em, -1.5em) rotate(-5deg);
+  }
+
+  // Top left
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
 }
 
 @keyframes flutter {
-  0%, 100% { transform: scaleY(1) rotate(0deg); }
-  50% { transform: scaleY(0.8) rotate(5deg); } // Flap effect
+
+  0%,
+  100% {
+    transform: scaleY(1) rotate(0deg);
+  }
+
+  50% {
+    transform: scaleY(0.8) rotate(5deg);
+  }
+
+  // Flap effect
 }
 
-.bannerWrapper {
+.carouselContainer {
   width: 100%;
-  display: flex;
-  justify-content: center;
+  position: relative;
   padding: 10px;
-  background-color: transparent;
-  overflow: hidden;
+
+  :global(.slick-list) {
+    overflow: hidden;
+    border-radius: 1.5em;
+  }
+}
+
+.carouselTrack {
+  display: flex;
+  width: 100%;
+  transition: transform 0.5s ease-in-out;
+}
+
+.bannerSlide {
+  display: flex !important; // Slick uses block by default
+  justify-content: center;
 }
 
 .bannerCard {
-  font-size: clamp(5px, 1.5vw, 16px); 
-
+  font-size: clamp(5px, 1.5vw, 16px);
   position: relative;
-  width: 78em;       
-  height: 18em;      
-  min-width: 78em;   
-  
+  width: 78em;
+  height: 18em;
+  min-width: 78em;
   background-color: $c-yellow;
   border-radius: 1.5em;
   overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 5em;
-  box-shadow: 0 0.5em 1.5em rgba(0,0,0,0.05);
+  box-shadow: 0 0.5em 1.5em rgba(0, 0, 0, 0.05);
   font-family: 'Arial', sans-serif;
   user-select: none;
 
   @media (max-width: 768px) {
-    font-size: 1.35vw; 
-    min-width: auto;   
-    width: 100%;       
-    padding: 0 2em;    
-    height: auto;      
-    aspect-ratio: 78 / 26; 
+    font-size: 1.35vw;
+    min-width: auto;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 78 / 26;
   }
 }
 
@@ -66,8 +98,8 @@ $c-white: #ffffff;
   height: 100%;
   opacity: 0.4;
   z-index: 0;
-  background-image: 
-    radial-gradient(circle, transparent 65%, white 66%), 
+  background-image:
+    radial-gradient(circle, transparent 65%, white 66%),
     radial-gradient(circle, transparent 65%, white 66%);
   background-position: 0 0, 1.5em 1.5em;
   background-size: 3em 3em;
@@ -80,7 +112,7 @@ $c-white: #ffffff;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  margin-left: 2em; 
+  margin-left: 2em;
 }
 
 .subHeading {
@@ -91,7 +123,7 @@ $c-white: #ffffff;
   margin: 0;
   line-height: 1;
   letter-spacing: 0.05em;
-  white-space: nowrap; 
+  white-space: nowrap;
 }
 
 .mainHeading {
@@ -113,7 +145,7 @@ $c-white: #ffffff;
   padding: 0.8em 2em;
   border-radius: 2em;
   text-transform: uppercase;
-  box-shadow: 0 0.2em 0.5em rgba(0,0,0,0.2);
+  box-shadow: 0 0.2em 0.5em rgba(0, 0, 0, 0.2);
   white-space: nowrap;
 }
 
@@ -121,7 +153,7 @@ $c-white: #ffffff;
 .flyingBee {
   position: absolute;
   // This centers it in the middle of the banner
-  left: 45%; 
+  left: 45%;
   top: 50%;
   transform: translate(-50%, -50%);
   width: 6em; // Size of the bee area
@@ -140,11 +172,12 @@ $c-white: #ffffff;
 .beeSvg {
   width: 100%;
   height: 100%;
-  drop-shadow: 0 0.5em 0.3em rgba(0,0,0,0.2); // Shadow on the floor
+  filter: drop-shadow(0 0.5em 0.3em rgba(0, 0, 0, 0.2)); // Corrected to filter: drop-shadow
 }
 
 // Wing animations
-.wingBack, .wingFront {
+.wingBack,
+.wingFront {
   transform-origin: 55px 35px; // Pivot point of wing
   animation: flutter 0.15s linear infinite; // Fast flutter
 }
@@ -170,11 +203,11 @@ $c-white: #ffffff;
   background-color: $c-brown-dark;
   width: 28em;
   height: 12em;
-  border-radius: 10em; 
+  border-radius: 10em;
   display: flex;
   align-items: center;
-  padding-left: 3.5em; 
-  margin-right: -2em; 
+  padding-left: 3.5em;
+  margin-right: -2em;
 }
 
 .podContent {
@@ -183,8 +216,8 @@ $c-white: #ffffff;
   color: $c-white;
   text-align: center;
   margin-right: auto;
-  width: 11em; 
-  z-index: 5; 
+  width: 11em;
+  z-index: 5;
 }
 
 .productTitle {
@@ -193,7 +226,7 @@ $c-white: #ffffff;
   margin: 0;
   text-transform: uppercase;
   line-height: 1.1;
-  white-space: nowrap; 
+  white-space: nowrap;
 }
 
 .tamilTitle {
@@ -212,7 +245,7 @@ $c-white: #ffffff;
 .priceTag {
   position: absolute;
   bottom: -0.6em;
-  left: 45%; 
+  left: 45%;
   transform: translateX(-50%) rotate(-2deg);
   background-color: $c-green;
   color: $c-white;
@@ -220,10 +253,10 @@ $c-white: #ffffff;
   font-weight: 700;
   padding: 0.25em 0.8em;
   border-radius: 0.3em;
-  box-shadow: 0 0.2em 0.5em rgba(0,0,0,0.3);
+  box-shadow: 0 0.2em 0.5em rgba(0, 0, 0, 0.3);
   z-index: 6;
   white-space: nowrap;
-  
+
   .rupee {
     font-size: 0.8em;
     margin-right: 2px;
@@ -233,18 +266,18 @@ $c-white: #ffffff;
 .imageCircle {
   width: 11em;
   height: 11em;
-  min-width: 11em; 
-  background-color: rgba(255,255,255,0.15); 
+  min-width: 11em;
+  background-color: rgba(255, 255, 255, 0.15);
   border-radius: 50%;
   overflow: hidden;
-  margin-right: 0.5em; 
+  margin-right: 0.5em;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px solid rgba(255,255,255,0.1);
+  border: 2px solid rgba(255, 255, 255, 0.1);
   position: relative;
   z-index: 5;
-  
+
   .realImg {
     object-fit: contain;
     width: 85%;
@@ -252,25 +285,42 @@ $c-white: #ffffff;
   }
 }
 
-.pagination {
-  position: absolute;
-  bottom: 1em;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 0.6em;
-  z-index: 10;
-  
-  .dot {
-    width: 0.7em;
-    height: 0.7em;
-    border: 1px solid $c-white; 
-    border-radius: 50%;
-    cursor: pointer;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-    
-    &.active {
-      background-color: $c-white;
+.customDots {
+  bottom: 1.5em !important;
+
+  :global(li) {
+    margin: 0 4px;
+
+    button:before {
+      color: $c-white !important;
+      opacity: 0.5 !important;
+      font-size: 8px !important;
+    }
+
+    &.slick-active button:before {
+      color: $c-white !important;
+      opacity: 1 !important;
+      transform: scale(1.2);
     }
   }
+}
+
+.navDot {
+  width: 0.8em;
+  height: 0.8em;
+  border: 1px solid $c-white;
+  border-radius: 50%;
+  cursor: pointer;
+  background-color: transparent;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.5);
+  }
+}
+
+.activeDot {
+  background-color: $c-white;
+  width: 2em;
+  border-radius: 1em;
 }

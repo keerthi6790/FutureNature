@@ -24,7 +24,11 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ isOpen, onClose }) => {
   const [selectedDealIds, setSelectedDealIds] = useState<number[]>([1, 2, 3]); // Default active deals
 
   const handleOptionClick = (optionId: string) => {
-    if (optionId === "add-product") {
+    if (optionId === "banners") {
+      onClose();
+      router.push("/admin/manageBanners");
+    }
+    else if (optionId === "add-product") {
       onClose();
       router.push("/admin/addProduct");
     } else if (optionId === "edit-product") {
