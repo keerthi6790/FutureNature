@@ -9,6 +9,28 @@
     padding: 20px 24px 80px;
 }
 
+/* Breadcrumbs */
+.breadcrumbs {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: #9ca3af;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+
+    span {
+        &:last-child {
+            color: #374151;
+            font-weight: 500;
+        }
+    }
+
+    .separator {
+        color: #d1d5db;
+    }
+}
+
 .productCard {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
@@ -71,11 +93,95 @@
     height: auto;
 }
 
+/* Thumbnail Gallery */
+.thumbnailGallery {
+    display: flex;
+    gap: 12px;
+    margin-top: 16px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+
+    &::-webkit-scrollbar {
+        height: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: #f3f4f6;
+        border-radius: 3px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: #d1d5db;
+        border-radius: 3px;
+
+        &:hover {
+            background: #9ca3af;
+        }
+    }
+}
+
+.thumbnail {
+    flex: 0 0 80px;
+    height: 80px;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.2s;
+    background-color: white;
+
+    &:hover {
+        border-color: #FF8C42;
+    }
+
+    &.active {
+        border-color: #FF8C42;
+        box-shadow: 0 0 0 1px #FF8C42;
+    }
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+}
+
 /* Right Column - Info */
 .infoSection {
     display: flex;
     flex-direction: column;
     gap: 24px;
+}
+
+/* Metadata Row */
+.metadataRow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+    color: #6b7280;
+    flex-wrap: wrap;
+
+    .metaItem {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+
+        &.rating {
+            color: #374151;
+            font-weight: 600;
+
+            .star {
+                color: #FF8C42;
+                font-size: 16px;
+            }
+        }
+    }
+
+    .separator {
+        color: #d1d5db;
+        font-weight: 600;
+    }
 }
 
 .titleWrapper {
@@ -113,12 +219,13 @@
     transition: all 0.2s;
 
     &.active {
-        background-color: #fbbf24;
-        border-color: transparent;
+        background-color: #FF8C42;
+        border-color: #FF8C42;
+        color: white;
     }
 
     &:hover:not(.active) {
-        border-color: #fbbf24;
+        border-color: #FF8C42;
     }
 }
 
@@ -131,7 +238,7 @@
 .sellingPrice {
     font-size: 36px;
     font-weight: 700;
-    color: #111827;
+    color: #FF8C42;
 }
 
 .originalPrice {
@@ -174,7 +281,6 @@
         line-height: 1.8;
         color: #6b7280;
         margin: 0;
-        font-family: Arial, sans-serif;
     }
 }
 
@@ -191,7 +297,6 @@
         line-height: 1.8;
         color: #6b7280;
         margin: 0;
-        font-family: Arial, sans-serif;
     }
 }
 
@@ -250,9 +355,9 @@
 }
 
 .addToCartBtn {
-    flex: 1;
-    background-color: #fbbf24;
-    color: #111827;
+    flex: 2;
+    background-color: #FF8C42;
+    color: white;
     border: none;
     border-radius: 12px;
     padding: 16px 24px;
@@ -263,7 +368,7 @@
     letter-spacing: 0.5px;
 
     &:hover {
-        background-color: #f59e0b;
+        background-color: #f57c2b;
         transform: translateY(-2px);
     }
 }
@@ -501,6 +606,28 @@
         padding: 24px;
     }
 
+    .thumbnailGallery {
+        gap: 8px;
+    }
+
+    .thumbnail {
+        flex: 0 0 70px;
+        height: 70px;
+    }
+
+    .metadataRow {
+        font-size: 13px;
+        gap: 8px;
+    }
+
+    .titleWrapper h1 {
+        font-size: 28px;
+    }
+
+    .sellingPrice {
+        font-size: 28px;
+    }
+
     .reviewsWrapper {
         padding: 0 24px;
     }
@@ -510,6 +637,48 @@
     }
 
     .submitReviewBtn {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .breadcrumbs {
+        font-size: 12px;
+    }
+
+    .productCard {
+        padding: 16px;
+    }
+
+    .imageWrapper {
+        min-height: 280px;
+        padding: 16px;
+    }
+
+    .thumbnail {
+        flex: 0 0 60px;
+        height: 60px;
+    }
+
+    .metadataRow {
+        font-size: 12px;
+    }
+
+    .titleWrapper h1 {
+        font-size: 24px;
+    }
+
+    .sellingPrice {
+        font-size: 24px;
+    }
+
+    .actionRow {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .addToCartBtn,
+    .shareBtn {
         width: 100%;
     }
 }

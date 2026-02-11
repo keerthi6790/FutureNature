@@ -16,6 +16,8 @@ interface Product {
     available_quantity: number;
 }
 
+import SkeletonDeals from "./SkeletonDeals";
+
 export default function DailyDeals() {
     const { addToCart, updateQuantity } = useCart();
     const [quantities, setQuantities] = useState<{ [key: string]: number }>({});
@@ -40,7 +42,7 @@ export default function DailyDeals() {
         fetchDailyDeals();
     }, []);
 
-    if (loading) return <div className={styles.sectionWrapper}><p>Loading daily deals...</p></div>;
+    if (loading) return <SkeletonDeals />;
     if (products.length === 0) return null;
 
     return (

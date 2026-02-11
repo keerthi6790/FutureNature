@@ -8,17 +8,11 @@
   --white: #ffffff;
   --gray: #57534e;
 
-  font-family: "Inter", sans-serif;
   background-color: var(--cream);
   color: var(--dark);
   overflow-x: hidden;
 }
 
-.pageWrapper h1,
-.pageWrapper h2,
-.pageWrapper h3 {
-  font-family: "Playfair Display", serif;
-}
 
 .container {
   max-width: 1100px;
@@ -52,7 +46,6 @@
 }
 
 .heroSubtitle {
-  font-family: "Inter", sans-serif;
   font-size: 13px;
   letter-spacing: 4px;
   color: var(--gold);
@@ -71,7 +64,6 @@
 }
 
 .goldText {
-  font-family: "Cinzel", serif;
   color: var(--gold);
   font-style: italic;
 }
@@ -173,12 +165,10 @@
   float: left;
   line-height: 0.8;
   padding-right: 8px;
-  font-family: "Playfair Display", serif;
   color: var(--gold);
 }
 
 .signature {
-  font-family: "Playfair Display", serif;
   font-style: italic;
   font-size: 24px;
   color: var(--gold);
@@ -188,7 +178,8 @@
 
 /* --- TRUST ANCHOR (FSSAI) --- */
 .trustAnchor {
-  margin-bottom: 40px; /* Space between FSSAI and Standards */
+  margin-bottom: 40px;
+  /* Space between FSSAI and Standards */
   position: relative;
   z-index: 10;
 }
@@ -240,7 +231,6 @@
 }
 
 .fssaiLogoText {
-  font-family: serif;
   font-style: italic;
   font-weight: 900;
   font-size: 28px;
@@ -254,7 +244,6 @@
 }
 
 .certHead {
-  font-family: "Cinzel", serif;
   font-size: 20px;
   color: #fbbf24;
   margin: 0 0 4px;
@@ -284,7 +273,6 @@
 }
 
 .licNo {
-  font-family: monospace;
   font-size: 18px;
   letter-spacing: 2px;
   color: #fff;
@@ -304,7 +292,6 @@
   font-size: 15px;
   color: #e5e5e5;
   margin-bottom: 8px;
-  font-family: "Inter", sans-serif;
 }
 
 /* --- PILLARS SECTION --- */

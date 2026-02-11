@@ -44,6 +44,7 @@ interface Product {
 export default function ViewProduct({ product }: { product: Product }) {
     const { cart, addToCart, updateQuantity } = useCart();
     const [quantity, setQuantity] = useState(1);
+    const [selectedImageIndex, setSelectedImageIndex] = useState(0);
     const reviewsRef = useRef<HTMLDivElement>(null);
     const [reviews, setReviews] = useState(product.reviews || []);
     const [newReview, setNewReview] = useState("");
@@ -242,6 +243,15 @@ export default function ViewProduct({ product }: { product: Product }) {
 
                 {/* Product Detail Section */}
                 <div className={styles.detailsContainer}>
+                    {/* Breadcrumbs */}
+                    <div className={styles.breadcrumbs}>
+                        <span>Browse Products</span>
+                        <span className={styles.separator}>›</span>
+                        <span>Honey</span>
+                        <span className={styles.separator}>›</span>
+                        <span>{product.product_name}</span>
+                    </div>
+
                     <div className={styles.productCard}>
                         {/* Left Column - Product Image */}
                         <div className={styles.imageSection}>
@@ -262,17 +272,46 @@ export default function ViewProduct({ product }: { product: Product }) {
                                 </div>
 
                                 <Image
-                                    src={product.imageUrl[0]}
+                                    src={product.imageUrl[selectedImageIndex]}
                                     alt={product.product_name}
                                     width={400}
                                     height={500}
                                     className={styles.productImg}
                                 />
                             </div>
+
+                            {/* Thumbnail Gallery */}
+                            <div className={styles.thumbnailGallery}>
+                                {product.imageUrl.map((img, idx) => (
+                                    <div
+                                        key={idx}
+                                        className={`${styles.thumbnail} ${idx === selectedImageIndex ? styles.active : ''}`}
+                                        onClick={() => setSelectedImageIndex(idx)}
+                                    >
+                                        <Image src={img} alt={`${product.product_name} ${idx + 1}`} width={80} height={80} />
+                                    </div>
+                                ))}
+                            </div>
                         </div>
 
                         {/* Right Column - Product Details */}
                         <div className={styles.infoSection}>
+                            {/* Metadata Row */}
+                            <div className={styles.metadataRow}>
+                                <div className={`${styles.metaItem} ${styles.rating}`}>
+                                    <span className={styles.star}>★</span>
+                                    {product.overall_rating} Ratings
+                                </div>
+                                <span className={styles.separator}>•</span>
+                                <div className={styles.metaItem}>
+                                    {product.review_count}+ Reviews
+                                </div>
+                                <span className={styles.separator}>•</span>
+                                <div className={styles.metaItem}>
+                                    2.9K+ Sold
+                                </div>
+                            </div>
+
                             {/* Product Title */}
                             <div className={styles.titleWrapper}>
                                 <h1>

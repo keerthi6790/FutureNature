@@ -1,20 +1,10 @@
 /* --- VARIABLES --- */
 .pageWrapper {
     --gold: #d97706;
-    --cream: #fffbeb;
-    --sand: #fafaf9;
-    --dark: #1c1917;
-    --gray: #57534e;
-
-    font-family: "Inter", sans-serif;
     background-color: #ffffff;
     color: var(--dark);
 }
 
-.pageWrapper h1,
-.pageWrapper h2 {
-    font-family: "Playfair Display", serif;
-}
 
 .container {
     max-width: 1000px;

@@ -5,6 +5,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import styles from "@/styles/Banner.module.scss";
 import { Banner as BannerType, bannerApi } from "@/api/bannerApi";
+import SkeletonBanner from "./SkeletonBanner";
 
 export default function Banner() {
   const [banners, setBanners] = useState<BannerType[]>([]);
@@ -26,7 +27,7 @@ export default function Banner() {
     fetchBanners();
   }, []);
 
-  if (loading) return null;
+  if (loading) return <SkeletonBanner />;
 
   if (banners.length === 0) return null;
 
