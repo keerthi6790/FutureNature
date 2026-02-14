@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import CustomInputError from "./CustomInputError";
+import Input from "./Input";
 import { AddressData } from "../api/addressApi";
 
 interface AddressFormProps {
@@ -77,125 +77,83 @@ export default function AddressForm({ initialData, onSubmit, onCancel }: Address
         }
     };
 
-    const inputStyle = (error?: string) => ({
-        width: "100%",
-        padding: "10px 12px",
-        borderRadius: "6px",
-        border: `1px solid ${error ? "#ef4444" : "#d1d5db"}`,
-        outline: "none",
-        fontSize: "14px",
-    });
-
-    const labelStyle = {
-        display: "block",
-        fontSize: "14px",
-        fontWeight: 500,
-        marginBottom: "8px",
-        color: "#374151"
-    };
-
     return (
         <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                    <label style={labelStyle}>Flat/House No/Building</label>
-                    <input
-                        type="text"
-                        name="address1"
-                        value={formData.address1}
-                        onChange={handleChange}
-                        style={inputStyle(errors.address1)}
-                        placeholder="e.g. Flat 101, Galaxy Apts"
-                    />
-                    <CustomInputError message={errors.address1} />
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                    <label style={labelStyle}>Street/Area/Colony</label>
-                    <input
-                        type="text"
-                        name="address2"
-                        value={formData.address2}
-                        onChange={handleChange}
-                        style={inputStyle(errors.address2)}
-                        placeholder="e.g. MG Road, Indiranagar"
-                    />
-                    <CustomInputError message={errors.address2} />
-                </div>
-            </div>
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                <label style={labelStyle}>Landmark (Optional)</label>
-                <input
-                    type="text"
-                    name="address3"
-                    value={formData.address3}
+                <Input
+                    label="Flat/House No/Building"
+                    name="address1"
+                    value={formData.address1}
                     onChange={handleChange}
-                    style={inputStyle()}
-                    placeholder="e.g. Near Metro Station"
+                    placeholder="e.g. Flat 101, Galaxy Apts"
+                    error={errors.address1}
+                    required
+                />
+                <Input
+                    label="Street/Area/Colony"
+                    name="address2"
+                    value={formData.address2}
+                    onChange={handleChange}
+                    placeholder="e.g. MG Road, Indiranagar"
+                    error={errors.address2}
+                    required
                 />
             </div>
 
+            <Input
+                label="Landmark"
+                name="address3"
+                value={formData?.address3 || ""}
+                onChange={handleChange}
+                placeholder="e.g. Near Metro Station"
+            />
+
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                    <label style={labelStyle}>City</label>
-                    <input
-                        type="text"
-                        name="city"
-                        value={formData.city}
-                        onChange={handleChange}
-                        style={inputStyle(errors.city)}
-                    />
-                    <CustomInputError message={errors.city} />
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                    <label style={labelStyle}>District</label>
-                    <input
-                        type="text"
-                        name="district"
-                        value={formData.district}
-                        onChange={handleChange}
-                        style={inputStyle(errors.district)}
-                    />
-                    <CustomInputError message={errors.district} />
-                </div>
+                <Input
+                    label="City"
+                    name="city"
+                    value={formData.city}
+                    onChange={handleChange}
+                    error={errors.city}
+                    required
+                />
+                <Input
+                    label="District"
+                    name="district"
+                    value={formData.district}
+                    onChange={handleChange}
+                    error={errors.district}
+                    required
+                />
             </div>
 
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "20px" }}>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                    <label style={labelStyle}>State</label>
-                    <input
-                        type="text"
-                        name="state"
-                        value={formData.state}
-                        onChange={handleChange}
-                        style={inputStyle(errors.state)}
-                    />
-                    <CustomInputError message={errors.state} />
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                    <label style={labelStyle}>Pincode</label>
-                    <input
-                        type="text"
-                        name="pincode"
-                        value={formData.pincode}
-                        onChange={handleChange}
-                        maxLength={6}
-                        style={inputStyle(errors.pincode)}
-                    />
-                    <CustomInputError message={errors.pincode} />
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                    <label style={labelStyle}>Mobile Number</label>
-                    <input
-                        type="tel"
-                        name="mobileNumber"
-                        value={formData.mobileNumber}
-                        onChange={handleChange}
-                        maxLength={10}
-                        style={inputStyle(errors.mobileNumber)}
-                    />
-                    <CustomInputError message={errors.mobileNumber} />
-                </div>
+                <Input
+                    label="State"
+                    name="state"
+                    value={formData.state}
+                    onChange={handleChange}
+                    error={errors.state}
+                    required
+                />
+                <Input
+                    label="Pincode"
+                    name="pincode"
+                    type="text"
+                    value={formData.pincode}
+                    onChange={handleChange}
+                    error={errors.pincode || undefined}
+                    required
+                />
+                <Input
+                    label="Mobile Number"
+                    name="mobileNumber"
+                    type="tel"
+                    value={formData.mobileNumber}
+                    onChange={handleChange}
+                    error={errors.mobileNumber}
+                    required
+                />
             </div>
 
             <div style={{ display: "flex", gap: "15px", marginTop: "20px" }}>

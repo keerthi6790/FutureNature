@@ -4,6 +4,8 @@ import { useRouter } from "next/router";
 import Cookies from "js-cookie";
 import toast, { Toaster } from "react-hot-toast";
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
+import AccountSidebar from "../components/AccountSidebar";
 import { addressApi, AddressData } from "../api/addressApi";
 import AddressList from "../components/AddressList";
 import AddressForm from "../components/AddressForm";
@@ -115,35 +117,35 @@ export default function AddressPage() {
             <Navbar />
             <Toaster />
 
-            <main className={styles.mainContent}>
-                <div className={styles.headerRow}>
-                    <h1 className={styles.pageTitle}>
-                        My Addresses
-                    </h1>
-                </div>
+            <div className={styles.layoutContainer}>
+                <AccountSidebar activeTab="address" />
 
-                {loading ? (
-                    <div className={styles.loadingState}>Loading...</div>
-                ) : showForm ? (
-                    <div className={styles.formWrapper}>
-                        <h2 className={styles.formTitle}>
-                            {editingAddress ? "Edit Address" : "Add New Address"}
-                        </h2>
-                        <AddressForm
-                            initialData={editingAddress}
-                            onSubmit={editingAddress ? handleEdit : handleAdd}
-                            onCancel={closeForm}
+                <main className={styles.mainContent}>
+                    {loading ? (
+                        <div className={styles.loadingState}>Loading...</div>
+                    ) : showForm ? (
+                        <div className={styles.formWrapper}>
+                            <h2 className={styles.formTitle}>
+                                {editingAddress ? "Edit Address" : "Add New Address"}
+                            </h2>
+                            <AddressForm
+                                initialData={editingAddress}
+                                onSubmit={editingAddress ? handleEdit : handleAdd}
+                                onCancel={closeForm}
+                            />
+                        </div>
+                    ) : (
+                        <AddressList
+                            addresses={addresses}
+                            onEdit={openEdit}
+                            onDelete={handleDelete}
+                            onAddNew={openAdd}
                         />
-                    </div>
-                ) : (
-                    <AddressList
-                        addresses={addresses}
-                        onEdit={openEdit}
-                        onDelete={handleDelete}
-                        onAddNew={openAdd}
-                    />
-                )}
-            </main>
+                    )}
+                </main>
+            </div>
+
+            <Footer />
         </div>
     );
 }

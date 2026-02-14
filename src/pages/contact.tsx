@@ -1,5 +1,7 @@
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
+import Input from "@/components/Input";
+import Textarea from "@/components/Textarea";
 import Head from "next/head";
 import { useState } from "react";
 import styles from "@/styles/Contact.module.scss";
@@ -219,61 +221,52 @@ export default function Contact() {
               )}
 
               <form onSubmit={handleSubmit} className={styles.formLayout}>
-                <div className={styles.inputGroup}>
-                  <label>Name</label>
-                  <input
-                    type="text"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    placeholder="Your Name"
-                    className={errors.name ? styles.error : ""}
-                  />
-                  {errors.name && <span className={styles.errorText}>{errors.name}</span>}
-                </div>
+                <Input
+                  label="Name"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  placeholder="Your Name"
+                  error={errors.name}
+                  required
+                />
 
-                <div className={styles.inputGroup}>
-                  <label>Email</label>
-                  <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    placeholder="your@email.com"
-                    className={errors.email ? styles.error : ""}
-                  />
-                  {errors.email && <span className={styles.errorText}>{errors.email}</span>}
-                </div>
+                <Input
+                  label="Email"
+                  name="email"
+                  type="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  placeholder="your@email.com"
+                  error={errors.email}
+                  required
+                />
 
-                <div className={styles.inputGroup}>
-                  <label>Mobile Number</label>
-                  <input
-                    type="tel"
-                    name="mobile"
-                    value={formData.mobile}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    placeholder="+91 99999 99999"
-                    className={errors.mobile ? styles.error : ""}
-                  />
-                  {errors.mobile && <span className={styles.errorText}>{errors.mobile}</span>}
-                </div>
+                <Input
+                  label="Mobile Number"
+                  name="mobile"
+                  type="tel"
+                  value={formData.mobile}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  placeholder="+91 99999 99999"
+                  error={errors.mobile}
+                  required
+                />
 
-                <div className={styles.inputGroup}>
-                  <label>Message</label>
-                  <textarea
-                    name="message"
-                    value={formData.message}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    placeholder="How can we help you?"
-                    rows={5}
-                    className={errors.message ? styles.error : ""}
-                  />
-                  {errors.message && <span className={styles.errorText}>{errors.message}</span>}
-                </div>
+                <Textarea
+                  label="Message"
+                  name="message"
+                  value={formData.message}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  placeholder="How can we help you?"
+                  rows={5}
+                  error={errors.message}
+                  required
+                />
 
                 <button
                   type="submit"

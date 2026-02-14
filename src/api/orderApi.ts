@@ -22,9 +22,14 @@ export interface OrderData {
     items: OrderItem[];
     address: {
         address1: string;
+        address2: string;
+        address3: string;
+        address4?: string;
         city: string;
+        district: string;
         state: string;
         pincode: string;
+        phone_number: string;
     };
 }
 

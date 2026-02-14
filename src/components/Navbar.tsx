@@ -435,6 +435,26 @@ export default function Navbar() {
                         Admin
                       </div>}
                       <Link
+                        href="/orders"
+                        onClick={() => setIsProfileMenuOpen(false)}
+                        style={{
+                          display: "block",
+                          padding: "10px 16px",
+                          color: "#374151",
+                          textDecoration: "none",
+                          fontSize: "15px",
+                          transition: "background-color 0.2s",
+                        }}
+                        onMouseOver={(e) =>
+                          (e.currentTarget.style.backgroundColor = "#f3f4f6")
+                        }
+                        onMouseOut={(e) =>
+                          (e.currentTarget.style.backgroundColor = "transparent")
+                        }
+                      >
+                        My Orders
+                      </Link>
+                      <Link
                         href="/address"
                         onClick={() => setIsProfileMenuOpen(false)}
                         style={{

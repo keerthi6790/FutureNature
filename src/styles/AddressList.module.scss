@@ -1,0 +1,315 @@
+/* --- Variables --- */
+$c-primary: #f59e0b;
+$c-primary-dark: #d97706;
+$c-text-main: #111827;
+$c-text-muted: #6b7280;
+$c-bg-light: #f9fafb;
+$c-border: #e5e7eb;
+$c-white: #ffffff;
+
+.container {
+    width: 100%;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+
+    @media (max-width: 640px) {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+    }
+}
+
+.title {
+    font-size: 24px;
+    font-weight: 800;
+    color: $c-text-main;
+    margin: 0;
+
+    @media (max-width: 640px) {
+        font-size: 20px;
+    }
+}
+
+.addButton {
+    background-color: $c-primary;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
+
+    &:hover {
+        background-color: $c-primary-dark;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+    }
+
+    svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    @media (max-width: 640px) {
+        width: 100%;
+        justify-content: center;
+        padding: 14px 24px;
+    }
+}
+
+.emptyState {
+    text-align: center;
+    padding: 60px 20px;
+    background: $c-white;
+    border-radius: 16px;
+    border: 2px dashed $c-border;
+
+    svg {
+        width: 64px;
+        height: 64px;
+        color: #d1d5db;
+        margin-bottom: 16px;
+    }
+
+    h3 {
+        font-size: 18px;
+        font-weight: 700;
+        color: $c-text-main;
+        margin: 0 0 8px 0;
+    }
+
+    p {
+        font-size: 14px;
+        color: $c-text-muted;
+        margin: 0;
+    }
+}
+
+.addressList {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.addressItem {
+    background: $c-white;
+    border: 1px solid $c-border;
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    transition: all 0.2s ease;
+    position: relative;
+
+    &:hover {
+        border-color: darken($c-border, 10%);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    @media (max-width: 640px) {
+        padding: 16px;
+        flex-direction: column;
+        gap: 12px;
+    }
+}
+
+.addressContent {
+    flex: 1;
+    min-width: 0;
+}
+
+.addressHeader {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+
+    @media (max-width: 640px) {
+        flex-wrap: wrap;
+    }
+}
+
+.addressIcon {
+    width: 40px;
+    height: 40px;
+    background: #fffbeb;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    svg {
+        width: 20px;
+        height: 20px;
+        color: $c-primary;
+    }
+}
+
+.addressLabel {
+    background: $c-bg-light;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    color: $c-text-muted;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.addressDetails {
+    .mainAddress {
+        font-size: 15px;
+        font-weight: 700;
+        color: $c-text-main;
+        margin: 0 0 6px 0;
+        line-height: 1.4;
+    }
+
+    .subAddress {
+        font-size: 14px;
+        color: $c-text-muted;
+        margin: 0 0 4px 0;
+        line-height: 1.5;
+    }
+
+    .phone {
+        font-size: 14px;
+        color: $c-text-muted;
+        margin: 8px 0 0 0;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+
+        svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        strong {
+            color: $c-text-main;
+            font-weight: 600;
+        }
+    }
+}
+
+.moreOptions {
+    position: relative;
+    flex-shrink: 0;
+
+    @media (max-width: 640px) {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+    }
+}
+
+.moreButton {
+    background: none;
+    border: 1px solid $c-border;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: $c-text-muted;
+
+    &:hover {
+        background-color: $c-bg-light;
+        border-color: darken($c-border, 10%);
+        color: $c-text-main;
+    }
+
+    &.active {
+        background-color: $c-bg-light;
+        border-color: $c-primary;
+        color: $c-primary;
+    }
+
+    svg {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+.dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 8px;
+    background: $c-white;
+    border: 1px solid $c-border;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    min-width: 160px;
+    z-index: 100;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
+    transition: all 0.2s ease;
+
+    &.open {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: all;
+    }
+
+    @media (max-width: 640px) {
+        right: 0;
+    }
+}
+
+.dropdownItem {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    background: none;
+    border: none;
+    width: 100%;
+    text-align: left;
+    font-size: 14px;
+    font-weight: 500;
+    color: $c-text-main;
+    cursor: pointer;
+    transition: background-color 0.2s;
+
+    svg {
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+    }
+
+    &:hover {
+        background-color: $c-bg-light;
+    }
+
+    &.delete {
+        color: #dc2626;
+
+        &:hover {
+            background-color: #fef2f2;
+        }
+
+        svg {
+            color: #dc2626;
+        }
+    }
+}
