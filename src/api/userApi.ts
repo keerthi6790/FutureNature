@@ -4,8 +4,9 @@ interface UserData {
     firstName: string;
     lastName: string;
     mobileNumber: string;
-    email?: string;
-    referralCode?: string;
+    email: string;
+    dob: string;
+    isWhatsappOptIn: boolean;
 }
 
 export const userApi = {

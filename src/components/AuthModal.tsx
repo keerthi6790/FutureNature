@@ -6,6 +6,8 @@ import Cookies from "js-cookie";
 import CustomInputError from "./CustomInputError";
 import { userApi } from "../api/userApi";
 import styles from "../styles/AuthModal.module.scss";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 interface AuthModalProps {
     isOpen: boolean;
@@ -20,7 +22,9 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }: AuthModal
     const [signupData, setSignupData] = useState({
         firstName: "",
         lastName: "",
-        password: "",
+        email: "",
+        dob: "",
+        isWhatsappOptIn: false,
     });
     const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -49,13 +53,23 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }: AuthModal
     };
 
     const handleSignupChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
+        const { name, value, type, checked } = e.target;
         setSignupData((prev) => ({
             ...prev,
-            [name]: value,
+            [name]: type === "checkbox" ? checked : value,
         }));
         if (errors[name]) {
             setErrors((prev) => ({ ...prev, [name]: "" }));
+        }
+    };
+
+    const handleDateChange = (date: Date | null) => {
+        setSignupData((prev) => ({
+            ...prev,
+            dob: date ? date.toISOString().split('T')[0] : "",
+        }));
+        if (errors.dob) {
+            setErrors((prev) => ({ ...prev, dob: "" }));
         }
     };
 
@@ -65,8 +79,13 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }: AuthModal
             newErrors.firstName = "First name is required";
         if (!signupData.lastName.trim())
             newErrors.lastName = "Last name is required";
-        if (!signupData.password || signupData.password.length < 6)
-            newErrors.password = "Password must be at least 6 characters";
+        if (!signupData.email.trim()) {
+            newErrors.email = "Email is required";
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(signupData.email)) {
+            newErrors.email = "Invalid email format";
+        }
+        if (!signupData.dob)
+            newErrors.dob = "Date of birth is required";
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
@@ -138,10 +157,15 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }: AuthModal
         const cleanPhone = phoneNumber.replace(/\s/g, "");
 
         try {
-            await userApi.register({
+            const response = await userApi.register({
                 ...signupData,
                 mobileNumber: cleanPhone,
             });
+
+            const data = response.data;
+            if (data.status && data.data?.token) {
+                Cookies.set("token", data.data.token, { expires: 7 });
+            }
 
             toast.success("Registration successful");
             if (onLoginSuccess) {
@@ -162,7 +186,9 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }: AuthModal
         setSignupData({
             firstName: "",
             lastName: "",
-            password: "",
+            email: "",
+            dob: "",
+            isWhatsappOptIn: false,
         });
         setErrors({});
     };
@@ -273,49 +299,93 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }: AuthModal
                 {step === "REGISTER" && (
                     <form onSubmit={registerUser}>
                         <div className={styles.registerForm}>
-                            <div>
-                                <label className={styles.label}>
-                                    First Name
-                                </label>
-                                <input
-                                    type="text"
-                                    name="firstName"
-                                    value={signupData.firstName}
-                                    onChange={handleSignupChange}
-                                    className={`${styles.registerInput} ${errors.firstName ? styles.error : ""}`}
-                                />
-                                <CustomInputError message={errors.firstName} />
+                            <div className={styles.nameRow}>
+                                <div className={styles.nameField}>
+                                    <label className={styles.label}>
+                                        First Name
+                                    </label>
+                                    <input
+                                        type="text"
+                                        name="firstName"
+                                        value={signupData.firstName}
+                                        onChange={handleSignupChange}
+                                        placeholder="John"
+                                        className={`${styles.registerInput} ${errors.firstName ? styles.error : ""}`}
+                                    />
+                                    <CustomInputError message={errors.firstName} />
+                                </div>
+                                <div className={styles.nameField}>
+                                    <label className={styles.label}>
+                                        Last Name
+                                    </label>
+                                    <input
+                                        type="text"
+                                        name="lastName"
+                                        value={signupData.lastName}
+                                        onChange={handleSignupChange}
+                                        placeholder="Doe"
+                                        className={`${styles.registerInput} ${errors.lastName ? styles.error : ""}`}
+                                    />
+                                    <CustomInputError message={errors.lastName} />
+                                </div>
                             </div>
+
                             <div>
                                 <label className={styles.label}>
-                                    Last Name
+                                    Email Address
                                 </label>
                                 <input
-                                    type="text"
-                                    name="lastName"
-                                    value={signupData.lastName}
+                                    type="email"
+                                    name="email"
+                                    value={signupData.email}
                                     onChange={handleSignupChange}
-                                    className={`${styles.registerInput} ${errors.lastName ? styles.error : ""}`}
+                                    placeholder="john.doe@example.com"
+                                    className={`${styles.registerInput} ${errors.email ? styles.error : ""}`}
                                 />
-                                <CustomInputError message={errors.lastName} />
+                                <CustomInputError message={errors.email} />
                             </div>
+
                             <div>
                                 <label className={styles.label}>
-                                    Password
+                                    Date of Birth
                                 </label>
-                                <input
-                                    type="password"
-                                    name="password"
-                                    value={signupData.password}
-                                    onChange={handleSignupChange}
-                                    className={`${styles.registerInput} ${errors.password ? styles.error : ""}`}
-                                />
-                                <CustomInputError message={errors.password} />
+                                <div className={styles.datePickerWrapper} style={{
+                                    width: "100%"
+                                }}>
+                                    <DatePicker
+                                        selected={signupData.dob ? new Date(signupData.dob) : null}
+                                        onChange={handleDateChange}
+                                        dateFormat="dd/MM/yyyy"
+                                        placeholderText="DD/MM/YYYY"
+
+                                        maxDate={new Date()}
+                                        showMonthDropdown
+                                        showYearDropdown
+                                        dropdownMode="select"
+                                        className={`${styles.registerInput} ${errors.dob ? styles.error : ""}`}
+
+                                    />
+                                </div>
+                                <CustomInputError message={errors.dob} />
+                            </div>
+
+                            <div className={styles.optInContainer}>
+                                <label className={styles.checkboxLabel}>
+                                    <input
+                                        type="checkbox"
+                                        name="isWhatsappOptIn"
+                                        checked={signupData.isWhatsappOptIn}
+                                        onChange={handleSignupChange}
+                                        className={styles.checkbox}
+                                    />
+                                    <span>Opt-in for WhatsApp Marketing & Updates</span>
+                                </label>
                             </div>
                         </div>
                         <button
                             type="submit"
                             className={styles.submitButton}
+                            style={{ marginTop: "20px" }}
                         >
                             Complete Registration
                         </button>

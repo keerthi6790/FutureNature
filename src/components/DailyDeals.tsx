@@ -119,7 +119,7 @@ export default function DailyDeals() {
                                             addToCart(product.id, 1);
                                         }}
                                     >
-                                        Add to Cart
+                                        ADD TO CART
                                     </button>
                                 ) : (
                                     <div className={styles.qtyControl}>

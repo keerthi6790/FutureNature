@@ -47,6 +47,7 @@ export default function AccountSidebar({ activeTab = "address" }: AccountSidebar
         Cookies.remove("token");
         toast.success("Logged out successfully");
         router.push("/");
+        window.location.reload()
     };
 
 

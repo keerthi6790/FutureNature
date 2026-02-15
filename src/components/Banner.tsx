@@ -11,21 +11,6 @@ export default function Banner() {
   const [banners, setBanners] = useState<BannerType[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchBanners = async () => {
-      try {
-        const response = await bannerApi.getBanners(true);
-        if (response.status) {
-          setBanners(response.data);
-        }
-      } catch (error) {
-        console.error("Error fetching banners:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchBanners();
-  }, []);
 
   if (loading) return <SkeletonBanner />;
 

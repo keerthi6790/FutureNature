@@ -162,6 +162,7 @@ export default function About() {
         </section>
 
         {/* <Footer /> */}
+        <Footer />
       </div>
     </>
   );

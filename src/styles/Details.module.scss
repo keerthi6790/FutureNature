@@ -446,6 +446,8 @@
     color: #111827;
     margin: 0;
     letter-spacing: 1px;
+    position: relative;
+    left: -40px;
 }
 
 .reviewsScrollArea {
@@ -522,8 +524,8 @@
 
 /* Write Review */
 .writeReviewSection {
-    margin-top: 400px;
     /* matched from original */
+    margin: 20px 0px;
 }
 
 .ratingPromptRow {

@@ -417,7 +417,7 @@ export default function ViewProduct({ product }: { product: Product }) {
                                         onClick={handleAddToCart}
                                         className={styles.addToCartBtn}
                                     >
-                                        Add to Cart
+                                        ADD TO CART
                                     </button>
                                 )}
                                 <button
