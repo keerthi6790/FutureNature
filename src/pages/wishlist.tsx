@@ -111,6 +111,7 @@ export default function WishlistPage() {
                           src={product.imageUrl[0] || "/Assets/Products/15.png"}
                           alt={product.product_name}
                           fill
+                          unoptimized
                           className={styles.productImg}
                           sizes="(max-width: 768px) 100vw, 300px"
                         />

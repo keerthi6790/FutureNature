@@ -298,7 +298,8 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ isOpen, onClose }) => {
                     style={{ width: '20px', height: '20px', accentColor: '#fbbf24', cursor: 'pointer' }}
                   />
                   <div style={{ width: '50px', height: '50px', position: 'relative', borderRadius: '8px', overflow: 'hidden' }}>
-                    <Image src={deal.image} alt={deal.name} fill style={{ objectFit: 'cover' }} />
+                    <Image src={deal.image}
+                      unoptimized alt={deal.name} fill style={{ objectFit: 'cover' }} />
                   </div>
                   <div style={{ flex: 1 }}>
                     <div style={{ fontWeight: '600', color: '#374151' }}>{deal.name}</div>

@@ -79,6 +79,7 @@ export default function DailyDeals() {
                                             src={product.imageUrl?.[0] || "/Assets/Products/15.png"}
                                             alt={product.product_name}
                                             fill
+                                            unoptimized
                                             style={{ objectFit: "cover" }}
                                         />
                                     </div>

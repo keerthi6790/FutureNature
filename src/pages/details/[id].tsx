@@ -276,6 +276,7 @@ export default function ViewProduct({ product }: { product: Product }) {
                                     alt={product.product_name}
                                     width={400}
                                     height={500}
+                                    unoptimized
                                     className={styles.productImg}
                                 />
                             </div>
@@ -288,7 +289,8 @@ export default function ViewProduct({ product }: { product: Product }) {
                                         className={`${styles.thumbnail} ${idx === selectedImageIndex ? styles.active : ''}`}
                                         onClick={() => setSelectedImageIndex(idx)}
                                     >
-                                        <Image src={img} alt={`${product.product_name} ${idx + 1}`} width={80} height={80} />
+                                        <Image
+                                            unoptimized src={img} alt={`${product.product_name} ${idx + 1}`} width={80} height={80} />
                                     </div>
                                 ))}
                             </div>
@@ -325,10 +327,10 @@ export default function ViewProduct({ product }: { product: Product }) {
                             {/* Price Section */}
                             <div className={styles.priceSection}>
                                 <div className={styles.sellingPrice}>
-                                    ₹{product.selling_price}
+                                    ₹{Math.round(parseFloat(product.selling_price))}
                                 </div>
                                 <div className={styles.originalPrice}>
-                                    ₹{product.price}
+                                    ₹{Math.round(parseFloat(product.price))}
                                 </div>
                                 {product.discounted_amount && (
                                     <div className={styles.discountBadge}>

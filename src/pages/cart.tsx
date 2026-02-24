@@ -138,6 +138,7 @@ export default function Cart() {
                           alt={item.name || "Product Image"}
                           fill
                           style={{ objectFit: 'contain' }}
+                          unoptimized
                         />
                       </div>
 
@@ -161,7 +162,7 @@ export default function Cart() {
                             <span>{item.quantity}</span>
                             <button onClick={() => updateQuantity(item.id, item.quantity + 1)}>+</button>
                           </div>
-                          <div className={styles.itemPrice}>₹{(item.price || 0) * item.quantity}</div>
+                          <div className={styles.itemPrice}>₹{Math.round((item.price || 0) * item.quantity)}</div>
                         </div>
                       </div>
                     </div>
@@ -177,11 +178,11 @@ export default function Cart() {
               <div className={styles.summarySection}>
                 <div className={styles.summaryCard}>
                   <h2 className={styles.summaryTitle}>Order Summary</h2>
-                  <div className={styles.summaryRow}><span>Subtotal</span><span>₹{subtotal}</span></div>
+                  <div className={styles.summaryRow}><span>Subtotal</span><span>₹{Math.round(subtotal)}</span></div>
                   <div className={styles.summaryRow}><span>Tax Estimate (5%)</span><span>₹{salesTax}</span></div>
                   <div className={styles.summaryRow}><span>Shipping</span><span className={isFreeShipping ? styles.freeText : ''}>{isFreeShipping ? 'FREE' : `₹${shippingCost}`}</span></div>
                   <div className={styles.divider}></div>
-                  <div className={`${styles.summaryRow} ${styles.totalRow}`}><span>Total</span><span>₹{total}</span></div>
+                  <div className={`${styles.summaryRow} ${styles.totalRow}`}><span>Total</span><span>₹{Math.round(total)}</span></div>
                   <button onClick={() => setShowShipping(true)} className={styles.checkoutBtn}>Proceed to Checkout</button>
                   <div className={styles.trustBadge}><ShieldCheckIcon /><span>Secure Checkout</span></div>
                 </div>

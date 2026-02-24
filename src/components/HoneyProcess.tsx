@@ -83,6 +83,7 @@ export default function HoneyProcess() {
               <div className={styles.imageCol}>
                 <div className={styles.imgFrame}>
                   <Image
+                    unoptimized
                     src={item.image}
                     alt={item.title}
                     width={400}

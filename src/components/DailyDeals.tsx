@@ -60,6 +60,7 @@ export default function DailyDeals() {
                                 src={product.imageUrl?.[0] || "/Assets/Products/15.png"}
                                 alt={product.product_name}
                                 width={350}
+                                unoptimized
                                 height={350}
                                 className={styles.productImg}
                                 style={product.available_quantity <= 0 ? { filter: 'grayscale(1) opacity(0.6)' } : {}}
@@ -99,8 +100,8 @@ export default function DailyDeals() {
 
                             <div className={styles.actionRow}>
                                 <div className={styles.priceBlock}>
-                                    <div className={styles.currentPrice}>₹ {product.selling_price}</div>
-                                    <div className={styles.oldPrice}>₹{product.price}</div>
+                                    <div className={styles.currentPrice}>₹ {Math.round(parseFloat(product.selling_price))}</div>
+                                    <div className={styles.oldPrice}>₹{Math.round(parseFloat(product.price))}</div>
                                 </div>
 
                                 {product.available_quantity <= 0 ? (

@@ -225,6 +225,7 @@ export default function Products() {
                                                 src={product.image || '/Assets/Products/15.png'}
                                                 alt={product.name}
                                                 width={400}
+                                                unoptimized
                                                 height={320}
                                                 className={styles.productImg}
                                             />
@@ -283,9 +284,9 @@ export default function Products() {
 
                                             <div className={styles.cardFooter}>
                                                 <div className={styles.priceBox}>
-                                                    <span className={styles.priceCurr}>₹{product.price}</span>
+                                                    <span className={styles.priceCurr}>₹{Math.round(product.price)}</span>
                                                     {product.originalPrice > product.price && (
-                                                        <span className={styles.priceOld}>₹{product.originalPrice}</span>
+                                                        <span className={styles.priceOld}>₹{Math.round(product.originalPrice)}</span>
                                                     )}
                                                 </div>
 

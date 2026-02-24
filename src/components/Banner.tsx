@@ -43,6 +43,7 @@ export default function Banner() {
                 fill
                 style={{ objectFit: "cover", borderRadius: "1.5em" }}
                 priority
+                unoptimized
               />
             </div>
           </div>

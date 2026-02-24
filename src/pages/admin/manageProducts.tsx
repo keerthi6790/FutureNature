@@ -132,16 +132,17 @@ export default function ManageProducts() {
                                 <div key={product.id} className={styles.productCard}>
                                     <div className={styles.imageArea}>
                                         <Image
-                                            src={product.imageUrl?.[0] || "/Assets/Products/15.png"}
+                                            src={product.imageUrl?.[0]}
                                             alt={product.product_name}
                                             fill
                                             style={{ objectFit: "cover" }}
+                                            unoptimized
                                         />
                                     </div>
                                     <div className={styles.cardContent}>
                                         <h2 className={styles.productTitle}>{product.product_name}</h2>
                                         <p className={styles.tamilTitle}>{product.product_name_tamil}</p>
-                                        <span className={styles.price}>₹{product.selling_price}</span>
+                                        <span className={styles.price}>₹{Math.round(parseFloat(product.selling_price))}</span>
                                         <div className={styles.actions}>
                                             {product.isDeleted ? (
                                                 <button
