@@ -1,17 +1,18 @@
 import Head from "next/head";
 import Image from "next/image";
 import { useState, useEffect, useRef, useCallback } from "react";
+import { useRouter } from "next/router";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useCart } from "@/components/CartContext";
 import { productApi } from "@/api/productApi";
 import { reviewApi } from "@/api/reviewApi";
-import { GetServerSidePropsContext } from "next";
 import toast from "react-hot-toast";
 import { Rating } from "react-simple-star-rating";
 import { wishlistApi } from "@/api/wishlistApi";
 import Cookies from "js-cookie";
 import styles from "@/styles/Details.module.scss";
+import SkeletonDetail from "@/components/SkeletonDetail";
 
 interface Product {
     id: string
@@ -41,12 +42,17 @@ interface Product {
     benefitsTamil?: string[]
 }
 
-export default function ViewProduct({ product }: { product: Product }) {
+export default function ViewProduct() {
+    const router = useRouter();
+    const { id } = router.query;
     const { cart, addToCart, updateQuantity } = useCart();
+
+    const [product, setProduct] = useState<Product | null>(null);
+    const [loading, setLoading] = useState(true);
     const [quantity, setQuantity] = useState(1);
     const [selectedImageIndex, setSelectedImageIndex] = useState(0);
     const reviewsRef = useRef<HTMLDivElement>(null);
-    const [reviews, setReviews] = useState(product.reviews || []);
+    const [reviews, setReviews] = useState<Product['reviews']>([]);
     const [newReview, setNewReview] = useState("");
     const [newRating, setNewRating] = useState(5);
     const [hasFetchedReviews, setHasFetchedReviews] = useState(false);
@@ -55,7 +61,31 @@ export default function ViewProduct({ product }: { product: Product }) {
     const [pendingWishlist, setPendingWishlist] = useState(false);
 
     useEffect(() => {
+        const fetchProduct = async () => {
+            if (!id) return;
+            setLoading(true);
+            try {
+                const response = await productApi.getProductById(id as string);
+                if (response.data.status) {
+                    setProduct(response.data.data);
+                    setReviews(response.data.data.reviews || []);
+                } else {
+                    toast.error("Product not found");
+                }
+            } catch (error) {
+                console.error("Error fetching product:", error);
+                toast.error("Failed to load product details");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchProduct();
+    }, [id]);
+
+    useEffect(() => {
         const checkWishlist = async () => {
+            if (!product) return;
             const token = Cookies.get("token");
             if (token) {
                 try {
@@ -70,9 +100,10 @@ export default function ViewProduct({ product }: { product: Product }) {
             }
         };
         checkWishlist();
-    }, [product.id]);
+    }, [product]);
 
     const handleToggleWishlist = useCallback(async () => {
+        if (!product) return;
         const token = Cookies.get("token");
         if (!token) {
             toast.error("Please login to add to wishlist");
@@ -89,7 +120,7 @@ export default function ViewProduct({ product }: { product: Product }) {
             console.error("Error toggling wishlist:", error);
             toast.error("Failed to update wishlist");
         }
-    }, [product.id]);
+    }, [product]);
 
     useEffect(() => {
         const token = Cookies.get("token");
@@ -100,7 +131,7 @@ export default function ViewProduct({ product }: { product: Product }) {
     }, [pendingWishlist, handleToggleWishlist]);
 
     // Check if product is in cart
-    const cartItem = cart.find(item => item.id === product.id);
+    const cartItem = product ? cart.find(item => item.id === product.id) : null;
     const isInCart = !!cartItem;
 
     // Sync quantity with cart
@@ -113,6 +144,7 @@ export default function ViewProduct({ product }: { product: Product }) {
     }, [cartItem]);
 
     const handleQuantityChange = (change: number) => {
+        if (!product) return;
         const newQty = quantity + change;
         if (newQty <= 0) {
             updateQuantity(product.id, 0);
@@ -124,6 +156,7 @@ export default function ViewProduct({ product }: { product: Product }) {
     };
 
     const handleAddToCart = () => {
+        if (!product) return;
         addToCart(product.id, 1, {
             name: product.product_name,
             price: parseFloat(product.selling_price),
@@ -133,6 +166,7 @@ export default function ViewProduct({ product }: { product: Product }) {
     };
 
     const handleShare = async () => {
+        if (!product) return;
         try {
             if (navigator.share) {
                 await navigator.share({
@@ -150,7 +184,7 @@ export default function ViewProduct({ product }: { product: Product }) {
     };
 
     const fetchReviews = useCallback(async () => {
-        if (hasFetchedReviews) return;
+        if (hasFetchedReviews || !product) return;
         try {
             const response = await reviewApi.getReviewsByProductId(product.id);
             if (response.data.status) {
@@ -160,9 +194,10 @@ export default function ViewProduct({ product }: { product: Product }) {
         } catch (error) {
             console.error("Error fetching reviews:", error);
         }
-    }, [hasFetchedReviews, product.id]);
+    }, [hasFetchedReviews, product]);
 
     const handlePostReview = async () => {
+        if (!product) return;
         if (!newReview.trim()) {
             toast.error("Please enter a review message");
             return;
@@ -228,6 +263,28 @@ export default function ViewProduct({ product }: { product: Product }) {
         return () => clearInterval(intervalId);
     }, []);
 
+
+    if (loading) {
+        return (
+            <div className={styles.pageWrapper}>
+                <Navbar />
+                <SkeletonDetail />
+                <Footer />
+            </div>
+        );
+    }
+
+    if (!product) {
+        return (
+            <div className={styles.pageWrapper}>
+                <Navbar />
+                <div style={{ textAlign: 'center', padding: '100px' }}>
+                    <h2>Product not found</h2>
+                </div>
+                <Footer />
+            </div>
+        );
+    }
 
     return (
         <>
@@ -533,13 +590,4 @@ export default function ViewProduct({ product }: { product: Product }) {
             <Footer />
         </>
     );
-}
-
-export const getServerSideProps = async (context: GetServerSidePropsContext) => {
-    const fullPath = context.params?.id;
-    let response;
-    if (typeof fullPath === "string")
-        response = await productApi.getProductById(fullPath)
-
-    return { props: { product: response?.data?.data } }
 }

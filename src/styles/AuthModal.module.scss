@@ -139,6 +139,20 @@
     transition: border-color 0.2s;
     font-family: inherit;
 
+    ::webkit-inner-spin-button {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        margin: 0;
+    }
+
+    ::webkit-outer-spin-button {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        margin: 0;
+    }
+
     &:focus {
         border-color: #ffb400;
     }
@@ -162,6 +176,32 @@
     font-weight: 600;
     cursor: pointer;
     text-decoration: underline;
+}
+
+.resendButton {
+    background: none;
+    border: none;
+    color: #ffb400;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: underline;
+
+    &:disabled {
+        color: #9ca3af;
+        cursor: not-allowed;
+        text-decoration: none;
+    }
+}
+
+.timerText {
+    color: #6b7280;
+    font-size: 14px;
+
+    b {
+        color: #1f2937;
+        min-width: 25px;
+        display: inline-block;
+    }
 }
 
 .registerForm {

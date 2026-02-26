@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import OtpInput from "react-otp-input";
 import toast, { Toaster } from "react-hot-toast";
@@ -27,6 +27,20 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }: AuthModal
         isWhatsappOptIn: false,
     });
     const [errors, setErrors] = useState<Record<string, string>>({});
+    const [timer, setTimer] = useState(0);
+    const [canResend, setCanResend] = useState(false);
+
+    useEffect(() => {
+        let interval: NodeJS.Timeout;
+        if (timer > 0) {
+            interval = setInterval(() => {
+                setTimer((prev) => prev - 1);
+            }, 1000);
+        } else if (timer === 0 && step === "OTP") {
+            setCanResend(true);
+        }
+        return () => clearInterval(interval);
+    }, [timer, step]);
 
     if (!isOpen) return null;
 
@@ -105,6 +119,8 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }: AuthModal
             await userApi.triggerOtp(cleanPhone);
             toast.success("OTP sent successfully");
             setStep("OTP");
+            setTimer(30);
+            setCanResend(false);
             setErrors({});
         } catch (error) {
             console.error(error);
@@ -272,7 +288,7 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }: AuthModal
                                 renderInput={(props) => (
                                     <input
                                         {...props}
-                                        type="number"
+                                        inputMode="numeric"
                                         className={`${styles.otpInput} ${errors.otp ? styles.error : ""}`}
                                     />
                                 )}
@@ -286,6 +302,19 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }: AuthModal
                             Verify & Login
                         </button>
                         <p className={styles.changeNumberText}>
+                            {canResend ? (
+                                <button
+                                    onClick={triggerOtp}
+                                    className={styles.resendButton}
+                                >
+                                    Resend OTP
+                                </button>
+                            ) : (
+                                <span className={styles.timerText}>
+                                    Resend OTP in <b>{timer}s</b>
+                                </span>
+                            )}
+                            {" | "}
                             <button
                                 onClick={() => setStep("PHONE")}
                                 className={styles.changeNumberButton}

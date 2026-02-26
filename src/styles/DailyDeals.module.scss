@@ -31,18 +31,23 @@ $color-text-muted: #6b7280;
   }
 }
 
-// --- GRID LAYOUT ---
 .productsGrid {
   display: grid;
-  // MOBILE: Force 2 columns
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-  max-width: 1200px;
+  // MOBILE: 1 column
+  grid-template-columns: 1fr;
+  gap: 20px;
+  max-width: 1240px;
   margin: 0 auto;
 
-  // DESKTOP: Revert to original flexible large columns
-  @media (max-width: 768px) {
-    grid-template-columns: repeat(auto-fit, minmax(368px, 2fr));
+  // TABLET: 2 columns
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+
+  // DESKTOP: 3 columns
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(3, 1fr);
     gap: 30px;
   }
 }
@@ -102,7 +107,7 @@ $color-text-muted: #6b7280;
   width: 100%;
 
   // MOBILE HEIGHT
-  height: 160px;
+  height: 240px;
 
   // DESKTOP HEIGHT
   @media (min-width: 768px) {
@@ -143,6 +148,7 @@ $color-text-muted: #6b7280;
     // Truncate text on mobile
     display: -webkit-box;
     -webkit-line-clamp: 2;
+    line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
 

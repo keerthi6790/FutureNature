@@ -1,0 +1,169 @@
+.shimmer {
+    position: relative;
+    overflow: hidden;
+    background-color: #f3f4f6;
+    border-radius: 4px;
+
+    &::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        transform: translateX(-100%);
+        background: linear-gradient(90deg,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 0.2) 20%,
+                rgba(255, 255, 255, 0.5) 60%,
+                rgba(255, 255, 255, 0) 100%);
+        animation: shimmer 2s infinite;
+    }
+}
+
+@keyframes shimmer {
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+.skeletonWrapper {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px 24px 80px;
+}
+
+.skeletonBreadcrumbs {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.breadcrumbItem {
+    width: 80px;
+    height: 20px;
+}
+
+.skeletonCard {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 60px;
+    background-color: white;
+    border-radius: 24px;
+    padding: 40px;
+}
+
+.skeletonImageSection {
+    display: flex;
+    flex-direction: column;
+}
+
+.skeletonMainImage {
+    width: 100%;
+    height: 500px;
+    border-radius: 16px;
+    margin-bottom: 16px;
+}
+
+.skeletonThumbnails {
+    display: flex;
+    gap: 12px;
+}
+
+.skeletonThumbnail {
+    width: 80px;
+    height: 80px;
+    border-radius: 8px;
+}
+
+.skeletonInfoSection {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.skeletonMetaRow {
+    display: flex;
+    gap: 12px;
+}
+
+.metaItem {
+    width: 60px;
+    height: 20px;
+}
+
+.skeletonTitle {
+    width: 70%;
+    height: 44px;
+    margin-bottom: 8px;
+}
+
+.skeletonSubtitle {
+    width: 40%;
+    height: 28px;
+}
+
+.skeletonPriceRow {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}
+
+.priceItem {
+    width: 120px;
+    height: 48px;
+}
+
+.skeletonDescription {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding-top: 24px;
+    border-top: 1px solid #e5e7eb;
+}
+
+.descLine {
+    width: 100%;
+    height: 16px;
+
+    &:last-child {
+        width: 60%;
+    }
+}
+
+.skeletonActions {
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+.actionBtn {
+    flex: 1;
+    height: 56px;
+    border-radius: 12px;
+}
+
+@media (max-width: 900px) {
+    .skeletonCard {
+        grid-template-columns: 1fr;
+        padding: 24px;
+    }
+
+    .skeletonMainImage {
+        height: 350px;
+    }
+}
+
+@media (max-width: 480px) {
+    .skeletonCard {
+        padding: 16px;
+    }
+
+    .skeletonMainImage {
+        height: 280px;
+    }
+
+    .skeletonActions {
+        flex-direction: column;
+    }
+}
