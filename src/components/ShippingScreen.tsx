@@ -15,6 +15,23 @@ declare global {
   }
 }
 
+// Define ArrowLeftIcon component
+const ArrowLeftIcon = () => (
+  <svg
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="black"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <line x1="19" y1="12" x2="5" y2="12"></line>
+    <polyline points="12 19 5 12 12 5"></polyline>
+  </svg>
+);
+
 // Define the shape of data expected by the Payment component or parent
 export interface ShippingFormData {
   firstName: string; // Not in addressData, might need to extract or hardcode
@@ -264,49 +281,61 @@ const ShippingScreen: React.FC<ShippingScreenProps> = ({
         style={{
           backgroundColor: "white",
           borderRadius: "12px",
-          padding: "40px",
           maxWidth: "1000px",
           width: "100%",
           margin: "0 auto",
           position: "relative",
         }}
       >
-        {onClose && (
-          <button
-            onClick={onClose}
+        <div style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "flex-start",
+          marginBottom: "30px",
+          gap: "8px",
+        }}>
+          {onClose && (
+            <button
+              onClick={() => {
+                if (view === "list") {
+                  onClose();
+                } else {
+                  setView("list");
+                }
+              }}
+              style={{
+                background: "transparent",
+                border: "none",
+                fontSize: "24px",
+                cursor: "pointer",
+                color: "#666",
+                lineHeight: "1",
+                zIndex: 10,
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = "#000")}
+              onMouseLeave={(e) => (e.currentTarget.style.color = "#666")}
+            >
+              <ArrowLeftIcon />
+            </button>
+          )}
+          <h2
             style={{
-              position: "absolute",
-              top: "20px",
-              right: "20px",
-              background: "transparent",
-              border: "none",
-              fontSize: "28px",
-              cursor: "pointer",
-              color: "#666",
-              padding: "5px 10px",
-              lineHeight: "1",
+              fontSize: "24px",
+              fontWeight: "700",
+              color: "#111827",
+              textAlign: "center",
             }}
-            onMouseEnter={(e) => (e.currentTarget.style.color = "#000")}
-            onMouseLeave={(e) => (e.currentTarget.style.color = "#666")}
           >
-            ×
-          </button>
-        )}
-        <h2
-          style={{
-            fontSize: "24px",
-            fontWeight: "700",
-            color: "#111827",
-            marginBottom: "30px",
-            textAlign: "center",
-          }}
-        >
-          {view === "list"
-            ? "SELECT DELIVERY ADDRESS"
-            : view === "add"
-              ? "ADD NEW ADDRESS"
-              : "EDIT ADDRESS"}
-        </h2>
+            {view === "list"
+              ? "SELECT DELIVERY ADDRESS"
+              : view === "add"
+                ? "ADD NEW ADDRESS"
+                : "EDIT ADDRESS"}
+          </h2>
+        </div>
 
         {loading ? (
           <div style={{ textAlign: "center", padding: "40px" }}>

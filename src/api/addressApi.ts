@@ -2,6 +2,8 @@ import apiClient from "./apiClient";
 
 export interface AddressData {
     id?: string;
+    receiverName?: string;
+    label?: string;
     address1: string;
     address2: string;
     address3?: string;

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Input from "./Input";
 import { AddressData } from "../api/addressApi";
+import styles from "@/styles/AddressForm.module.scss";
 
 interface AddressFormProps {
     initialData?: AddressData;
@@ -10,6 +11,8 @@ interface AddressFormProps {
 
 export default function AddressForm({ initialData, onSubmit, onCancel }: AddressFormProps) {
     const [formData, setFormData] = useState<AddressData>({
+        receiverName: "",
+        label: "Home",
         address1: "",
         address2: "",
         address3: "",
@@ -25,11 +28,15 @@ export default function AddressForm({ initialData, onSubmit, onCancel }: Address
 
     useEffect(() => {
         if (initialData) {
-            setFormData(initialData);
+            setFormData({
+                ...initialData,
+                receiverName: initialData.receiverName || "",
+                label: initialData.label || "Home",
+            });
         }
     }, [initialData]);
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setFormData((prev) => ({
             ...prev,
@@ -78,8 +85,37 @@ export default function AddressForm({ initialData, onSubmit, onCancel }: Address
     };
 
     return (
-        <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
+        <form onSubmit={handleSubmit} className={styles.form}>
+            <div className={styles.grid2}>
+                <Input
+                    label="Receiver's Name"
+                    name="receiverName"
+                    value={formData.receiverName || ""}
+                    onChange={handleChange}
+                    placeholder="e.g. John Doe"
+                />
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    <label style={{ fontSize: '14px', fontWeight: 600, color: '#374151' }}>Address Label</label>
+                    <select
+                        name="label"
+                        value={formData.label}
+                        onChange={handleChange}
+                        style={{
+                            padding: '12px',
+                            borderRadius: '8px',
+                            border: '1px solid #d1d5db',
+                            fontSize: '14px',
+                            backgroundColor: 'white'
+                        }}
+                    >
+                        <option value="Home">Home</option>
+                        <option value="Work">Work</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+            </div>
+
+            <div className={styles.grid2}>
                 <Input
                     label="Flat/House No/Building"
                     name="address1"
@@ -108,7 +144,7 @@ export default function AddressForm({ initialData, onSubmit, onCancel }: Address
                 placeholder="e.g. Near Metro Station"
             />
 
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
+            <div className={styles.grid2}>
                 <Input
                     label="City"
                     name="city"
@@ -127,7 +163,7 @@ export default function AddressForm({ initialData, onSubmit, onCancel }: Address
                 />
             </div>
 
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "20px" }}>
+            <div className={styles.grid3}>
                 <Input
                     label="State"
                     name="state"
@@ -156,52 +192,18 @@ export default function AddressForm({ initialData, onSubmit, onCancel }: Address
                 />
             </div>
 
-            <div style={{ display: "flex", gap: "15px", marginTop: "20px" }}>
+            <div className={styles.actions}>
                 <button
                     type="button"
                     onClick={onCancel}
-                    style={{
-                        flex: 1,
-                        padding: "12px",
-                        borderRadius: "8px",
-                        border: "1px solid #d1d5db",
-                        backgroundColor: "white",
-                        color: "#374151",
-                        fontWeight: 600,
-                        cursor: "pointer",
-                        fontSize: '14px'
-                    }}
+                    className={styles.cancelButton}
                 >
                     Cancel
                 </button>
                 <button
                     type="submit"
                     disabled={isSubmitting}
-                    style={{
-                        flex: 1,
-                        padding: "12px",
-                        borderRadius: "8px",
-                        border: "none",
-                        backgroundColor: "#fbbf24",
-                        color: "#000",
-                        fontWeight: 700,
-                        cursor: isSubmitting ? "not-allowed" : "pointer",
-                        opacity: isSubmitting ? 0.7 : 1,
-                        fontSize: '14px',
-                        transition: 'all 0.2s'
-                    }}
-                    onMouseEnter={(e) => {
-                        if (!isSubmitting) {
-                            e.currentTarget.style.backgroundColor = '#000';
-                            e.currentTarget.style.color = '#fff';
-                        }
-                    }}
-                    onMouseLeave={(e) => {
-                        if (!isSubmitting) {
-                            e.currentTarget.style.backgroundColor = '#fbbf24';
-                            e.currentTarget.style.color = '#000';
-                        }
-                    }}
+                    className={styles.saveButton}
                 >
                     {isSubmitting ? "Saving..." : (initialData?.id ? "Update Address" : "Save Address")}
                 </button>

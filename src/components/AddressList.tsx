@@ -117,7 +117,7 @@ function MoreOptions({ address, onEdit, onDelete }: MoreOptionsProps) {
     );
 }
 
-export default function AddressList({ addresses, onEdit, onDelete, onAddNew }: AddressListProps) {
+export default function AddressList({ addresses, onEdit, onDelete, onAddNew, onSelect, selectedId }: AddressListProps) {
     if (addresses.length === 0) {
         return (
             <div className={styles.container}>
@@ -150,16 +150,26 @@ export default function AddressList({ addresses, onEdit, onDelete, onAddNew }: A
 
             <div className={styles.addressList}>
                 {addresses.map((addr) => (
-                    <div key={addr.id} className={styles.addressItem}>
+                    <div
+                        key={addr.id}
+                        className={`${styles.addressItem} ${selectedId === addr.id ? styles.selected : ""}`}
+                        onClick={() => onSelect?.(addr)}
+                        style={{ cursor: onSelect ? "pointer" : "default" }}
+                    >
                         <div className={styles.addressContent}>
                             <div className={styles.addressHeader}>
                                 <div className={styles.addressIcon}>
                                     <LocationIcon />
                                 </div>
-                                <span className={styles.addressLabel}>Home</span>
+                                <span className={styles.addressLabel}>{addr.label || "Home"}</span>
                             </div>
 
                             <div className={styles.addressDetails}>
+                                {addr.receiverName && (
+                                    <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#111827', margin: '0 0 8px 0' }}>
+                                        {addr.receiverName}
+                                    </h3>
+                                )}
                                 <p className={styles.mainAddress}>
                                     {addr.address1}, {addr.address2}
                                 </p>

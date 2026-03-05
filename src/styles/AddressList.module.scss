@@ -119,6 +119,12 @@ $c-white: #ffffff;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     }
 
+    &.selected {
+        border-color: $c-primary;
+        background-color: #fffbeb;
+        box-shadow: 0 0 0 1px $c-primary;
+    }
+
     @media (max-width: 640px) {
         padding: 16px;
         flex-direction: column;
