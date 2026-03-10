@@ -370,7 +370,7 @@ export default function Footer() {
           paddingTop: '20px',
           borderTop: '1px solid #333'
         }}>
-          © 2025 Futurenature. Powered by BugBrew.
+          © 2025 Futurenature. Designed & Maintained by BugBrew.
         </div>
       </div>
     </footer>

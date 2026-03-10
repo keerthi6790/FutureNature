@@ -51,7 +51,12 @@ export default function ViewProduct() {
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
-  const reviewsRef = useRef<HTMLDivElement>(null);
+
+  // UI States
+  const [showFullDesc, setShowFullDesc] = useState(false);
+  const [showFullBenefits, setShowFullBenefits] = useState(false);
+  const [showReviewModal, setShowReviewModal] = useState(false);
+
   const [reviews, setReviews] = useState<Product["reviews"]>([]);
   const [newReview, setNewReview] = useState("");
   const [newRating, setNewRating] = useState(5);
@@ -79,7 +84,6 @@ export default function ViewProduct() {
         setLoading(false);
       }
     };
-
     fetchProduct();
   }, [id]);
 
@@ -91,9 +95,7 @@ export default function ViewProduct() {
         try {
           const response = await wishlistApi.getWishlist();
           if (response.data.status) {
-            const isInWishlist = response.data.data.some(
-              (p: { id: string }) => p.id === product.id,
-            );
+            const isInWishlist = response.data.data.some((p: { id: string }) => p.id === product.id);
             setIsWishlisted(isInWishlist);
           }
         } catch (error) {
@@ -111,7 +113,6 @@ export default function ViewProduct() {
       toast.error("Please login to add to wishlist");
       return;
     }
-
     try {
       const response = await wishlistApi.toggleWishlist(product.id);
       if (response.data.status) {
@@ -132,11 +133,9 @@ export default function ViewProduct() {
     }
   }, [pendingWishlist, handleToggleWishlist]);
 
-  // Check if product is in cart
   const cartItem = product ? cart.find((item) => item.id === product.id) : null;
   const isInCart = !!cartItem;
 
-  // Sync quantity with cart
   useEffect(() => {
     if (cartItem) {
       setQuantity(cartItem.quantity);
@@ -144,6 +143,16 @@ export default function ViewProduct() {
       setQuantity(1);
     }
   }, [cartItem]);
+
+  // Prevent background scrolling when modal is open
+  useEffect(() => {
+    if (showReviewModal) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => { document.body.style.overflow = 'unset'; };
+  }, [showReviewModal]);
 
   const handleQuantityChange = (change: number) => {
     if (!product) return;
@@ -159,12 +168,12 @@ export default function ViewProduct() {
 
   const handleAddToCart = () => {
     if (!product) return;
-    addToCart(product.id, 1, {
+    addToCart(product.id, quantity, {
       name: product.product_name,
       price: parseFloat(product.selling_price),
       image: product.imageUrl[0],
     });
-    setQuantity(1);
+    toast.success("Added to cart!");
   };
 
   const handleShare = async () => {
@@ -173,7 +182,7 @@ export default function ViewProduct() {
       if (navigator.share) {
         await navigator.share({
           title: product.product_name,
-          text: `Check out this ${product.product_name} on FutureNature!`,
+          text: `Check out ${product.product_name} on FutureNature!`,
           url: window.location.href,
         });
       } else {
@@ -214,23 +223,16 @@ export default function ViewProduct() {
         toast.success("Review posted successfully!");
         setNewReview("");
         setNewRating(5);
-        // Refresh reviews
-        const updatedReviews = await reviewApi.getReviewsByProductId(
-          product.id,
-        );
+        setShowReviewModal(false); // Close Modal on success
+        const updatedReviews = await reviewApi.getReviewsByProductId(product.id);
         if (updatedReviews.data.status) {
           setReviews(updatedReviews.data.data);
         }
       }
     } catch (error: unknown) {
-      const err = error as {
-        response?: { data?: { data?: { msg?: string } } };
-      };
+      const err = error as { response?: { data?: { data?: { msg?: string } } } };
       console.error("Error posting review:", error);
-      toast.error(
-        err?.response?.data?.data?.msg ||
-          "Failed to post review. Please login first.",
-      );
+      toast.error(err?.response?.data?.data?.msg || "Failed to post review. Please login.");
     } finally {
       setIsSubmitting(false);
     }
@@ -242,30 +244,11 @@ export default function ViewProduct() {
     }
   }, [hasFetchedReviews, fetchReviews]);
 
-  // Auto-scroll reviews upward continuously
-  useEffect(() => {
-    const reviewsContainer = reviewsRef.current;
-    if (!reviewsContainer) return;
-
-    const scrollSpeed = 0.3; // Slow motion speed
-
-    const autoScroll = () => {
-      reviewsContainer.scrollTop += scrollSpeed;
-
-      // Reset to top when reaching end of first review set for seamless loop
-      const scrollableHeight = reviewsContainer.scrollHeight;
-      const visibleHeight = reviewsContainer.clientHeight;
-      const scrollThreshold = (scrollableHeight - visibleHeight) / 3;
-
-      if (reviewsContainer.scrollTop >= scrollThreshold) {
-        reviewsContainer.scrollTop = 0;
-      }
-    };
-
-    const intervalId = setInterval(autoScroll, 20);
-
-    return () => clearInterval(intervalId);
-  }, []);
+  const truncateText = (text: string, limit: number) => {
+    if (!text) return "";
+    if (text.length <= limit) return text;
+    return text.substring(0, limit) + "...";
+  };
 
   if (loading) {
     return (
@@ -281,13 +264,17 @@ export default function ViewProduct() {
     return (
       <div className={styles.pageWrapper}>
         <Navbar />
-        <div style={{ textAlign: "center", padding: "100px" }}>
+        <div className={styles.notFoundCard}>
           <h2>Product not found</h2>
+          <button onClick={() => router.push('/')} className={styles.btnPrimary}>Return Home</button>
         </div>
         <Footer />
       </div>
     );
   }
+
+  const descLimit = 150;
+  const benefitsLimit = 100;
 
   return (
     <>
@@ -295,317 +282,256 @@ export default function ViewProduct() {
         <title>{product.product_name} - FutureNature</title>
         <meta name="description" content={product.description} />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <div className={styles.pageWrapper}>
         <Navbar />
 
-        {/* Product Detail Section */}
-        <div className={styles.detailsContainer}>
+        <main className={styles.modernContainer}>
           {/* Breadcrumbs */}
-          <div className={styles.breadcrumbs}>
-            <span>Browse Products</span>
-            <span className={styles.separator}>›</span>
-            <span>Honey</span>
-            <span className={styles.separator}>›</span>
-            <span>{product.product_name}</span>
-          </div>
+          <nav className={styles.breadcrumbs}>
+            <span onClick={() => router.push('/')}>Home</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 18l6-6-6-6"/></svg>
+            <span>Products</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 18l6-6-6-6"/></svg>
+            <span className={styles.current}>{product.product_name}</span>
+          </nav>
 
-          <div className={styles.productCard}>
-            {/* Left Column - Product Image */}
-            <div className={styles.imageSection}>
-              {/* Best Seller Badge */}
-              {product.isBestSeller && (
-                <div className={styles.bestSellerBadge}>Most seller</div>
-              )}
-
-              <div className={styles.imageWrapper}>
-                {/* Decorative bees */}
-                <div className={`${styles.beeDecoration} ${styles.top}`}>
-                  🐝
-                </div>
-                <div className={`${styles.beeDecoration} ${styles.mid}`}>
-                  🐝
-                </div>
-
+          <div className={styles.productGrid}>
+            
+            {/* Left: Image Gallery */}
+            <div className={styles.galleryColumn}>
+              <div className={styles.imageCard}>
+                {product.isBestSeller && <div className={styles.badge}>Most Popular</div>}
                 <Image
                   src={product.imageUrl[selectedImageIndex]}
                   alt={product.product_name}
-                  width={400}
-                  height={500}
+                  fill
                   unoptimized
-                  className={styles.productImg}
+                  className={styles.mainImage}
+                  priority
                 />
               </div>
-
-              {/* Thumbnail Gallery */}
-              <div className={styles.thumbnailGallery}>
+              <div className={styles.thumbnailTrack}>
                 {product.imageUrl.map((img, idx) => (
-                  <div
+                  <button
                     key={idx}
-                    className={`${styles.thumbnail} ${idx === selectedImageIndex ? styles.active : ""}`}
+                    className={`${styles.thumbBtn} ${idx === selectedImageIndex ? styles.thumbActive : ""}`}
                     onClick={() => setSelectedImageIndex(idx)}
                   >
-                    <Image
-                      unoptimized
-                      src={img}
-                      alt={`${product.product_name} ${idx + 1}`}
-                      width={80}
-                      height={80}
-                    />
-                  </div>
+                    <Image unoptimized src={img} alt={`View ${idx + 1}`} fill className={styles.thumbImg} />
+                  </button>
                 ))}
               </div>
             </div>
 
-            {/* Right Column - Product Details */}
-            <div className={styles.infoSection}>
-              {/* Metadata Row */}
-              <div className={styles.metadataRow}>
-                <div className={`${styles.metaItem} ${styles.rating}`}>
-                  <span className={styles.star}>★</span>
-                  {product.overall_rating} Ratings
+            {/* Right: Product Details Cards */}
+            <div className={styles.detailsColumn}>
+              
+              {/* Card 1: Main Info & Price */}
+              <div className={styles.infoCard}>
+                {/* Top Meta Row (Ratings, Reviews, Sold) */}
+                <div className={styles.topMetaRow}>
+                  <svg className={styles.starIcon} viewBox="0 0 24 24">
+                    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                  </svg>
+                  <span>{product.overall_rating} Ratings</span>
+                  <span className={styles.dot}>•</span>
+                  <span>{product.review_count}+ Reviews</span>
+                  <span className={styles.dot}>•</span>
+                  <span>2.9K+ Sold</span>
                 </div>
-                <span className={styles.separator}>•</span>
-                <div className={styles.metaItem}>
-                  {product.review_count}+ Reviews
+
+                {/* Title & Subtitle */}
+                <div className={styles.titleSection}>
+                  <h1 className={styles.title}>{product.product_name}</h1>
+                  <h2 className={styles.subtitle}>{product.product_name_tamil}</h2>
                 </div>
-                <span className={styles.separator}>•</span>
-                <div className={styles.metaItem}>2.9K+ Sold</div>
+
+                {/* Price & Green Discount */}
+                <div className={styles.priceRow}>
+                  <span className={styles.sellingPrice}>₹{Math.round(parseFloat(product.selling_price))}</span>
+                  <span className={styles.originalPrice}>₹{Math.round(parseFloat(product.price))}</span>
+                  {product.discounted_amount && (
+                    <span className={styles.discountText}>{product.discounted_amount}% Discount</span>
+                  )}
+                </div>
+
+                {/* Bottom Stars */}
+                <div className={styles.bottomRatingRow}>
+                  <Rating initialValue={product.overall_rating} readonly size={22} allowFraction fillColor="#FFB800" />
+                  <span className={styles.ratingCount}>{product.review_count}</span>
+                </div>
               </div>
 
-              {/* Product Title */}
-              <div className={styles.titleWrapper}>
-                <h1>{product.product_name}</h1>
-                <p>{product.product_name_tamil}</p>
-              </div>
-
-              {/* Price Section */}
-              <div className={styles.priceSection}>
-                <div className={styles.sellingPrice}>
-                  ₹{Math.round(parseFloat(product.selling_price))}
+              {/* Card 2: Description */}
+              <div className={styles.contentCard}>
+                <h3 className={styles.cardHeader}>About this product</h3>
+                <div className={styles.cardBody}>
+                  <p className={styles.textPrimary}>
+                    {showFullDesc ? product.description : truncateText(product.description, descLimit)}
+                  </p>
+                  <p className={styles.textSecondary}>
+                    {showFullDesc ? product.description_tamil : truncateText(product.description_tamil, descLimit)}
+                  </p>
                 </div>
-                <div className={styles.originalPrice}>
-                  ₹{Math.round(parseFloat(product.price))}
-                </div>
-                {product.discounted_amount && (
-                  <div className={styles.discountBadge}>
-                    {product.discounted_amount}% Discount
-                  </div>
+                {(product.description?.length > descLimit || product.description_tamil?.length > descLimit) && (
+                  <button className={styles.textBtn} onClick={() => setShowFullDesc(!showFullDesc)}>
+                    {showFullDesc ? "Read Less" : "Read More"}
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ transform: showFullDesc ? 'rotate(180deg)' : 'rotate(0deg)' }}>
+                      <path d="M6 9l6 6 6-6"/>
+                    </svg>
+                  </button>
                 )}
-                {product.available_quantity <= 0 && (
-                  <div
-                    style={{
-                      color: "#dc2626",
-                      fontWeight: "700",
-                      fontSize: "18px",
-                      marginTop: "10px",
-                    }}
-                  >
-                    Out of Stock
+              </div>
+
+              {/* Card 3: Benefits */}
+              {product.benefits && product.benefits.length > 0 && (
+                <div className={styles.contentCard}>
+                  <h3 className={styles.cardHeader}>Key Benefits</h3>
+                  <div className={styles.cardBody}>
+                    <div className={styles.benefitsGrid}>
+                      {showFullBenefits 
+                        ? product.benefits.map((benefit, i) => (
+                            <div key={i} className={styles.benefitItem}>
+                              <div className={styles.checkIcon}>✓</div>
+                              <span>{benefit}</span>
+                            </div>
+                          ))
+                        : truncateText(product.benefits.join(" • "), benefitsLimit)}
+                    </div>
+                    <p className={styles.textSecondary} style={{marginTop: '12px'}}>
+                      {showFullBenefits ? product.benefitsTamil?.join(" • ") : truncateText(product.benefitsTamil?.join(" • ") || "", benefitsLimit)}
+                    </p>
                   </div>
-                )}
-              </div>
-              {/* Rating */}
-              <div className={styles.ratingSection}>
-                <div
-                  style={{ display: "flex", alignItems: "center", gap: "4px" }}
-                >
-                  <Rating
-                    initialValue={product.overall_rating}
-                    readonly
-                    size={20}
-                    allowFraction
-                  />
-                </div>
-                <span className={styles.reviewCount}>
-                  {product.review_count}
-                </span>
-              </div>
-
-              {/* Description */}
-              <div className={styles.descriptionBox}>
-                <p className={styles.mainDesc}>{product.description}</p>
-                <p className={styles.tamilDesc}>{product.description_tamil}</p>
-              </div>
-
-              {/* Benefits */}
-              <div className={styles.benefitsBox}>
-                <p className={styles.mainBenefits}>
-                  {product?.benefits?.join(" ")}
-                </p>
-                <p className={styles.tamilBenefits}>
-                  {product?.benefitsTamil?.join(" ")}
-                </p>
-              </div>
-
-              {/* Quantity Selector */}
-              {isInCart && (
-                <div className={styles.quantitySection}>
-                  <label>Quantity</label>
-                  <div className={styles.qtyControl}>
-                    <button
-                      onClick={() => handleQuantityChange(-1)}
-                      className={styles.qtyBtn}
-                    >
-                      -
+                  {((product.benefits.join(" ").length > benefitsLimit) || (product.benefitsTamil && product.benefitsTamil.join(" ").length > benefitsLimit)) && (
+                    <button className={styles.textBtn} onClick={() => setShowFullBenefits(!showFullBenefits)}>
+                      {showFullBenefits ? "View Less" : "View All Benefits"}
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ transform: showFullBenefits ? 'rotate(180deg)' : 'rotate(0deg)' }}>
+                        <path d="M6 9l6 6 6-6"/>
+                      </svg>
                     </button>
-                    <div className={styles.qtyValue}>{quantity}</div>
-                    <button
-                      onClick={() => handleQuantityChange(1)}
-                      className={styles.qtyBtn}
-                    >
-                      +
-                    </button>
-                  </div>
+                  )}
                 </div>
               )}
 
-              {/* Action Buttons */}
-              <div className={styles.actionRow}>
-                {product.available_quantity <= 0 ? (
-                  <button
-                    disabled
-                    className={styles.addToCartBtn}
-                    style={{
-                      backgroundColor: "#9ca3af",
-                      cursor: "not-allowed",
-                    }}
-                  >
-                    Out of Stock
-                  </button>
-                ) : (
-                  <button
-                    onClick={handleAddToCart}
-                    className={styles.addToCartBtn}
-                  >
-                    ADD TO CART
-                  </button>
-                )}
-                <button onClick={handleShare} className={styles.shareBtn}>
-                  Share
-                </button>
-                <button
-                  onClick={handleToggleWishlist}
-                  className={`${styles.wishlistBtn} ${isWishlisted ? styles.active : ""}`}
-                >
-                  <svg
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill={isWishlisted ? "currentColor" : "none"}
-                    stroke="currentColor"
-                    strokeWidth="2"
-                  >
-                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-                  </svg>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Reviews Section */}
-        <div className={styles.reviewsWrapper}>
-          <div className={styles.reviewsHeader}>
-            <div className={styles.headerIcon}></div>
-            <h2 className={styles.reviewsTitle}>REVIEWS</h2>
-          </div>
-
-          <div ref={reviewsRef} className={styles.reviewsScrollArea}>
-            {reviews.length > 0 ? (
-              reviews.map((review, index) => (
-                <div key={review.id || index} className={styles.reviewCard}>
-                  <div className={styles.reviewAuthorRow}>
-                    <div className={styles.authorInfo}>
-                      <div className={styles.avatar}>
-                        <svg
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="white"
-                        >
-                          <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-                        </svg>
-                      </div>
-                      <span className={styles.authorName}>
-                        {review.addedBy?.firstName} {review.addedBy?.lastName}
-                      </span>
-                    </div>
-                    <div className={styles.reviewRatingRow}>
-                      <div style={{ display: "flex", gap: "2px" }}>
-                        <Rating
-                          initialValue={review.rating}
-                          readonly
-                          size={18}
-                          allowFraction
-                        />
-                      </div>
-                      <span className={styles.ratingValue}>
-                        {review.rating}/5
-                      </span>
-                    </div>
+              {/* Card 4: Action Center */}
+              <div className={styles.actionCard}>
+                <div className={styles.quantityWrapper}>
+                  <label>Quantity</label>
+                  <div className={styles.quantityControl}>
+                    <button onClick={() => handleQuantityChange(-1)}>-</button>
+                    <span>{quantity}</span>
+                    <button onClick={() => handleQuantityChange(1)}>+</button>
                   </div>
-                  <p className={styles.reviewText}>{review.review}</p>
                 </div>
-              ))
-            ) : (
-              <p className={styles.noReviews}>
-                {hasFetchedReviews
-                  ? "No reviews yet. Be the first to review!"
-                  : "Scroll down to see reviews..."}
-              </p>
-            )}
+
+                <div className={styles.actionButtons}>
+                  {product.available_quantity <= 0 ? (
+                    <button disabled className={styles.btnDisabled}>Out of Stock</button>
+                  ) : (
+                    <button onClick={handleAddToCart} className={styles.btnPrimary}>
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 20a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/><path d="M20 20a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+                      Add to Cart
+                    </button>
+                  )}
+                  <div className={styles.iconButtons}>
+                    <button onClick={handleToggleWishlist} className={`${styles.iconBtn} ${isWishlisted ? styles.activeWishlist : ""}`} title="Wishlist">
+                      <svg width="22" height="22" viewBox="0 0 24 24" fill={isWishlisted ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                    </button>
+                    <button onClick={handleShare} className={styles.shareTextBtn}>
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+                      Share
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+            </div>
           </div>
 
-          {/* Write a Review Section */}
-          <div className={styles.writeReviewSection}>
-            <div className={styles.ratingPromptRow}>
-              <p>Rate this product:</p>
-              <div style={{ display: "flex", gap: "4px" }}>
-                <Rating
-                  onClick={setNewRating}
-                  initialValue={newRating}
-                  size={32}
-                  transition
-                  allowFraction
-                />
+          {/* Modern Review Dashboard */}
+          <div className={styles.reviewDashboard}>
+            <div className={styles.dashboardHeader}>
+              <h2>Customer Reviews</h2>
+              <button className={styles.btnOutline} onClick={() => setShowReviewModal(true)}>
+                Write a Review
+              </button>
+            </div>
+
+            <div className={styles.dashboardContent}>
+              {/* Left: Stats Sidebar */}
+              <div className={styles.reviewSidebar}>
+                <div className={styles.statsCard}>
+                  <div className={styles.bigScore}>{product.overall_rating}</div>
+                  <div className={styles.starsWrapper}>
+                    <Rating initialValue={product.overall_rating} readonly size={24} allowFraction fillColor="#FFB800" />
+                  </div>
+                  <p className={styles.reviewCount}>Based on {product.review_count} reviews</p>
+                </div>
+              </div>
+
+              {/* Right: Review Cards List */}
+              <div className={styles.reviewList}>
+                {reviews.length > 0 ? (
+                  reviews.map((review, index) => (
+                    <div key={review.id || index} className={styles.reviewCard}>
+                      <div className={styles.reviewerInfo}>
+                        <div className={styles.avatar}>
+                          {review.addedBy?.firstName?.charAt(0) || "U"}
+                        </div>
+                        <div>
+                          <p className={styles.rName}>{review.addedBy?.firstName} {review.addedBy?.lastName}</p>
+                          <Rating initialValue={review.rating} readonly size={14} allowFraction fillColor="#FFB800" />
+                        </div>
+                      </div>
+                      <p className={styles.rComment}>{review.review}</p>
+                    </div>
+                  ))
+                ) : (
+                  <div className={styles.emptyState}>
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#d1d5db" strokeWidth="1"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                    <p>No reviews yet. Be the first to share your thoughts!</p>
+                  </div>
+                )}
               </div>
             </div>
-            <div className={styles.reviewInputWrapper}>
-              <div className={styles.avatarSmall}>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
-                  <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-                </svg>
+          </div>
+
+        </main>
+
+        {/* --- REVIEW POPUP MODAL --- */}
+        {showReviewModal && (
+          <div className={styles.modalOverlay} onClick={() => setShowReviewModal(false)}>
+            <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+              
+              <button className={styles.closeModalBtn} onClick={() => setShowReviewModal(false)}>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+              </button>
+
+              <h3 className={styles.modalTitle}>Rate this product</h3>
+              <p className={styles.modalSubtitle}>How was your experience with {product.product_name}?</p>
+              
+              <div className={styles.ratingInputCenter}>
+                <Rating onClick={setNewRating} initialValue={newRating} size={36} transition allowFraction fillColor="#FFB800" />
               </div>
+              
               <textarea
                 value={newReview}
                 onChange={(e) => setNewReview(e.target.value)}
-                placeholder="Can you tell us more?"
-                className={styles.reviewTextarea}
+                placeholder="Share your experience (optional but helpful!)"
+                className={styles.modalTextarea}
               />
-              <button
-                onClick={handlePostReview}
-                disabled={isSubmitting}
-                className={styles.submitReviewBtn}
-              >
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                >
-                  <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" />
-                </svg>
+              
+              <button onClick={handlePostReview} disabled={isSubmitting} className={styles.btnPrimaryFull}>
+                {isSubmitting ? "Submitting..." : "Post Review"}
               </button>
             </div>
           </div>
-        </div>
+        )}
+
+        <Footer />
       </div>
-      <Footer />
     </>
   );
 }

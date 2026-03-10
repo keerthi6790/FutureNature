@@ -154,8 +154,19 @@ export default function Contact() {
 
         <div className={styles.container}>
           {/* Header Section */}
+         {/* Header Section */}
           <div className={styles.headerSection}>
-            <h1 className={styles.mainTitle}>Get in Touch</h1>
+            <div className={styles.titleContainer}>
+              {/* SVG allows for perfect rounded corners on the hexagon */}
+              <svg 
+                className={styles.honeyComb} 
+                viewBox="0 0 100 100" 
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path d="M28.8675 16.5C31.9615 11.141 37.735 7.80385 43.923 7.80385H66.077C72.265 7.80385 78.0385 11.141 81.1325 16.5L92.2094 35.6865C95.3034 41.0455 95.3034 47.7225 92.2094 53.0815L81.1325 72.268C78.0385 77.627 72.265 80.9641 66.077 80.9641H43.923C37.735 80.9641 31.9615 77.627 28.8675 72.268L17.7906 53.0815C14.6966 47.7225 14.6966 41.0455 17.7906 35.6865L28.8675 16.5Z" fill="#FFB800"/>
+              </svg>
+              <h1 className={styles.mainTitle}>Get in Touch</h1>
+            </div>
             <p className={styles.subtitle}>Have questions about our honey products? We&apos;re here to help.</p>
           </div>
 

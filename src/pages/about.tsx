@@ -74,7 +74,7 @@ export default function About() {
                   </p>
                 </div>
 
-                <div className={styles.signature}>Vidhya Sri</div>
+                <div className={styles.signature}>-- Vidhya Sri</div>
               </div>
             </div>
           </div>

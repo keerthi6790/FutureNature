@@ -11,17 +11,45 @@
 }
 
 /* Header */
+// Contact.module.scss
+
+/* Header */
 .headerSection {
     text-align: center;
     padding: 60px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Wrapper keeps the shape attached directly to the text */
+.titleContainer {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.honeyComb {
+    position: absolute;
+    /* Move this left/right to adjust how much it covers the 'Ge' */
+    left: -20px; 
+    top: 50%;
+    transform: translateY(-50%);
+    width: 75px;
+    height: 75px;
+    z-index: 0;
 }
 
 .mainTitle {
     font-size: 48px;
     font-weight: 900;
     color: #111827;
-    margin-bottom: 16px;
+    margin: 0;
     letter-spacing: -0.02em;
+    position: relative;
+    z-index: 1; /* Ensures text stays on top of the SVG */
+    padding-left: 12px; /* Slight bump to align nicely over the shape */
 }
 
 .subtitle {
@@ -40,16 +68,18 @@
 }
 
 /* Left Info Card */
+/* =========================================
+   Modern Minimal Info Card Redesign
+   ========================================= */
+
 .infoCard {
-    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
     border-radius: 24px;
-    padding: 40px;
+    padding: 48px;
     position: relative;
     color: #111827;
-    overflow: hidden;
-    box-shadow:
-        0 20px 25px -5px rgba(245, 158, 11, 0.15),
-        0 10px 10px -5px rgba(245, 158, 11, 0.1);
+    box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.04); /* Extremely soft, diffuse shadow */
     display: flex;
     flex-direction: column;
 }
@@ -64,91 +94,111 @@
 
 .infoTitle {
     font-size: 28px;
-    font-weight: 800;
+    font-weight: 700;
+    letter-spacing: -0.02em;
     margin-bottom: 8px;
+    color: #111827;
 }
 
 .infoSubtitle {
-    font-size: 16px;
-    opacity: 0.8;
-    margin-bottom: 40px;
+    font-size: 15px;
+    color: #6b7280; /* Muted grey */
+    margin-bottom: 56px; /* Generous breathing room */
+    line-height: 1.6;
 }
 
 .infoItems {
     display: flex;
     flex-direction: column;
-    gap: 32px;
+    gap: 40px; /* Wide spacing between items */
     flex-grow: 1;
 }
 
 .infoItem {
     display: flex;
-    gap: 16px;
+    gap: 20px;
     align-items: flex-start;
 }
 
+/* Strip away the box, let the icon breathe */
 .iconBox {
-    background: rgba(255, 255, 255, 0.2);
-    width: 40px;
-    height: 40px;
-    border-radius: 12px;
+    background: transparent;
+    width: auto;
+    height: auto;
     display: flex;
     align-items: center;
     justify-content: center;
+    color: #fbbf24; /* Minimal yellow accent */
     flex-shrink: 0;
+    margin-top: 2px; /* Aligns icon perfectly with the title text */
 }
 
+/* Modernize the SVG icons inside */
+.iconBox svg {
+    width: 22px;
+    height: 22px;
+    stroke-width: 1.5px; /* Thinner, more elegant lines */
+}
+
+/* Minimalist Kickers for the labels */
 .infoItem h3 {
-    font-size: 16px;
-    font-weight: 700;
-    margin: 0 0 4px;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #9ca3af;
+    font-weight: 600;
+    margin: 0 0 6px;
 }
 
+/* Stronger values to contrast with the light labels */
 .infoItem p {
-    font-size: 15px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #111827;
     margin: 0;
-    line-height: 1.5;
-    opacity: 0.9;
+    line-height: 1.6;
 }
 
+/* Refined Social Section */
 .socialSection {
-    margin-top: 40px;
+    margin-top: 56px;
+    padding-top: 32px;
+    border-top: 1px solid #f3f4f6; /* Subtle separator line */
 }
 
 .socialSection h3 {
-    font-size: 16px;
-    font-weight: 700;
-    margin-bottom: 16px;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #9ca3af;
+    font-weight: 600;
+    margin-bottom: 20px;
 }
 
 .socialIcons {
     display: flex;
-    gap: 16px;
+    gap: 24px; /* Wider spacing */
 }
 
+/* Clean, floating icons instead of circular buttons */
 .socialIcons a {
     color: #111827;
-    transition: transform 0.2s;
-    background: rgba(255, 255, 255, 0.2);
-    padding: 8px;
-    border-radius: 50%;
+    transition: color 0.3s ease, transform 0.3s ease;
+    background: transparent;
+    padding: 0;
+    border-radius: 0;
     display: flex;
 }
 
 .socialIcons a:hover {
     transform: translateY(-3px);
-    background: rgba(255, 255, 255, 0.4);
+    background: transparent;
+    color: #fbbf24; /* Yellow pop on hover */
 }
 
+/* Hide the old decorative background circle completely */
 .infoDecoration {
-    position: absolute;
-    bottom: -50px;
-    right: -50px;
-    width: 200px;
-    height: 200px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 50%;
-    z-index: 1;
+    display: none; 
 }
 
 /* Right Form Card */
@@ -218,9 +268,10 @@
     font-weight: 500;
 }
 
+/* --- Reversed Submit Button Styles --- */
 .submitBtn {
-    background-color: #111827;
-    color: white;
+    background-color: #fbbf24; /* Yellow background by default */
+    color: #111827; /* Dark text */
     padding: 16px;
     border-radius: 12px;
     font-weight: 600;
@@ -232,15 +283,18 @@
 }
 
 .submitBtn:hover:not(:disabled) {
-    background-color: #fbbf24;
-    color: #111827;
+    background-color: #111827; /* Black background on hover */
+    color: #ffffff; /* White text on hover */
     transform: translateY(-2px);
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
 
 .submitBtn:disabled {
-    background-color: #d1d5db;
+    background-color: #d1d5db; /* Keeps the grey disabled state */
+    color: #6b7280; /* Slightly darker grey text for readability */
     cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
 }
 
 .statusMessage {
