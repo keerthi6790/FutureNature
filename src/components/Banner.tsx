@@ -8,16 +8,30 @@ import { Banner as BannerType, bannerApi } from "@/api/bannerApi";
 import SkeletonBanner from "./SkeletonBanner";
 
 export default function Banner() {
-  const [banners, setBanners] = useState<BannerType[]>([]);
-  const [loading, setLoading] = useState(true);
-
-
-  if (loading) return <SkeletonBanner />;
+  const [banners] = useState<BannerType[]>([
+    {
+      imageUrl:
+        "https://futurenature.s3.ap-south-1.amazonaws.com/banners/Slide2.png",
+      isActive: true,
+      id: "1",
+    },
+    {
+      imageUrl:
+        "https://futurenature.s3.ap-south-1.amazonaws.com/banners/Slide1.png",
+      isActive: true,
+      id: "1",
+    },
+    {
+      imageUrl:
+        "https://futurenature.s3.ap-south-1.amazonaws.com/banners/Slide3.png",
+      isActive: true,
+      id: "1",
+    },
+  ]);
 
   if (banners.length === 0) return null;
 
   const settings = {
-    dots: true,
     infinite: true,
     speed: 800,
     slidesToShow: 1,
@@ -28,7 +42,7 @@ export default function Banner() {
     arrows: false,
     dotsClass: `slick-dots ${styles.customDots}`,
     fade: false,
-    cssEase: "ease-in-out"
+    cssEase: "ease-in-out",
   };
 
   return (
@@ -36,12 +50,15 @@ export default function Banner() {
       <Slider {...settings}>
         {banners.map((banner) => (
           <div key={banner.id} className={styles.bannerSlide}>
-            <div className={styles.bannerCard} style={{ padding: 0, width: "100%", position: "relative" }}>
+            <div
+              className={styles.bannerCard}
+              style={{ padding: 0, width: "100%", position: "relative" }}
+            >
               <Image
                 src={banner.imageUrl}
                 alt="Banner"
                 fill
-                style={{ objectFit: "cover", borderRadius: "1.5em" }}
+                style={{ objectFit: "cover" }}
                 priority
                 unoptimized
               />

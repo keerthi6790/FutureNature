@@ -13,7 +13,6 @@ export default function About() {
           name="description"
           content="Certified purity. The story behind FutureNature honey."
         />
-
       </Head>
 
       <div className={styles.pageWrapper}>
@@ -24,7 +23,9 @@ export default function About() {
           <div className={styles.heroBgPattern}></div>
           <div className={styles.container}>
             <div className={styles.heroContent}>
-              <span className={styles.heroSubtitle}>EST. 2024 • TAMIL NADU</span>
+              <span className={styles.heroSubtitle}>
+                EST. 2024 • TAMIL NADU
+              </span>
               <h1 className={styles.heroTitle}>
                 Preserving <br />
                 <span className={styles.goldText}>Nature&apos;s Soul</span>
@@ -45,7 +46,7 @@ export default function About() {
               {/* Background Image Block */}
               <div className={styles.storyBgImg}>
                 <Image
-                  src="/Assets/About us.png"
+                  src="https://futurenature.s3.ap-south-1.amazonaws.com/others/About us.png"
                   alt="Beekeeping Background"
                   fill
                   className={styles.bgImg}
@@ -61,10 +62,10 @@ export default function About() {
 
                 <div className={styles.cardBody}>
                   <p>
-                    <span className={styles.dropCap}>H</span>oney is the only food on
-                    the planet that never spoils. It is nature&apos;s way of
-                    preserving energy. My mission isn&apos;t just to harvest it, but
-                    to protect the tiny architects who build it.
+                    <span className={styles.dropCap}>H</span>oney is the only
+                    food on the planet that never spoils. It is nature&apos;s
+                    way of preserving energy. My mission isn&apos;t just to
+                    harvest it, but to protect the tiny architects who build it.
                   </p>
                   <p>
                     At FutureNature, we stepped away from industrial farming. We

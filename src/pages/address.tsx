@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
-import toast, { Toaster } from "react-hot-toast";
+import toast,  from "react-hot-toast";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import AccountSidebar from "../components/AccountSidebar";
@@ -115,7 +115,6 @@ export default function AddressPage() {
                 <title>My Addresses | FutureNature</title>
             </Head>
             <Navbar />
-            <Toaster />
 
             <div className={styles.layoutContainer}>
                 <AccountSidebar activeTab="address" />

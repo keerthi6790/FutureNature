@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans:wght@100;200;300;400;500;600;700;800;900&display=swap");
 
 :root {
   --background: #ffffff;
@@ -14,7 +14,7 @@ body {
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: 'Noto Sans', Arial, Helvetica, sans-serif;
+  font-family: "Noto Sans", Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -55,4 +55,25 @@ nextjs-portal {
   .navbar-spacer {
     height: 70px;
   }
+
+  .profileWrapper {
+    width: 32px !important;
+    height: 28px !important;
+    font-size: 14px !important;
+  }
+}
+
+.profileWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 32px;
+  background-color: #ffb606;
+  aspect-ratio: 1 / cos(30deg);
+  clip-path: polygon(50% -50%, 100% 50%, 50% 150%, 0 50%);
+  border-radius: 16px;
+  font-size: 16px;
+  font-weight: 500;
+  color: white;
 }

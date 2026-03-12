@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Cookies from "js-cookie";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { addressApi, AddressData } from "../api/addressApi";
 import AddressList from "./AddressList";
 import AddressForm from "./AddressForm";
@@ -276,7 +276,6 @@ const ShippingScreen: React.FC<ShippingScreenProps> = ({
         padding: "40px 20px",
       }}
     >
-      <Toaster />
       <div
         style={{
           backgroundColor: "white",
@@ -287,13 +286,15 @@ const ShippingScreen: React.FC<ShippingScreenProps> = ({
           position: "relative",
         }}
       >
-        <div style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "flex-start",
-          marginBottom: "30px",
-          gap: "8px",
-        }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "flex-start",
+            marginBottom: "30px",
+            gap: "8px",
+          }}
+        >
           {onClose && (
             <button
               onClick={() => {

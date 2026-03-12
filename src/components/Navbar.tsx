@@ -7,6 +7,21 @@ import Cookies from "js-cookie";
 import { useAuth } from "./AuthContext";
 import AdminPanel from "./AdminPanel";
 import { isAdminUser } from "@/utils/authUtils";
+import { userApi } from "@/api/userApi";
+
+interface IProfileData {
+  id: string;
+  phone_number: string;
+  firstName: string;
+  lastName: string;
+  is_verified: boolean;
+  createdAt: string;
+  updatedAt: string;
+  isAdmin: boolean;
+  dob: null;
+  email: null;
+  isWhatsappOptIn: false;
+}
 
 export default function Navbar() {
   const router = useRouter();
@@ -19,6 +34,26 @@ export default function Navbar() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const profileMenuRef = useRef<HTMLDivElement>(null);
+  const [profileData, setProfileData] = useState<IProfileData>({});
+
+  const getProfileData = async () => {
+    try {
+      const response = await userApi.getUserData();
+      console.log({ response });
+
+      if (response.data.status) {
+        setProfileData(response.data.data.user);
+      }
+    } catch (err) {
+      console.log({ err });
+    }
+  };
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      getProfileData();
+    }
+  }, [isLoggedIn]);
 
   useEffect(() => {
     const checkLoginStatus = () => {
@@ -97,7 +132,7 @@ export default function Navbar() {
             }}
           >
             <Image
-              src="/Assets/logo.png"
+              src="https://futurenature.s3.ap-south-1.amazonaws.com/others/logo.png"
               alt="FutureNature Logo"
               width={150}
               height={60}
@@ -294,7 +329,6 @@ export default function Navbar() {
               gap: "20px",
             }}
           >
-
             <Link
               href="/cart"
               className="navbar-cart-link"
@@ -323,7 +357,7 @@ export default function Navbar() {
                 }}
               >
                 <Image
-                  src="/Assets/Svg/cart.svg"
+                  src="https://futurenature.s3.ap-south-1.amazonaws.com/others/cart.svg"
                   alt="Cart"
                   width={42}
                   height={42}
@@ -381,19 +415,8 @@ export default function Navbar() {
                   }}
                 >
                   <span className="navbar-login-text">Profile</span>
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <Image
-                      src="/Assets/Svg/profile.svg"
-                      alt="Profile"
-                      width={42}
-                      height={42}
-                    />
+                  <div className="profileWrapper">
+                    {profileData?.firstName?.[0]}
                   </div>
                 </button>
 
@@ -415,26 +438,29 @@ export default function Navbar() {
                     }}
                   >
                     <div style={{ padding: "8px 0" }}>
-                      {isAdmin && <div
-                        onClick={() => setIsAdminPanelOpen(true)}
-                        style={{
-                          display: "block",
-                          padding: "10px 16px",
-                          color: "#374151",
-                          textDecoration: "none",
-                          fontSize: "15px",
-                          transition: "background-color 0.2s",
-                          cursor: "pointer",
-                        }}
-                        onMouseOver={(e) =>
-                          (e.currentTarget.style.backgroundColor = "#f3f4f6")
-                        }
-                        onMouseOut={(e) =>
-                          (e.currentTarget.style.backgroundColor = "transparent")
-                        }
-                      >
-                        Admin
-                      </div>}
+                      {isAdmin && (
+                        <div
+                          onClick={() => setIsAdminPanelOpen(true)}
+                          style={{
+                            display: "block",
+                            padding: "10px 16px",
+                            color: "#374151",
+                            textDecoration: "none",
+                            fontSize: "15px",
+                            transition: "background-color 0.2s",
+                            cursor: "pointer",
+                          }}
+                          onMouseOver={(e) =>
+                            (e.currentTarget.style.backgroundColor = "#f3f4f6")
+                          }
+                          onMouseOut={(e) =>
+                            (e.currentTarget.style.backgroundColor =
+                              "transparent")
+                          }
+                        >
+                          Admin
+                        </div>
+                      )}
                       <Link
                         href="/orders"
                         onClick={() => setIsProfileMenuOpen(false)}
@@ -450,7 +476,8 @@ export default function Navbar() {
                           (e.currentTarget.style.backgroundColor = "#f3f4f6")
                         }
                         onMouseOut={(e) =>
-                          (e.currentTarget.style.backgroundColor = "transparent")
+                          (e.currentTarget.style.backgroundColor =
+                            "transparent")
                         }
                       >
                         My Orders
@@ -470,7 +497,8 @@ export default function Navbar() {
                           (e.currentTarget.style.backgroundColor = "#f3f4f6")
                         }
                         onMouseOut={(e) =>
-                          (e.currentTarget.style.backgroundColor = "transparent")
+                          (e.currentTarget.style.backgroundColor =
+                            "transparent")
                         }
                       >
                         My Addresses
@@ -493,7 +521,8 @@ export default function Navbar() {
                           (e.currentTarget.style.backgroundColor = "#fef2f2")
                         }
                         onMouseOut={(e) =>
-                          (e.currentTarget.style.backgroundColor = "transparent")
+                          (e.currentTarget.style.backgroundColor =
+                            "transparent")
                         }
                       >
                         Logout
@@ -529,7 +558,7 @@ export default function Navbar() {
                   }}
                 >
                   <Image
-                    src="/Assets/Svg/profile.svg"
+                    src="https://futurenature.s3.ap-south-1.amazonaws.com/others/profile.svg"
                     alt="Login"
                     width={42}
                     height={42}
@@ -539,7 +568,6 @@ export default function Navbar() {
             )}
           </div>
         </div>
-
       </nav>
       <AdminPanel
         isOpen={isAdminPanelOpen}

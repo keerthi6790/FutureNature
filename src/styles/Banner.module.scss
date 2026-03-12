@@ -33,7 +33,6 @@ $c-white: #ffffff;
 }
 
 @keyframes flutter {
-
   0%,
   100% {
     transform: scaleY(1) rotate(0deg);
@@ -72,7 +71,7 @@ $c-white: #ffffff;
   font-size: clamp(5px, 1.5vw, 16px);
   position: relative;
   width: 78em;
-  height: 18em;
+  height: 28em;
   min-width: 78em;
   background-color: $c-yellow;
   border-radius: 1.5em;
@@ -100,7 +99,9 @@ $c-white: #ffffff;
   background-image:
     radial-gradient(circle, transparent 65%, white 66%),
     radial-gradient(circle, transparent 65%, white 66%);
-  background-position: 0 0, 1.5em 1.5em;
+  background-position:
+    0 0,
+    1.5em 1.5em;
   background-size: 3em 3em;
 }
 
@@ -171,7 +172,9 @@ $c-white: #ffffff;
 .beeSvg {
   width: 100%;
   height: 100%;
-  filter: drop-shadow(0 0.5em 0.3em rgba(0, 0, 0, 0.2)); // Corrected to filter: drop-shadow
+  filter: drop-shadow(
+    0 0.5em 0.3em rgba(0, 0, 0, 0.2)
+  ); // Corrected to filter: drop-shadow
 }
 
 // Wing animations
@@ -193,7 +196,6 @@ $c-white: #ffffff;
   opacity: 0; // Hide trail or set 0.3 to see the path
   z-index: -1;
 }
-
 
 // --- RIGHT POD ---
 .productPod {

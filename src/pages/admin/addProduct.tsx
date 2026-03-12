@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { productApi } from "@/api/productApi";
 import { isAdminUser } from "@/utils/authUtils";
 import Cookies from "js-cookie";
@@ -178,7 +178,7 @@ export default function AddProduct() {
       } else {
         toast.error(
           response.data.message ||
-          `Failed to ${isEditMode ? "update" : "add"} product`,
+            `Failed to ${isEditMode ? "update" : "add"} product`,
         );
       }
     } catch (err: any) {
@@ -194,8 +194,6 @@ export default function AddProduct() {
   return (
     <AdminGuard>
       <div className={styles.pageWrapper}>
-        <Toaster />
-
         {/* Header */}
         <div className={styles.container}>
           <div className={styles.header}>
@@ -239,14 +237,10 @@ export default function AddProduct() {
             <div className={styles.formColumn}>
               {/* General Information */}
               <div className={styles.card}>
-                <h2 className={styles.cardTitle}>
-                  General Information
-                </h2>
+                <h2 className={styles.cardTitle}>General Information</h2>
                 <div className={styles.row}>
                   <div className={styles.fieldGroup}>
-                    <label>
-                      Product Name (E)
-                    </label>
+                    <label>Product Name (E)</label>
                     <input
                       type="text"
                       name="productNameE"
@@ -257,9 +251,7 @@ export default function AddProduct() {
                     />
                   </div>
                   <div className={styles.fieldGroup}>
-                    <label>
-                      Product Name (T)
-                    </label>
+                    <label>Product Name (T)</label>
                     <input
                       type="text"
                       name="productNameT"
@@ -273,9 +265,7 @@ export default function AddProduct() {
 
                 <div className={styles.row}>
                   <div className={styles.fieldGroup}>
-                    <label>
-                      Description (E)
-                    </label>
+                    <label>Description (E)</label>
                     <textarea
                       name="descriptionE"
                       value={formData.descriptionE}
@@ -286,9 +276,7 @@ export default function AddProduct() {
                     />
                   </div>
                   <div className={styles.fieldGroup}>
-                    <label>
-                      Description (T)
-                    </label>
+                    <label>Description (T)</label>
                     <textarea
                       name="descriptionT"
                       value={formData.descriptionT}
@@ -303,14 +291,10 @@ export default function AddProduct() {
 
               {/* Pricing Details */}
               <div className={styles.card}>
-                <h2 className={styles.cardTitle}>
-                  Pricing & Inventory
-                </h2>
+                <h2 className={styles.cardTitle}>Pricing & Inventory</h2>
                 <div className={styles.row}>
                   <div className={styles.fieldGroup}>
-                    <label>
-                      Price
-                    </label>
+                    <label>Price</label>
                     <input
                       type="number"
                       name="price"
@@ -322,9 +306,7 @@ export default function AddProduct() {
                     />
                   </div>
                   <div className={styles.fieldGroup}>
-                    <label>
-                      Sale Price
-                    </label>
+                    <label>Sale Price</label>
                     <input
                       type="number"
                       name="salePrice"
@@ -338,9 +320,7 @@ export default function AddProduct() {
                 </div>
                 <div className={styles.row}>
                   <div className={styles.fieldGroup}>
-                    <label>
-                      Discount Percentage
-                    </label>
+                    <label>Discount Percentage</label>
                     <input
                       type="text"
                       name="discountPercentage"
@@ -355,9 +335,7 @@ export default function AddProduct() {
                     />
                   </div>
                   <div className={styles.fieldGroup}>
-                    <label>
-                      Available Quantity
-                    </label>
+                    <label>Available Quantity</label>
                     <input
                       type="number"
                       name="availableQuantity"
@@ -382,10 +360,7 @@ export default function AddProduct() {
                 {/* Main Image Display */}
                 <div className={styles.mainImageDisplay}>
                   {mainImage ? (
-                    <img
-                      src={mainImage}
-                      alt="Product"
-                    />
+                    <img src={mainImage} alt="Product" />
                   ) : (
                     <div className={styles.placeholderImage}>
                       <div>📷</div>
@@ -402,10 +377,7 @@ export default function AddProduct() {
                       className={`${styles.thumbnailWrapper} ${mainImage === img ? styles.active : ""}`}
                       onClick={() => setMainImage(img)}
                     >
-                      <img
-                        src={img}
-                        alt={`Thumbnail ${index + 1}`}
-                      />
+                      <img src={img} alt={`Thumbnail ${index + 1}`} />
                       <button
                         onClick={(e) => {
                           e.stopPropagation();

@@ -73,7 +73,9 @@ export default function Blog({
                       <div className={styles.cardContent}>
                         <div className={styles.tagRow}>
                           <span className={styles.idBadge}>#{item.id}</span>
-                          <span className={styles.categoryTag}>{item.tagline}</span>
+                          <span className={styles.categoryTag}>
+                            {item.tagline}
+                          </span>
                         </div>
 
                         <h2 className={styles.cardTitle}>{item.name}</h2>
@@ -106,7 +108,9 @@ export default function Blog({
         {/* --- 3. FOOTER CTA --- */}
         <section className={styles.footerCta}>
           <div className={styles.container}>
-            <h2 className={styles.ctaTitle}>Start your journey to better health.</h2>
+            <h2 className={styles.ctaTitle}>
+              Start your journey to better health.
+            </h2>
             <a href="/products" className={styles.shopBtn}>
               Visit The Shop
             </a>
@@ -127,7 +131,7 @@ export async function getStaticProps() {
       tagline: "The Energizer",
       description:
         "This blend is perfect for soothing sore throats, improving digestion, and warming the body. The bold combination of ginger and raw honey provides an energizing start to the day.",
-      image: "/Assets/Tile/T1.jpg",
+      image: "https://futurenature.s3.ap-south-1.amazonaws.com/others/T1.jpg",
     },
     {
       id: 2,
@@ -135,7 +139,7 @@ export async function getStaticProps() {
       tagline: "The Cooling Ritual",
       description:
         "A gentle fusion of rose petal preserve and raw honey. Gulkand naturally cools the system and supports digestion. Savor it as a calming evening ritual to promote tranquility.",
-      image: "/Assets/Tile/T2.jpg",
+      image: "https://futurenature.s3.ap-south-1.amazonaws.com/others/T2.jpg",
     },
     {
       id: 3,
@@ -143,7 +147,7 @@ export async function getStaticProps() {
       tagline: "Oral Defense",
       description:
         "Supports oral hygiene through selected ingredients. Perfect for oil pulling or daily use, promoting gum health and helping prevent tooth decay naturally.",
-      image: "/Assets/Tile/T3.jpg",
+      image: "https://futurenature.s3.ap-south-1.amazonaws.com/others/T3.jpg",
     },
     {
       id: 4,
@@ -151,7 +155,7 @@ export async function getStaticProps() {
       tagline: "Immunity Spark",
       description:
         "Combining the freshness of lemon with the richness of raw honey. Perfect for boosting immunity and providing natural energy. A citrus twist for your morning tea.",
-      image: "/Assets/Tile/T4.jpg",
+      image: "https://futurenature.s3.ap-south-1.amazonaws.com/others/T4.jpg",
     },
     {
       id: 5,
@@ -159,7 +163,7 @@ export async function getStaticProps() {
       tagline: "Golden Healer",
       description:
         "Known for its anti-inflammatory properties, turmeric honey is perfect for joint health and overall wellness. A perfect natural remedy for your body's defense system.",
-      image: "/Assets/Tile/T5.jpg",
+      image: "https://futurenature.s3.ap-south-1.amazonaws.com/others/T5.jpg",
     },
     {
       id: 6,
@@ -167,7 +171,7 @@ export async function getStaticProps() {
       tagline: "Respiratory Support",
       description:
         "Enriched with black seeds, this blend supports respiratory health and boosts immunity. Powerful natural wellness support with traditional herbs.",
-      image: "/Assets/Tile/T6.jpg",
+      image: "https://futurenature.s3.ap-south-1.amazonaws.com/others/T6.jpg",
     },
     {
       id: 7,
@@ -175,7 +179,7 @@ export async function getStaticProps() {
       tagline: "Metabolic Balance",
       description:
         "Warm and aromatic, cinnamon honey helps with blood sugar balance and adds a delightful spice to your daily wellness routine.",
-      image: "/Assets/Tile/T1.jpg",
+      image: "https://futurenature.s3.ap-south-1.amazonaws.com/others/T1.jpg",
     },
     {
       id: 8,
@@ -183,7 +187,7 @@ export async function getStaticProps() {
       tagline: "Stress Relief",
       description:
         "A powerful adaptogenic blend that helps manage stress and promotes mental clarity. Perfect for evening routines or whenever you need natural balance.",
-      image: "/Assets/Tile/T2.jpg",
+      image: "https://futurenature.s3.ap-south-1.amazonaws.com/others/T2.jpg",
     },
     {
       id: 9,
@@ -191,7 +195,7 @@ export async function getStaticProps() {
       tagline: "Holy Vitality",
       description:
         "Holy basil infused honey promotes respiratory health and supports digestion. A sacred blend for holistic wellness and natural vitality.",
-      image: "/Assets/Tile/T3.jpg",
+      image: "https://futurenature.s3.ap-south-1.amazonaws.com/others/T3.jpg",
     },
     {
       id: 10,
@@ -199,7 +203,7 @@ export async function getStaticProps() {
       tagline: "Nature's Bouquet",
       description:
         "A blend of multiple flower nectars, offering diverse nutritional benefits. Perfect for those who want comprehensive wellness support from nature's bounty.",
-      image: "/Assets/Tile/T4.jpg",
+      image: "https://futurenature.s3.ap-south-1.amazonaws.com/others/T4.jpg",
     },
     {
       id: 11,
@@ -207,7 +211,7 @@ export async function getStaticProps() {
       tagline: "Breath of Life",
       description:
         "Perfect for respiratory support and clear breathing. This soothing blend is ideal for seasonal wellness and maintaining healthy airways naturally.",
-      image: "/Assets/Tile/T5.jpg",
+      image: "https://futurenature.s3.ap-south-1.amazonaws.com/others/T5.jpg",
     },
     {
       id: 12,
@@ -215,7 +219,7 @@ export async function getStaticProps() {
       tagline: "Heart Health",
       description:
         "Vibrant and energizing, hibiscus honey supports heart health and provides natural antioxidants. A delicious way to care for your cardiovascular wellness.",
-      image: "/Assets/Tile/T6.jpg",
+      image: "https://futurenature.s3.ap-south-1.amazonaws.com/others/T6.jpg",
     },
     {
       id: 13,
@@ -223,7 +227,7 @@ export async function getStaticProps() {
       tagline: "Detox Blend",
       description:
         "Combining apple cider vinegar with raw honey, this blend supports digestion and detoxification. A powerful wellness tonic for daily use.",
-      image: "/Assets/Tile/T1.jpg",
+      image: "https://futurenature.s3.ap-south-1.amazonaws.com/others/T1.jpg",
     },
     {
       id: 14,
@@ -231,7 +235,7 @@ export async function getStaticProps() {
       tagline: "Mind & Focus",
       description:
         "An ancient herb combined with honey for enhanced cognitive function and mental clarity. Perfect for students and professionals.",
-      image: "/Assets/Tile/T2.jpg",
+      image: "https://futurenature.s3.ap-south-1.amazonaws.com/others/T2.jpg",
     },
     {
       id: 15,
@@ -239,7 +243,7 @@ export async function getStaticProps() {
       tagline: "Royal Glow",
       description:
         "A luxurious blend infused with the finest saffron threads. Known for promoting skin health, improving mood, and providing premium wellness support.",
-      image: "/Assets/Tile/T3.jpg",
+      image: "https://futurenature.s3.ap-south-1.amazonaws.com/others/T3.jpg",
     },
     {
       id: 16,
@@ -247,7 +251,7 @@ export async function getStaticProps() {
       tagline: "Pure Essence",
       description:
         "A premium selection of the finest floral honeys combined for ultimate wellness benefits. Perfect for those seeking the best of nature's offerings.",
-      image: "/Assets/Tile/T4.jpg",
+      image: "https://futurenature.s3.ap-south-1.amazonaws.com/others/T4.jpg",
     },
   ];
   return { props: { WELLNESS_BLENDS } };

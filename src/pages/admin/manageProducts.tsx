@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { productApi } from "@/api/productApi";
 import apiClient from "@/api/apiClient";
 import { isAdminUser } from "@/utils/authUtils";
@@ -95,7 +95,7 @@ export default function ManageProducts() {
     return (
         <AdminGuard>
             <div className={styles.pageWrapper}>
-                <Toaster />
+                < />
                 <div className={styles.container}>
                     <div className={styles.header}>
                         <div>

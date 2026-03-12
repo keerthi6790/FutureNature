@@ -14,11 +14,10 @@ const Tile = () => {
       </div>
 
       <div className={styles.tileGrid}>
-        
         {/* Item 1: Tall (Row Span 2) */}
         <div className={`${styles.tileItem} ${styles.tallItem}`}>
           <Image
-            src="/Assets/Tile/T1.jpg"
+            src="https://futurenature.s3.ap-south-1.amazonaws.com/others/T1.jpg"
             alt="Honey Product"
             width={400}
             height={800}
@@ -31,7 +30,7 @@ const Tile = () => {
         {/* Item 2: Standard */}
         <div className={styles.tileItem}>
           <Image
-            src="/Assets/Tile/T2.jpg"
+            src="https://futurenature.s3.ap-south-1.amazonaws.com/others/T2.jpg"
             alt="Honey Product"
             width={300}
             height={300}
@@ -44,7 +43,7 @@ const Tile = () => {
         {/* Item 3: Standard */}
         <div className={styles.tileItem}>
           <Image
-            src="/Assets/Tile/T3.jpg"
+            src="https://futurenature.s3.ap-south-1.amazonaws.com/others/T3.jpg"
             alt="Honey Product"
             width={300}
             height={300}
@@ -57,7 +56,7 @@ const Tile = () => {
         {/* Item 4: Standard */}
         <div className={styles.tileItem}>
           <Image
-            src="/Assets/Tile/T6.jpg"
+            src="https://futurenature.s3.ap-south-1.amazonaws.com/others/T6.jpg"
             alt="Honey Product"
             width={300}
             height={300}
@@ -70,7 +69,7 @@ const Tile = () => {
         {/* Item 5: Wide (Col Span 2) */}
         <div className={`${styles.tileItem} ${styles.wideItem}`}>
           <Image
-            src="/Assets/Tile/T5.jpg"
+            src="https://futurenature.s3.ap-south-1.amazonaws.com/others/T5.jpg"
             alt="Honey Product"
             width={600}
             height={300}
@@ -83,7 +82,7 @@ const Tile = () => {
         {/* Item 6: Standard (Will fill the gap created by the Wide item) */}
         <div className={styles.tileItem}>
           <Image
-            src="/Assets/Tile/T4.jpg"
+            src="https://futurenature.s3.ap-south-1.amazonaws.com/others/T4.jpg"
             alt="Honey Product"
             width={300}
             height={300}
@@ -92,7 +91,6 @@ const Tile = () => {
           />
           <HoverOverlay />
         </div>
-
       </div>
     </div>
   );
