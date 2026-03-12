@@ -34,7 +34,7 @@ export default function Navbar() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const profileMenuRef = useRef<HTMLDivElement>(null);
-  const [profileData, setProfileData] = useState<IProfileData | {}>({});
+  const [profileData, setProfileData] = useState<IProfileData | null>(null);
 
   const getProfileData = async () => {
     try {
