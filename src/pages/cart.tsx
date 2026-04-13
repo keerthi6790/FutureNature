@@ -369,7 +369,6 @@ export default function Cart() {
                                 updateQuantity(
                                   item.id,
                                   Math.max(1, item.quantity - 1),
-                                  selectedAddress?.id || "",
                                 )
                               }
                               disabled={item.quantity <= 1}
@@ -382,11 +381,7 @@ export default function Cart() {
                             </span>
                             <button
                               onClick={() =>
-                                updateQuantity(
-                                  item.id,
-                                  item.quantity + 1,
-                                  selectedAddress?.id || "",
-                                )
+                                updateQuantity(item.id, item.quantity + 1)
                               }
                               className={styles.qtyBtn}
                             >
@@ -404,7 +399,7 @@ export default function Cart() {
 
                 <ShippingScreen
                   selectedAddress={selectedAddress}
-                  setSelectedAddress={(e) => {
+                  setSelectedAddress={(e: any) => {
                     updateAddress(e?.id);
                   }}
                 />
@@ -432,7 +427,9 @@ export default function Cart() {
 
                   <div className={`${styles.summaryRow} ${styles.totalRow}`}>
                     <span>Total</span>
-                    <span>₹{Math.round(totalPrice)}</span>
+                    <span>
+                      {totalPrice ? `₹${Math.round(+totalPrice)}` : "FREE"}
+                    </span>
                   </div>
 
                   <button
@@ -463,6 +460,7 @@ export default function Cart() {
                   </div>
                 </div>
               </div>
+            </div>
           )}
         </main>
 

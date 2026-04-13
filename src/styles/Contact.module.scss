@@ -1,13 +1,13 @@
 .pageWrapper {
-    min-height: 100vh;
-    background-color: #f9fafb;
-    padding-bottom: 80px;
+  min-height: 100vh;
+  background-color: #f9fafb;
+  padding-bottom: 80px;
 }
 
 .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
 }
 
 /* Header */
@@ -15,56 +15,56 @@
 
 /* Header */
 .headerSection {
-    text-align: center;
-    padding: 60px 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  text-align: center;
+  padding: 60px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 /* Wrapper keeps the shape attached directly to the text */
 .titleContainer {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    margin-bottom: 16px;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 16px;
 }
 
 .honeyComb {
-    position: absolute;
-    /* Move this left/right to adjust how much it covers the 'Ge' */
-    left: -20px; 
-    top: 50%;
-    transform: translateY(-50%);
-    width: 75px;
-    height: 75px;
-    z-index: 0;
+  position: absolute;
+  /* Move this left/right to adjust how much it covers the 'Ge' */
+  left: -20px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 75px;
+  height: 75px;
+  z-index: 0;
 }
 
 .mainTitle {
-    font-size: 48px;
-    font-weight: 900;
-    color: #111827;
-    margin: 0;
-    letter-spacing: -0.02em;
-    position: relative;
-    z-index: 1; /* Ensures text stays on top of the SVG */
-    padding-left: 12px; /* Slight bump to align nicely over the shape */
+  font-size: 48px;
+  font-weight: 900;
+  color: #111827;
+  margin: 0;
+  letter-spacing: -0.02em;
+  position: relative;
+  z-index: 1; /* Ensures text stays on top of the SVG */
+  padding-left: 12px; /* Slight bump to align nicely over the shape */
 }
 
 .subtitle {
-    font-size: 18px;
-    color: #6b7280;
-    max-width: 600px;
-    margin: 0 auto;
+  font-size: 18px;
+  color: #6b7280;
+  max-width: 600px;
+  margin: 0 auto;
 }
 
 /* Grid Layout */
 .contentGrid {
-    display: grid;
-    grid-template-columns: 1fr 1.5fr;
-    gap: 32px;
-    align-items: stretch;
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 32px;
+  align-items: stretch;
 }
 
 /* Left Info Card */
@@ -73,272 +73,274 @@
    ========================================= */
 
 .infoCard {
-    background: #ffffff;
-    border: 1px solid #e5e7eb;
-    border-radius: 24px;
-    padding: 48px;
-    position: relative;
-    color: #111827;
-    box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.04); /* Extremely soft, diffuse shadow */
-    display: flex;
-    flex-direction: column;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 24px;
+  padding: 48px;
+  position: relative;
+  color: #111827;
+  box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.04); /* Extremely soft, diffuse shadow */
+  display: flex;
+  flex-direction: column;
 }
 
 .infoContent {
-    position: relative;
-    z-index: 2;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .infoTitle {
-    font-size: 28px;
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    margin-bottom: 8px;
-    color: #111827;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+  color: #111827;
 }
 
 .infoSubtitle {
-    font-size: 15px;
-    color: #6b7280; /* Muted grey */
-    margin-bottom: 56px; /* Generous breathing room */
-    line-height: 1.6;
+  font-size: 15px;
+  color: #6b7280; /* Muted grey */
+  margin-bottom: 56px; /* Generous breathing room */
+  line-height: 1.6;
 }
 
 .infoItems {
-    display: flex;
-    flex-direction: column;
-    gap: 40px; /* Wide spacing between items */
-    flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 40px; /* Wide spacing between items */
+  flex-grow: 1;
 }
 
 .infoItem {
-    display: flex;
-    gap: 20px;
-    align-items: flex-start;
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
 }
 
 /* Strip away the box, let the icon breathe */
 .iconBox {
-    background: transparent;
-    width: auto;
-    height: auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #fbbf24; /* Minimal yellow accent */
-    flex-shrink: 0;
-    margin-top: 2px; /* Aligns icon perfectly with the title text */
+  background: transparent;
+  width: auto;
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fbbf24; /* Minimal yellow accent */
+  flex-shrink: 0;
+  margin-top: 2px; /* Aligns icon perfectly with the title text */
 }
 
 /* Modernize the SVG icons inside */
 .iconBox svg {
-    width: 22px;
-    height: 22px;
-    stroke-width: 1.5px; /* Thinner, more elegant lines */
+  width: 22px;
+  height: 22px;
+  stroke-width: 1.5px; /* Thinner, more elegant lines */
 }
 
 /* Minimalist Kickers for the labels */
 .infoItem h3 {
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: #9ca3af;
-    font-weight: 600;
-    margin: 0 0 6px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #9ca3af;
+  font-weight: 600;
+  margin: 0 0 6px;
 }
 
 /* Stronger values to contrast with the light labels */
 .infoItem p {
-    font-size: 16px;
-    font-weight: 500;
-    color: #111827;
-    margin: 0;
-    line-height: 1.6;
+  font-size: 16px;
+  font-weight: 500;
+  color: #111827;
+  margin: 0;
+  line-height: 1.6;
 }
 
 /* Refined Social Section */
 .socialSection {
-    margin-top: 56px;
-    padding-top: 32px;
-    border-top: 1px solid #f3f4f6; /* Subtle separator line */
+  margin-top: 56px;
+  padding-top: 32px;
+  border-top: 1px solid #f3f4f6; /* Subtle separator line */
 }
 
 .socialSection h3 {
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: #9ca3af;
-    font-weight: 600;
-    margin-bottom: 20px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #9ca3af;
+  font-weight: 600;
+  margin-bottom: 20px;
 }
 
 .socialIcons {
-    display: flex;
-    gap: 24px; /* Wider spacing */
+  display: flex;
+  gap: 24px; /* Wider spacing */
 }
 
 /* Clean, floating icons instead of circular buttons */
 .socialIcons a {
-    color: #111827;
-    transition: color 0.3s ease, transform 0.3s ease;
-    background: transparent;
-    padding: 0;
-    border-radius: 0;
-    display: flex;
+  color: #111827;
+  transition:
+    color 0.3s ease,
+    transform 0.3s ease;
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+  display: flex;
 }
 
 .socialIcons a:hover {
-    transform: translateY(-3px);
-    background: transparent;
-    color: #fbbf24; /* Yellow pop on hover */
+  transform: translateY(-3px);
+  background: transparent;
+  color: #fbbf24; /* Yellow pop on hover */
 }
 
 /* Hide the old decorative background circle completely */
 .infoDecoration {
-    display: none; 
+  display: none;
 }
 
 /* Right Form Card */
 .formCard {
-    background: white;
-    padding: 40px;
-    border-radius: 24px;
-    box-shadow:
-        0 4px 6px -1px rgba(0, 0, 0, 0.05),
-        0 2px 4px -1px rgba(0, 0, 0, 0.03);
-    border: 1px solid #f3f4f6;
+  background: white;
+  padding: 40px;
+  border-radius: 24px;
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.05),
+    0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  border: 1px solid #f3f4f6;
 }
 
 .formTitle {
-    font-size: 24px;
-    font-weight: 800;
-    color: #111827;
-    margin-bottom: 32px;
+  font-size: 24px;
+  font-weight: 800;
+  color: #111827;
+  margin-bottom: 32px;
 }
 
 .formLayout {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 }
 
 .inputGroup {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .inputGroup label {
-    font-size: 14px;
-    font-weight: 600;
-    color: #374151;
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
 }
 
 .inputGroup input,
 .inputGroup textarea {
-    padding: 12px 16px;
-    border-radius: 12px;
-    border: 2px solid #e5e7eb;
-    font-size: 15px;
-    transition: all 0.3s ease;
-    outline: none;
-    color: #111827;
-    background: #f9fafb;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 2px solid #e5e7eb;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  outline: none;
+  color: #111827;
+  background: #f9fafb;
 }
 
 .inputGroup input:focus,
 .inputGroup textarea:focus {
-    border-color: #fbbf24;
-    background: #fff;
-    box-shadow: 0 0 0 4px rgba(251, 191, 36, 0.1);
+  border-color: #fbbf24;
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(251, 191, 36, 0.1);
 }
 
 .inputGroup input.error,
 .inputGroup textarea.error {
-    border-color: #ef4444;
-    background: #fef2f2;
+  border-color: #ef4444;
+  background: #fef2f2;
 }
 
 .errorText {
-    font-size: 13px;
-    color: #ef4444;
-    font-weight: 500;
+  font-size: 13px;
+  color: #ef4444;
+  font-weight: 500;
 }
 
 /* --- Reversed Submit Button Styles --- */
 .submitBtn {
-    background-color: #fbbf24; /* Yellow background by default */
-    color: #111827; /* Dark text */
-    padding: 16px;
-    border-radius: 12px;
-    font-weight: 600;
-    font-size: 16px;
-    border: none;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    margin-top: 8px;
+  background-color: #fbbf24; /* Yellow background by default */
+  color: #111827; /* Dark text */
+  padding: 16px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 8px;
 }
 
 .submitBtn:hover:not(:disabled) {
-    background-color: #111827; /* Black background on hover */
-    color: #ffffff; /* White text on hover */
-    transform: translateY(-2px);
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  background-color: #111827; /* Black background on hover */
+  color: #ffffff; /* White text on hover */
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
 
 .submitBtn:disabled {
-    background-color: #d1d5db; /* Keeps the grey disabled state */
-    color: #6b7280; /* Slightly darker grey text for readability */
-    cursor: not-allowed;
-    transform: none;
-    box-shadow: none;
+  background-color: #d1d5db; /* Keeps the grey disabled state */
+  color: #6b7280; /* Slightly darker grey text for readability */
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 .statusMessage {
-    padding: 16px;
-    border-radius: 12px;
-    margin-bottom: 24px;
-    font-size: 14px;
-    font-weight: 600;
+  padding: 16px;
+  border-radius: 12px;
+  margin-bottom: 24px;
+  font-size: 14px;
+  font-weight: 600;
 }
 
 .statusMessage.success {
-    background-color: #ecfdf5;
-    color: #065f46;
-    border: 1px solid #10b981;
+  background-color: #ecfdf5;
+  color: #065f46;
+  border: 1px solid #10b981;
 }
 
 .statusMessage.error {
-    background-color: #fef2f2;
-    color: #991b1b;
-    border: 1px solid #ef4444;
+  background-color: #fef2f2;
+  color: #991b1b;
+  border: 1px solid #ef4444;
 }
 
 /* Mobile Responsive */
 @media (max-width: 900px) {
-    .contentGrid {
-        grid-template-columns: 1fr;
-    }
+  .contentGrid {
+    grid-template-columns: 1fr;
+  }
 
-    .headerSection {
-        padding: 40px 0;
-        text-align: left;
-    }
+  .headerSection {
+    padding: 40px 0;
+    text-align: left;
+  }
 
-    .mainTitle {
-        font-size: 36px;
-    }
+  .mainTitle {
+    font-size: 36px;
+  }
 
-    .infoCard {
-        padding: 32px;
-        order: 2;
-        /* Puts info below form on mobile if preferred, remove to keep on top */
-    }
+  .infoCard {
+    padding: 32px;
+    order: 2;
+    /* Puts info below form on mobile if preferred, remove to keep on top */
+  }
 
-    .formCard {
-        padding: 24px;
-    }
+  .formCard {
+    padding: 24px;
+  }
 }

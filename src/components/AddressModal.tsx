@@ -1,6 +1,6 @@
 import styles from "../styles/AddressModal.module.scss";
 
-const AddressModal = ({ onClose }) => {
+const AddressModal = ({ onClose }: { onClose: () => void }) => {
   return (
     <>
       <div onClick={onClose} className={styles.overlay} />

@@ -1,52 +1,52 @@
 .homeWrapper {
-    min-height: 100vh;
-    background-color: #f9fafb;
+  min-height: 100vh;
+  background-color: #f9fafb;
 }
 
 .honeyShowcaseSection {
-    padding: 80px 20px;
-    background-color: #f9fafb;
-    max-width: 1400px;
-    margin: 0 auto;
+  padding: 80px 20px;
+  background-color: #f9fafb;
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
 .sectionHeader {
-    text-align: center;
-    margin-bottom: 60px;
+  text-align: center;
+  margin-bottom: 60px;
 }
 
 .sectionTitle {
-    font-size: 42px;
-    font-weight: 700;
-    color: #fbbf24;
-    margin: 0 0 12px 0;
-    letter-spacing: 0.5px;
+  font-size: 42px;
+  font-weight: 700;
+  color: #fbbf24;
+  margin: 0 0 12px 0;
+  letter-spacing: 0.5px;
 }
 
 .backToTopButton {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    width: 70px;
-    height: 70px;
-    clip-path: polygon(50% 0%, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%);
-    background-color: #ffb400;
-    color: white;
-    border: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 6px 20px rgba(255, 180, 0, 0.4);
-    transition: background-color 0.3s ease;
-    z-index: 1000;
-    transform: rotate(90deg);
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 70px;
+  height: 70px;
+  clip-path: polygon(50% 0%, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%);
+  background-color: #ffb400;
+  color: white;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 20px rgba(255, 180, 0, 0.4);
+  transition: background-color 0.3s ease;
+  z-index: 1000;
+  transform: rotate(90deg);
 
-    &:hover {
-        background-color: #000;
-    }
+  &:hover {
+    background-color: #000;
+  }
 
-    svg {
-        transform: rotate(-90deg);
-    }
+  svg {
+    transform: rotate(-90deg);
+  }
 }

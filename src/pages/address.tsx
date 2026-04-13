@@ -3,7 +3,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
 import toast from "react-hot-toast";
-import Navbar from "../components/Navbar";
+import Navbar from "@/components/Navbar";
 import Footer from "../components/Footer";
 import AccountSidebar from "../components/AccountSidebar";
 import { addressApi, AddressData } from "../api/addressApi";

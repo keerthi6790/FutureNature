@@ -1,26 +1,26 @@
 import React from "react";
 
 const Loader = () => {
-    return (
-        <div
-            style={{
-                position: "fixed",
-                top: 0,
-                left: 0,
-                width: "100%",
-                height: "100%",
-                backgroundColor: "rgba(255, 255, 255, 0.7)",
-                backdropFilter: "blur(4px)",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                zIndex: 9999,
-                transition: "opacity 0.3s ease-in-out",
-            }}
-        >
-            <div className="loader-container">
-                <div className="honey-spinner"></div>
-                <style jsx>{`
+  return (
+    <div
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        backgroundColor: "rgba(255, 255, 255, 0.7)",
+        backdropFilter: "blur(4px)",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        zIndex: 9999,
+        transition: "opacity 0.3s ease-in-out",
+      }}
+    >
+      <div className="loader-container">
+        <div className="honey-spinner"></div>
+        <style jsx>{`
           .loader-container {
             display: flex;
             flex-direction: column;
@@ -45,9 +45,9 @@ const Loader = () => {
             }
           }
         `}</style>
-            </div>
-        </div>
-    );
+      </div>
+    </div>
+  );
 };
 
 export default Loader;

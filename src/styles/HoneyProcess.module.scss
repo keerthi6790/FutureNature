@@ -1,286 +1,286 @@
 .processSection {
-    --gold: #f59e0b;
-    --gold-light: #fcd34d;
-    --cream: #fffbeb;
-    --dark: #1c1917;
-    --gray: #57534e;
+  --gold: #f59e0b;
+  --gold-light: #fcd34d;
+  --cream: #fffbeb;
+  --dark: #1c1917;
+  --gray: #57534e;
 
-    padding: 80px 24px;
-    background-color: #fff;
-    overflow: hidden;
+  padding: 80px 24px;
+  background-color: #fff;
+  overflow: hidden;
 
-    @media (max-width: 900px) {
-        padding: 60px 16px;
-    }
+  @media (max-width: 900px) {
+    padding: 60px 16px;
+  }
 }
 
 .sectionHeader {
-    text-align: center;
-    max-width: 800px;
-    margin: 0 auto 80px;
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto 80px;
 }
 
 .eyebrow {
-    font-size: 12px;
-    letter-spacing: 2px;
-    color: var(--gold);
-    font-weight: 700;
-    text-transform: uppercase;
-    display: block;
-    margin-bottom: 12px;
+  font-size: 12px;
+  letter-spacing: 2px;
+  color: var(--gold);
+  font-weight: 700;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 12px;
 }
 
 .title {
-    font-size: 48px;
-    color: var(--dark);
-    margin: 0 0 16px;
-    line-height: 1.1;
+  font-size: 48px;
+  color: var(--dark);
+  margin: 0 0 16px;
+  line-height: 1.1;
 
-    @media (max-width: 900px) {
-        font-size: 32px;
-    }
+  @media (max-width: 900px) {
+    font-size: 32px;
+  }
 }
 
 .highlight {
-    color: var(--gold);
-    font-style: italic;
+  color: var(--gold);
+  font-style: italic;
 }
 
 .subTitle {
-    font-size: 18px;
-    color: var(--gray);
+  font-size: 18px;
+  color: var(--gray);
 }
 
 .timelineContainer {
-    max-width: 1200px;
-    margin: 0 auto;
-    position: relative;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
 }
 
 .timelineTrack {
-    position: absolute;
-    left: 50%;
-    top: 0;
-    bottom: 0;
-    width: 2px;
-    background: linear-gradient(to bottom, var(--gold-light), var(--gold));
-    transform: translateX(-50%);
-    z-index: 0;
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--gold-light), var(--gold));
+  transform: translateX(-50%);
+  z-index: 0;
 
-    @media (max-width: 900px) {
-        left: 20px;
-        transform: none;
-    }
+  @media (max-width: 900px) {
+    left: 20px;
+    transform: none;
+  }
 }
 
 .timelineRow {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 100px;
+  position: relative;
+  z-index: 1;
+
+  &.reverse {
+    flex-direction: row-reverse;
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  &:hover {
+    .processCard {
+      transform: translateY(-5px);
+      border-color: var(--gold-light);
+    }
+
+    .processImg {
+      transform: scale(1.05) rotate(2deg);
+    }
+  }
+
+  @media (max-width: 900px) {
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 60px;
+    padding-left: 50px;
     position: relative;
-    z-index: 1;
 
     &.reverse {
-        flex-direction: row-reverse;
+      flex-direction: column;
     }
-
-    &:last-child {
-        margin-bottom: 0;
-    }
-
-    &:hover {
-        .processCard {
-            transform: translateY(-5px);
-            border-color: var(--gold-light);
-        }
-
-        .processImg {
-            transform: scale(1.05) rotate(2deg);
-        }
-    }
-
-    @media (max-width: 900px) {
-        flex-direction: column;
-        align-items: flex-start;
-        margin-bottom: 60px;
-        padding-left: 50px;
-        position: relative;
-
-        &.reverse {
-            flex-direction: column;
-        }
-    }
+  }
 }
 
 .contentCol,
 .imageCol {
-    width: 45%;
+  width: 45%;
 
-    @media (max-width: 900px) {
-        width: 100%;
-    }
+  @media (max-width: 900px) {
+    width: 100%;
+  }
 }
 
 .imageCol {
-    @media (max-width: 900px) {
-        margin-bottom: 20px;
-        order: 1;
-    }
+  @media (max-width: 900px) {
+    margin-bottom: 20px;
+    order: 1;
+  }
 }
 
 .contentCol {
-    @media (max-width: 900px) {
-        order: 2;
-    }
+  @media (max-width: 900px) {
+    order: 2;
+  }
 }
 
 .markerCol {
-    width: 10%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  width: 10%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-    @media (max-width: 900px) {
-        position: absolute;
-        left: -5px;
-        top: 0;
-        width: auto;
-        height: auto;
-        justify-content: flex-start;
-    }
+  @media (max-width: 900px) {
+    position: absolute;
+    left: -5px;
+    top: 0;
+    width: auto;
+    height: auto;
+    justify-content: flex-start;
+  }
 }
 
 .processCard {
-    background: #fff;
-    border: 1px solid #f3f4f6;
-    border-radius: 24px;
-    padding: 40px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-    transition: transform 0.3s ease;
-    position: relative;
+  background: #fff;
+  border: 1px solid #f3f4f6;
+  border-radius: 24px;
+  padding: 40px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease;
+  position: relative;
 
-    @media (max-width: 900px) {
-        padding: 24px 20px;
-        border-radius: 16px;
-    }
+  @media (max-width: 900px) {
+    padding: 24px 20px;
+    border-radius: 16px;
+  }
 }
 
 .stepCount {
-    font-size: 12px;
-    font-weight: 700;
-    color: var(--gold);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 8px;
-    display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+  display: block;
 }
 
 .cardTitle {
-    font-size: 28px;
-    color: var(--dark);
-    margin: 0 0 4px;
+  font-size: 28px;
+  color: var(--dark);
+  margin: 0 0 4px;
 
-    @media (max-width: 900px) {
-        font-size: 24px;
-    }
+  @media (max-width: 900px) {
+    font-size: 24px;
+  }
 }
 
 .cardSubtitle {
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--gray);
-    text-transform: uppercase;
-    letter-spacing: 1px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--gray);
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .cardDivider {
-    width: 40px;
-    height: 2px;
-    background: var(--gold);
-    margin: 20px 0;
+  width: 40px;
+  height: 2px;
+  background: var(--gold);
+  margin: 20px 0;
 }
 
 .cardDesc {
-    font-size: 16px;
-    line-height: 1.6;
-    color: var(--dark);
-    margin-bottom: 24px;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--dark);
+  margin-bottom: 24px;
 
-    @media (max-width: 900px) {
-        font-size: 15px;
-    }
+  @media (max-width: 900px) {
+    font-size: 15px;
+  }
 }
 
 .tamilBlock {
-    background: var(--cream);
-    padding: 16px;
-    border-radius: 12px;
-    border-left: 3px solid var(--gold);
+  background: var(--cream);
+  padding: 16px;
+  border-radius: 12px;
+  border-left: 3px solid var(--gold);
 }
 
 .tamilTitle {
-    font-weight: 700;
-    color: var(--dark);
-    font-size: 14px;
-    margin: 0 0 4px;
+  font-weight: 700;
+  color: var(--dark);
+  font-size: 14px;
+  margin: 0 0 4px;
 }
 
 .tamilDesc {
-    font-size: 13px;
-    color: var(--gray);
-    margin: 0;
-    line-height: 1.5;
+  font-size: 13px;
+  color: var(--gray);
+  margin: 0;
+  line-height: 1.5;
 }
 
 .honeyMarker {
-    width: 50px;
-    height: 50px;
-    background: #fff;
-    border: 2px solid var(--gold);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 0 0 8px #ffffff;
-    z-index: 2;
+  width: 50px;
+  height: 50px;
+  background: #fff;
+  border: 2px solid var(--gold);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 0 8px #ffffff;
+  z-index: 2;
 
-    @media (max-width: 900px) {
-        box-shadow: 0 0 0 6px #fff;
-    }
+  @media (max-width: 900px) {
+    box-shadow: 0 0 0 6px #fff;
+  }
 }
 
 .markerInner {
-    width: 36px;
-    height: 36px;
-    background: var(--gold);
-    color: #fff;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 700;
-    font-size: 16px;
+  width: 36px;
+  height: 36px;
+  background: var(--gold);
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 16px;
 }
 
 .imgFrame {
-    position: relative;
-    display: flex;
-    justify-content: center;
+  position: relative;
+  display: flex;
+  justify-content: center;
 
-    @media (max-width: 900px) {
-        justify-content: flex-start;
-    }
+  @media (max-width: 900px) {
+    justify-content: flex-start;
+  }
 }
 
 .processImg {
-    width: 100%;
-    max-width: 350px;
-    height: auto;
-    object-fit: contain;
-    transition: transform 0.5s ease;
+  width: 100%;
+  max-width: 350px;
+  height: auto;
+  object-fit: contain;
+  transition: transform 0.5s ease;
 
-    @media (max-width: 900px) {
-        max-width: 200px;
-    }
+  @media (max-width: 900px) {
+    max-width: 200px;
+  }
 }

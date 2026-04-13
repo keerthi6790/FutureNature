@@ -1,6 +1,8 @@
+"use client";
+
 import Head from "next/head";
 import Image from "next/image";
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/router";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -95,7 +97,9 @@ export default function ViewProduct() {
         try {
           const response = await wishlistApi.getWishlist();
           if (response.data.status) {
-            const isInWishlist = response.data.data.some((p: { id: string }) => p.id === product.id);
+            const isInWishlist = response.data.data.some(
+              (p: { id: string }) => p.id === product.id,
+            );
             setIsWishlisted(isInWishlist);
           }
         } catch (error) {
@@ -147,11 +151,13 @@ export default function ViewProduct() {
   // Prevent background scrolling when modal is open
   useEffect(() => {
     if (showReviewModal) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = "unset";
     }
-    return () => { document.body.style.overflow = 'unset'; };
+    return () => {
+      document.body.style.overflow = "unset";
+    };
   }, [showReviewModal]);
 
   const handleQuantityChange = (change: number) => {
@@ -224,15 +230,22 @@ export default function ViewProduct() {
         setNewReview("");
         setNewRating(5);
         setShowReviewModal(false); // Close Modal on success
-        const updatedReviews = await reviewApi.getReviewsByProductId(product.id);
+        const updatedReviews = await reviewApi.getReviewsByProductId(
+          product.id,
+        );
         if (updatedReviews.data.status) {
           setReviews(updatedReviews.data.data);
         }
       }
     } catch (error: unknown) {
-      const err = error as { response?: { data?: { data?: { msg?: string } } } };
+      const err = error as {
+        response?: { data?: { data?: { msg?: string } } };
+      };
       console.error("Error posting review:", error);
-      toast.error(err?.response?.data?.data?.msg || "Failed to post review. Please login.");
+      toast.error(
+        err?.response?.data?.data?.msg ||
+          "Failed to post review. Please login.",
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -266,7 +279,12 @@ export default function ViewProduct() {
         <Navbar />
         <div className={styles.notFoundCard}>
           <h2>Product not found</h2>
-          <button onClick={() => router.push('/')} className={styles.btnPrimary}>Return Home</button>
+          <button
+            onClick={() => router.push("/")}
+            className={styles.btnPrimary}
+          >
+            Return Home
+          </button>
         </div>
         <Footer />
       </div>
@@ -290,19 +308,38 @@ export default function ViewProduct() {
         <main className={styles.modernContainer}>
           {/* Breadcrumbs */}
           <nav className={styles.breadcrumbs}>
-            <span onClick={() => router.push('/')}>Home</span>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 18l6-6-6-6"/></svg>
+            <span onClick={() => router.push("/")}>Home</span>
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <path d="M9 18l6-6-6-6" />
+            </svg>
             <span>Products</span>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 18l6-6-6-6"/></svg>
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <path d="M9 18l6-6-6-6" />
+            </svg>
             <span className={styles.current}>{product.product_name}</span>
           </nav>
 
           <div className={styles.productGrid}>
-            
             {/* Left: Image Gallery */}
             <div className={styles.galleryColumn}>
               <div className={styles.imageCard}>
-                {product.isBestSeller && <div className={styles.badge}>Most Popular</div>}
+                {product.isBestSeller && (
+                  <div className={styles.badge}>Most Popular</div>
+                )}
                 <Image
                   src={product.imageUrl[selectedImageIndex]}
                   alt={product.product_name}
@@ -319,7 +356,13 @@ export default function ViewProduct() {
                     className={`${styles.thumbBtn} ${idx === selectedImageIndex ? styles.thumbActive : ""}`}
                     onClick={() => setSelectedImageIndex(idx)}
                   >
-                    <Image unoptimized src={img} alt={`View ${idx + 1}`} fill className={styles.thumbImg} />
+                    <Image
+                      unoptimized
+                      src={img}
+                      alt={`View ${idx + 1}`}
+                      fill
+                      className={styles.thumbImg}
+                    />
                   </button>
                 ))}
               </div>
@@ -327,7 +370,6 @@ export default function ViewProduct() {
 
             {/* Right: Product Details Cards */}
             <div className={styles.detailsColumn}>
-              
               {/* Card 1: Main Info & Price */}
               <div className={styles.infoCard}>
                 {/* Top Meta Row (Ratings, Reviews, Sold) */}
@@ -345,22 +387,38 @@ export default function ViewProduct() {
                 {/* Title & Subtitle */}
                 <div className={styles.titleSection}>
                   <h1 className={styles.title}>{product.product_name}</h1>
-                  <h2 className={styles.subtitle}>{product.product_name_tamil}</h2>
+                  <h2 className={styles.subtitle}>
+                    {product.product_name_tamil}
+                  </h2>
                 </div>
 
                 {/* Price & Green Discount */}
                 <div className={styles.priceRow}>
-                  <span className={styles.sellingPrice}>₹{Math.round(parseFloat(product.selling_price))}</span>
-                  <span className={styles.originalPrice}>₹{Math.round(parseFloat(product.price))}</span>
+                  <span className={styles.sellingPrice}>
+                    ₹{Math.round(parseFloat(product.selling_price))}
+                  </span>
+                  <span className={styles.originalPrice}>
+                    ₹{Math.round(parseFloat(product.price))}
+                  </span>
                   {product.discounted_amount && (
-                    <span className={styles.discountText}>{product.discounted_amount}% Discount</span>
+                    <span className={styles.discountText}>
+                      {product.discounted_amount}% Discount
+                    </span>
                   )}
                 </div>
 
                 {/* Bottom Stars */}
                 <div className={styles.bottomRatingRow}>
-                  <Rating initialValue={product.overall_rating} readonly size={22} allowFraction fillColor="#FFB800" />
-                  <span className={styles.ratingCount}>{product.review_count}</span>
+                  <Rating
+                    initialValue={product.overall_rating}
+                    readonly
+                    size={22}
+                    allowFraction
+                    fillColor="#FFB800"
+                  />
+                  <span className={styles.ratingCount}>
+                    {product.review_count}
+                  </span>
                 </div>
               </div>
 
@@ -369,17 +427,37 @@ export default function ViewProduct() {
                 <h3 className={styles.cardHeader}>About this product</h3>
                 <div className={styles.cardBody}>
                   <p className={styles.textPrimary}>
-                    {showFullDesc ? product.description : truncateText(product.description, descLimit)}
+                    {showFullDesc
+                      ? product.description
+                      : truncateText(product.description, descLimit)}
                   </p>
                   <p className={styles.textSecondary}>
-                    {showFullDesc ? product.description_tamil : truncateText(product.description_tamil, descLimit)}
+                    {showFullDesc
+                      ? product.description_tamil
+                      : truncateText(product.description_tamil, descLimit)}
                   </p>
                 </div>
-                {(product.description?.length > descLimit || product.description_tamil?.length > descLimit) && (
-                  <button className={styles.textBtn} onClick={() => setShowFullDesc(!showFullDesc)}>
+                {(product.description?.length > descLimit ||
+                  product.description_tamil?.length > descLimit) && (
+                  <button
+                    className={styles.textBtn}
+                    onClick={() => setShowFullDesc(!showFullDesc)}
+                  >
                     {showFullDesc ? "Read Less" : "Read More"}
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ transform: showFullDesc ? 'rotate(180deg)' : 'rotate(0deg)' }}>
-                      <path d="M6 9l6 6 6-6"/>
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      style={{
+                        transform: showFullDesc
+                          ? "rotate(180deg)"
+                          : "rotate(0deg)",
+                      }}
+                    >
+                      <path d="M6 9l6 6 6-6" />
                     </svg>
                   </button>
                 )}
@@ -391,24 +469,53 @@ export default function ViewProduct() {
                   <h3 className={styles.cardHeader}>Key Benefits</h3>
                   <div className={styles.cardBody}>
                     <div className={styles.benefitsGrid}>
-                      {showFullBenefits 
+                      {showFullBenefits
                         ? product.benefits.map((benefit, i) => (
                             <div key={i} className={styles.benefitItem}>
                               <div className={styles.checkIcon}>✓</div>
                               <span>{benefit}</span>
                             </div>
                           ))
-                        : truncateText(product.benefits.join(" • "), benefitsLimit)}
+                        : truncateText(
+                            product.benefits.join(" • "),
+                            benefitsLimit,
+                          )}
                     </div>
-                    <p className={styles.textSecondary} style={{marginTop: '12px'}}>
-                      {showFullBenefits ? product.benefitsTamil?.join(" • ") : truncateText(product.benefitsTamil?.join(" • ") || "", benefitsLimit)}
+                    <p
+                      className={styles.textSecondary}
+                      style={{ marginTop: "12px" }}
+                    >
+                      {showFullBenefits
+                        ? product.benefitsTamil?.join(" • ")
+                        : truncateText(
+                            product.benefitsTamil?.join(" • ") || "",
+                            benefitsLimit,
+                          )}
                     </p>
                   </div>
-                  {((product.benefits.join(" ").length > benefitsLimit) || (product.benefitsTamil && product.benefitsTamil.join(" ").length > benefitsLimit)) && (
-                    <button className={styles.textBtn} onClick={() => setShowFullBenefits(!showFullBenefits)}>
+                  {(product.benefits.join(" ").length > benefitsLimit ||
+                    (product.benefitsTamil &&
+                      product.benefitsTamil.join(" ").length >
+                        benefitsLimit)) && (
+                    <button
+                      className={styles.textBtn}
+                      onClick={() => setShowFullBenefits(!showFullBenefits)}
+                    >
                       {showFullBenefits ? "View Less" : "View All Benefits"}
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ transform: showFullBenefits ? 'rotate(180deg)' : 'rotate(0deg)' }}>
-                        <path d="M6 9l6 6 6-6"/>
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        style={{
+                          transform: showFullBenefits
+                            ? "rotate(180deg)"
+                            : "rotate(0deg)",
+                        }}
+                      >
+                        <path d="M6 9l6 6 6-6" />
                       </svg>
                     </button>
                   )}
@@ -428,25 +535,69 @@ export default function ViewProduct() {
 
                 <div className={styles.actionButtons}>
                   {product.available_quantity <= 0 ? (
-                    <button disabled className={styles.btnDisabled}>Out of Stock</button>
+                    <button disabled className={styles.btnDisabled}>
+                      Out of Stock
+                    </button>
                   ) : (
-                    <button onClick={handleAddToCart} className={styles.btnPrimary}>
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 20a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/><path d="M20 20a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+                    <button
+                      onClick={handleAddToCart}
+                      className={styles.btnPrimary}
+                    >
+                      <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      >
+                        <path d="M9 20a1 1 0 1 0 0 2 1 1 0 0 0 0-2z" />
+                        <path d="M20 20a1 1 0 1 0 0 2 1 1 0 0 0 0-2z" />
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+                      </svg>
                       Add to Cart
                     </button>
                   )}
                   <div className={styles.iconButtons}>
-                    <button onClick={handleToggleWishlist} className={`${styles.iconBtn} ${isWishlisted ? styles.activeWishlist : ""}`} title="Wishlist">
-                      <svg width="22" height="22" viewBox="0 0 24 24" fill={isWishlisted ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                    <button
+                      onClick={handleToggleWishlist}
+                      className={`${styles.iconBtn} ${isWishlisted ? styles.activeWishlist : ""}`}
+                      title="Wishlist"
+                    >
+                      <svg
+                        width="22"
+                        height="22"
+                        viewBox="0 0 24 24"
+                        fill={isWishlisted ? "currentColor" : "none"}
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      >
+                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                      </svg>
                     </button>
-                    <button onClick={handleShare} className={styles.shareTextBtn}>
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+                    <button
+                      onClick={handleShare}
+                      className={styles.shareTextBtn}
+                    >
+                      <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      >
+                        <circle cx="18" cy="5" r="3" />
+                        <circle cx="6" cy="12" r="3" />
+                        <circle cx="18" cy="19" r="3" />
+                        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+                        <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+                      </svg>
                       Share
                     </button>
                   </div>
                 </div>
               </div>
-
             </div>
           </div>
 
@@ -454,7 +605,10 @@ export default function ViewProduct() {
           <div className={styles.reviewDashboard}>
             <div className={styles.dashboardHeader}>
               <h2>Customer Reviews</h2>
-              <button className={styles.btnOutline} onClick={() => setShowReviewModal(true)}>
+              <button
+                className={styles.btnOutline}
+                onClick={() => setShowReviewModal(true)}
+              >
                 Write a Review
               </button>
             </div>
@@ -463,11 +617,21 @@ export default function ViewProduct() {
               {/* Left: Stats Sidebar */}
               <div className={styles.reviewSidebar}>
                 <div className={styles.statsCard}>
-                  <div className={styles.bigScore}>{product.overall_rating}</div>
-                  <div className={styles.starsWrapper}>
-                    <Rating initialValue={product.overall_rating} readonly size={24} allowFraction fillColor="#FFB800" />
+                  <div className={styles.bigScore}>
+                    {product.overall_rating}
                   </div>
-                  <p className={styles.reviewCount}>Based on {product.review_count} reviews</p>
+                  <div className={styles.starsWrapper}>
+                    <Rating
+                      initialValue={product.overall_rating}
+                      readonly
+                      size={24}
+                      allowFraction
+                      fillColor="#FFB800"
+                    />
+                  </div>
+                  <p className={styles.reviewCount}>
+                    Based on {product.review_count} reviews
+                  </p>
                 </div>
               </div>
 
@@ -481,8 +645,17 @@ export default function ViewProduct() {
                           {review.addedBy?.firstName?.charAt(0) || "U"}
                         </div>
                         <div>
-                          <p className={styles.rName}>{review.addedBy?.firstName} {review.addedBy?.lastName}</p>
-                          <Rating initialValue={review.rating} readonly size={14} allowFraction fillColor="#FFB800" />
+                          <p className={styles.rName}>
+                            {review.addedBy?.firstName}{" "}
+                            {review.addedBy?.lastName}
+                          </p>
+                          <Rating
+                            initialValue={review.rating}
+                            readonly
+                            size={14}
+                            allowFraction
+                            fillColor="#FFB800"
+                          />
                         </div>
                       </div>
                       <p className={styles.rComment}>{review.review}</p>
@@ -490,40 +663,78 @@ export default function ViewProduct() {
                   ))
                 ) : (
                   <div className={styles.emptyState}>
-                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#d1d5db" strokeWidth="1"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                    <svg
+                      width="48"
+                      height="48"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="#d1d5db"
+                      strokeWidth="1"
+                    >
+                      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                    </svg>
                     <p>No reviews yet. Be the first to share your thoughts!</p>
                   </div>
                 )}
               </div>
             </div>
           </div>
-
         </main>
 
         {/* --- REVIEW POPUP MODAL --- */}
         {showReviewModal && (
-          <div className={styles.modalOverlay} onClick={() => setShowReviewModal(false)}>
-            <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-              
-              <button className={styles.closeModalBtn} onClick={() => setShowReviewModal(false)}>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+          <div
+            className={styles.modalOverlay}
+            onClick={() => setShowReviewModal(false)}
+          >
+            <div
+              className={styles.modalContent}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                className={styles.closeModalBtn}
+                onClick={() => setShowReviewModal(false)}
+              >
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <path d="M18 6L6 18M6 6l12 12" />
+                </svg>
               </button>
 
               <h3 className={styles.modalTitle}>Rate this product</h3>
-              <p className={styles.modalSubtitle}>How was your experience with {product.product_name}?</p>
-              
+              <p className={styles.modalSubtitle}>
+                How was your experience with {product.product_name}?
+              </p>
+
               <div className={styles.ratingInputCenter}>
-                <Rating onClick={setNewRating} initialValue={newRating} size={36} transition allowFraction fillColor="#FFB800" />
+                <Rating
+                  onClick={setNewRating}
+                  initialValue={newRating}
+                  size={36}
+                  transition
+                  allowFraction
+                  fillColor="#FFB800"
+                />
               </div>
-              
+
               <textarea
                 value={newReview}
                 onChange={(e) => setNewReview(e.target.value)}
                 placeholder="Share your experience (optional but helpful!)"
                 className={styles.modalTextarea}
               />
-              
-              <button onClick={handlePostReview} disabled={isSubmitting} className={styles.btnPrimaryFull}>
+
+              <button
+                onClick={handlePostReview}
+                disabled={isSubmitting}
+                className={styles.btnPrimaryFull}
+              >
                 {isSubmitting ? "Submitting..." : "Post Review"}
               </button>
             </div>

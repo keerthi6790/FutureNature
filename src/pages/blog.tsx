@@ -1,6 +1,6 @@
 import Head from "next/head";
 import Image from "next/image";
-import Navbar from "../components/Navbar";
+import Navbar from "@/components/Navbar";
 import Footer from "../components/Footer";
 import styles from "@/styles/Blog.module.scss";
 
@@ -37,9 +37,9 @@ export default function Blog({
           <div className={styles.container}>
             <span className={styles.eyebrow}>THE WELLNESS JOURNAL</span>
             <h1 className={styles.mainTitle}>
-  Nature’s <span className={styles.highlight}>Apothecary</span>
-</h1>
- <div className={styles.heroLine}></div>
+              Nature’s <span className={styles.highlight}>Apothecary</span>
+            </h1>
+            <div className={styles.heroLine}></div>
             <p className={styles.mainDesc}>
               Pure, handcrafted blends for modern wellness.
             </p>

@@ -2,7 +2,6 @@
 
 /* Base Mobile Styles - Applied to all devices under 768px */
 @media (max-width: 768px) {
-
   /* Mobile Menu Hamburger Button */
   .mobile-menu-button {
     display: flex !important;
@@ -17,7 +16,7 @@
     right: 0;
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(20px);
-    WebkitBackdropFilter: blur(20px);
+    webkitbackdropfilter: blur(20px);
     flex-direction: column !important;
     gap: 0 !important;
     padding: 10px 0 !important;
@@ -51,7 +50,7 @@
   }
 
   .navbar-link:after {
-    content: '→';
+    content: "→";
     opacity: 0.3;
     font-size: 18px;
   }
@@ -98,7 +97,7 @@
     padding-left: 0 !important;
   }
 
-  .banner-left-image>div {
+  .banner-left-image > div {
     width: 80px !important;
     height: 100px !important;
   }
@@ -489,7 +488,7 @@
     border-bottom: 1px solid #e5e7eb !important;
   }
 
-  .cart-table-wrapper td:first-child>div {
+  .cart-table-wrapper td:first-child > div {
     width: 100% !important;
   }
 
@@ -514,7 +513,7 @@
     margin-right: 8px !important;
   }
 
-  .cart-table-wrapper .cart-item-quantity>div {
+  .cart-table-wrapper .cart-item-quantity > div {
     margin-left: auto !important;
   }
 
@@ -764,7 +763,6 @@
 
 /* Extra Small Mobile - Under 480px */
 @media (max-width: 480px) {
-
   /* Banner extra small - even more compact */
   .banner-container {
     min-height: 150px !important;
@@ -775,7 +773,7 @@
     flex: 0 0 40px !important;
   }
 
-  .banner-left-image>div {
+  .banner-left-image > div {
     width: 60px !important;
     height: 80px !important;
   }
