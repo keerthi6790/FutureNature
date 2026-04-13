@@ -6,7 +6,8 @@
     "dev": "next dev --webpack",
     "build": "next build --webpack",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "format:fix": "npx prettier . --write"
   },
   "dependencies": {
     "@types/js-cookie": "^3.0.6",
@@ -33,6 +34,7 @@
     "baseline-browser-mapping": "^2.10.8",
     "eslint": "^9",
     "eslint-config-next": "16.0.1",
+    "prettier": "3.8.2",
     "typescript": "^5"
   }
 }

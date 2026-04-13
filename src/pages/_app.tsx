@@ -8,7 +8,8 @@ import AuthModal from "@/components/AuthModal";
 import { LoadingProvider } from "@/components/LoadingContext";
 
 function GlobalAuthModal() {
-  const { isLoginModalOpen, closeLoginModal, onLoginSuccessCallback } = useAuth();
+  const { isLoginModalOpen, closeLoginModal, onLoginSuccessCallback } =
+    useAuth();
 
   return (
     <AuthModal
@@ -22,15 +23,15 @@ function GlobalAuthModal() {
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <AuthProvider>
-      <LoadingProvider>
-        <CartProvider>
+      <CartProvider>
+        <LoadingProvider>
           <div>
             <Toaster position="bottom-center" />
             <GlobalAuthModal />
             <Component {...pageProps} />
           </div>
-        </CartProvider>
-      </LoadingProvider>
+        </LoadingProvider>
+      </CartProvider>
     </AuthProvider>
   );
 }

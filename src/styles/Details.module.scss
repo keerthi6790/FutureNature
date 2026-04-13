@@ -1,12 +1,12 @@
 /* Details.module.scss - Rich Modern E-commerce Redesign */
 
 /* Core Variables */
-$bg-color: #f4f5f7;       /* Very light grey background for the page */
-$card-bg: #ffffff;        /* Crisp white for cards */
-$primary: #FFB800;        /* Signature Yellow */
+$bg-color: #f4f5f7; /* Very light grey background for the page */
+$card-bg: #ffffff; /* Crisp white for cards */
+$primary: #ffb800; /* Signature Yellow */
 $primary-hover: #e6a600;
-$text-main: #111827;      /* Near Black */
-$text-muted: #6b7280;     /* Grey */
+$text-main: #111827; /* Near Black */
+$text-muted: #6b7280; /* Grey */
 $border-color: #e5e7eb;
 $shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
 $shadow-md: 0 8px 24px -8px rgba(0, 0, 0, 0.08);
@@ -17,7 +17,7 @@ $radius-lg: 24px;
   min-height: 100vh;
   background-color: $bg-color;
   /* Updated font-family to match your global style */
-  font-family: 'Noto Sans', Arial, Helvetica, sans-serif;
+  font-family: "Noto Sans", Arial, Helvetica, sans-serif;
   color: $text-main;
 }
 
@@ -35,8 +35,10 @@ $radius-lg: 24px;
   border-radius: $radius-md;
   text-align: center;
   box-shadow: $shadow-md;
-  
-  h2 { margin-bottom: 20px; }
+
+  h2 {
+    margin-bottom: 20px;
+  }
 }
 
 /* --- Breadcrumbs --- */
@@ -52,15 +54,21 @@ $radius-lg: 24px;
   span {
     cursor: pointer;
     transition: color 0.2s;
-    &:hover { color: $primary; }
+    &:hover {
+      color: $primary;
+    }
   }
-  
-  svg { opacity: 0.5; }
+
+  svg {
+    opacity: 0.5;
+  }
 
   .current {
     color: $text-main;
     cursor: default;
-    &:hover { color: $text-main; }
+    &:hover {
+      color: $text-main;
+    }
   }
 }
 
@@ -111,7 +119,9 @@ $radius-lg: 24px;
     object-fit: contain;
     padding: 20px;
     transition: transform 0.4s ease;
-    &:hover { transform: scale(1.05); }
+    &:hover {
+      transform: scale(1.05);
+    }
   }
 }
 
@@ -120,10 +130,17 @@ $radius-lg: 24px;
   gap: 16px;
   overflow-x: auto;
   padding-bottom: 8px;
-  
-  &::-webkit-scrollbar { height: 4px; }
-  &::-webkit-scrollbar-track { background: transparent; }
-  &::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 4px; }
+
+  &::-webkit-scrollbar {
+    height: 4px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #d1d5db;
+    border-radius: 4px;
+  }
 }
 
 .thumbBtn {
@@ -137,8 +154,10 @@ $radius-lg: 24px;
   box-shadow: $shadow-sm;
   transition: all 0.2s;
 
-  &:hover { transform: translateY(-2px); }
-  
+  &:hover {
+    transform: translateY(-2px);
+  }
+
   &.thumbActive {
     border-color: $primary;
   }
@@ -158,7 +177,9 @@ $radius-lg: 24px;
 }
 
 /* Reusable Card Style */
-.infoCard, .contentCard, .actionCard {
+.infoCard,
+.contentCard,
+.actionCard {
   background: $card-bg;
   border-radius: $radius-lg;
   padding: 32px;
@@ -189,7 +210,7 @@ $radius-lg: 24px;
 
 .titleSection {
   margin-bottom: 32px;
-  
+
   .title {
     font-size: 36px;
     font-weight: 800;
@@ -211,20 +232,20 @@ $radius-lg: 24px;
   align-items: baseline;
   gap: 16px;
   margin-bottom: 24px;
-  
+
   .sellingPrice {
     font-size: 44px;
     font-weight: 700;
     color: #ff8c42; /* Matching the orange from the image */
   }
-  
+
   .originalPrice {
     font-size: 22px;
     color: #9ca3af;
     text-decoration: line-through;
     font-weight: 500;
   }
-  
+
   .discountText {
     color: #10b981; /* Clean green text */
     font-weight: 600;
@@ -256,7 +277,7 @@ $radius-lg: 24px;
   display: flex;
   flex-direction: column;
   gap: 12px;
-  
+
   .textPrimary {
     font-size: 16px;
     line-height: 1.6;
@@ -275,14 +296,14 @@ $radius-lg: 24px;
   display: flex;
   flex-direction: column;
   gap: 10px;
-  
+
   .benefitItem {
     display: flex;
     align-items: center;
     gap: 12px;
     font-size: 16px;
     color: $text-main;
-    
+
     .checkIcon {
       background: #ecfdf5;
       color: #10b981;
@@ -312,9 +333,13 @@ $radius-lg: 24px;
   align-items: center;
   gap: 6px;
   transition: opacity 0.2s;
-  
-  &:hover { opacity: 0.8; }
-  svg { transition: transform 0.3s ease; }
+
+  &:hover {
+    opacity: 0.8;
+  }
+  svg {
+    transition: transform 0.3s ease;
+  }
 }
 
 /* --- Action Center Card --- */
@@ -331,8 +356,11 @@ $radius-lg: 24px;
   background: $bg-color;
   padding: 12px 20px;
   border-radius: 12px;
-  
-  label { font-weight: 600; font-size: 15px; }
+
+  label {
+    font-weight: 600;
+    font-size: 15px;
+  }
 }
 
 .quantityControl {
@@ -350,7 +378,9 @@ $radius-lg: 24px;
     font-size: 18px;
     cursor: pointer;
     font-weight: 500;
-    &:hover { background: #f9fafb; }
+    &:hover {
+      background: #f9fafb;
+    }
   }
   span {
     padding: 0 16px;
@@ -402,10 +432,10 @@ $radius-lg: 24px;
   color: #9ca3af;
   box-shadow: none;
   cursor: not-allowed;
-  
-  &:hover { 
-    transform: none; 
-    background: #e5e7eb; 
+
+  &:hover {
+    transform: none;
+    background: #e5e7eb;
     color: #9ca3af;
     box-shadow: none;
   }
@@ -420,7 +450,7 @@ $radius-lg: 24px;
   padding: 12px 24px;
   cursor: pointer;
   transition: all 0.2s;
-  
+
   &:hover {
     background: $text-main;
     color: white;
@@ -491,7 +521,7 @@ $radius-lg: 24px;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 32px;
-  
+
   h2 {
     font-size: 28px;
     font-weight: 800;
@@ -526,8 +556,14 @@ $radius-lg: 24px;
     margin-bottom: 12px;
     color: $text-main;
   }
-  .starsWrapper { margin-bottom: 12px; }
-  .reviewCount { color: $text-muted; font-weight: 500; margin: 0; }
+  .starsWrapper {
+    margin-bottom: 12px;
+  }
+  .reviewCount {
+    color: $text-muted;
+    font-weight: 500;
+    margin: 0;
+  }
 }
 
 /* Review List Grid */
@@ -548,7 +584,9 @@ $radius-lg: 24px;
   border: 1px solid transparent;
   transition: border-color 0.2s;
 
-  &:hover { border-color: $border-color; }
+  &:hover {
+    border-color: $border-color;
+  }
 
   .reviewerInfo {
     display: flex;
@@ -591,8 +629,12 @@ $radius-lg: 24px;
   flex-direction: column;
   align-items: center;
   gap: 16px;
-  
-  p { font-size: 16px; font-weight: 500; margin: 0; }
+
+  p {
+    font-size: 16px;
+    font-weight: 500;
+    margin: 0;
+  }
 }
 
 /* --- POPUP MODAL STYLES --- */
@@ -613,8 +655,12 @@ $radius-lg: 24px;
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .modalContent {
@@ -631,8 +677,14 @@ $radius-lg: 24px;
 }
 
 @keyframes slideUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .closeModalBtn {
@@ -650,7 +702,7 @@ $radius-lg: 24px;
   color: $text-muted;
   cursor: pointer;
   transition: all 0.2s;
-  
+
   &:hover {
     background: #e5e7eb;
     color: $text-main;
@@ -692,12 +744,12 @@ $radius-lg: 24px;
   margin-bottom: 24px;
   transition: all 0.2s;
   box-sizing: border-box;
-  
+
   /* Makes the placeholder text a nice visible gray */
   &::placeholder {
     color: $text-muted;
   }
-  
+
   &:focus {
     background: $card-bg;
     border-color: $primary;
@@ -709,41 +761,77 @@ $radius-lg: 24px;
 
 /* --- Responsive Layout --- */
 @media (max-width: 1024px) {
-  .productGrid { gap: 24px; }
+  .productGrid {
+    gap: 24px;
+  }
   .dashboardContent {
     grid-template-columns: 1fr;
-    .reviewSidebar { position: static; }
+    .reviewSidebar {
+      position: static;
+    }
   }
 }
 
 @media (max-width: 800px) {
-  .productGrid { grid-template-columns: 1fr; }
-  .galleryColumn { position: static; }
-  
-  .imageCard { aspect-ratio: auto; height: 400px; }
-  
-  .reviewList { grid-template-columns: 1fr; }
+  .productGrid {
+    grid-template-columns: 1fr;
+  }
+  .galleryColumn {
+    position: static;
+  }
+
+  .imageCard {
+    aspect-ratio: auto;
+    height: 400px;
+  }
+
+  .reviewList {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 480px) {
-  .modernContainer { padding: 1rem 16px 4rem; }
-  
-  .infoCard, .contentCard, .actionCard, .statsCard, .reviewCard {
+  .modernContainer {
+    padding: 1rem 16px 4rem;
+  }
+
+  .infoCard,
+  .contentCard,
+  .actionCard,
+  .statsCard,
+  .reviewCard {
     padding: 20px;
   }
-  
+
   .modalContent {
     padding: 32px 20px;
   }
 
-  .titleSection .title { font-size: 26px; }
-  .priceRow { flex-direction: column; align-items: flex-start; gap: 12px; }
-  
-  .actionButtons { flex-direction: column; }
-  .iconButtons { display: flex; width: 100%; gap: 12px; }
-  .iconBtn { width: auto; flex: 1; }
-  .shareTextBtn { flex: 2; }
-  
+  .titleSection .title {
+    font-size: 26px;
+  }
+  .priceRow {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .actionButtons {
+    flex-direction: column;
+  }
+  .iconButtons {
+    display: flex;
+    width: 100%;
+    gap: 12px;
+  }
+  .iconBtn {
+    width: auto;
+    flex: 1;
+  }
+  .shareTextBtn {
+    flex: 2;
+  }
+
   .dashboardHeader {
     flex-direction: column;
     align-items: flex-start;

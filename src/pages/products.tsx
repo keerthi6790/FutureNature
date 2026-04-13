@@ -50,7 +50,9 @@ export default function Products() {
   const { cart, addToCart, updateQuantity } = useCart();
   const [quantities, setQuantities] = useState<{ [key: string]: number }>({});
   const [wishlistIds, setWishlistIds] = useState<string[]>([]);
-  const [pendingWishlistId, setPendingWishlistId] = useState<string | null>(null);
+  const [pendingWishlistId, setPendingWishlistId] = useState<string | null>(
+    null,
+  );
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -72,7 +74,8 @@ export default function Products() {
             id: item.id?.toString() || "",
             name: item.product_name || "Unknown Product",
             nameTamil: item.product_name_tamil || "",
-            image: Array.isArray(item.imageUrl) && item.imageUrl.length > 0
+            image:
+              Array.isArray(item.imageUrl) && item.imageUrl.length > 0
                 ? item.imageUrl[0]
                 : "/Assets/Products/15.png",
             rating: item.overall_rating || 0,
@@ -207,20 +210,25 @@ export default function Products() {
         </div>
 
         <div className={styles.container}>
-          
           {/* Header Section with Honeycomb */}
           <div className={styles.headerSection}>
             <div className={styles.titleContainer}>
-              <svg 
-                className={styles.honeyComb} 
-                viewBox="0 0 100 100" 
+              <svg
+                className={styles.honeyComb}
+                viewBox="0 0 100 100"
                 xmlns="http://www.w3.org/2000/svg"
               >
-                <path d="M28.8675 16.5C31.9615 11.141 37.735 7.80385 43.923 7.80385H66.077C72.265 7.80385 78.0385 11.141 81.1325 16.5L92.2094 35.6865C95.3034 41.0455 95.3034 47.7225 92.2094 53.0815L81.1325 72.268C78.0385 77.627 72.265 80.9641 66.077 80.9641H43.923C37.735 80.9641 31.9615 77.627 28.8675 72.268L17.7906 53.0815C14.6966 47.7225 14.6966 41.0455 17.7906 35.6865L28.8675 16.5Z" fill="#FFB800"/>
+                <path
+                  d="M28.8675 16.5C31.9615 11.141 37.735 7.80385 43.923 7.80385H66.077C72.265 7.80385 78.0385 11.141 81.1325 16.5L92.2094 35.6865C95.3034 41.0455 95.3034 47.7225 92.2094 53.0815L81.1325 72.268C78.0385 77.627 72.265 80.9641 66.077 80.9641H43.923C37.735 80.9641 31.9615 77.627 28.8675 72.268L17.7906 53.0815C14.6966 47.7225 14.6966 41.0455 17.7906 35.6865L28.8675 16.5Z"
+                  fill="#FFB800"
+                />
               </svg>
               <h1 className={styles.mainTitle}>OUR PRODUCTS</h1>
             </div>
-            <p className={styles.subtitle}>Direct from our hives to your home. Pure, raw, and unfiltered nature.</p>
+            <p className={styles.subtitle}>
+              Direct from our hives to your home. Pure, raw, and unfiltered
+              nature.
+            </p>
           </div>
 
           {/* Products Grid Section */}
@@ -237,9 +245,10 @@ export default function Products() {
                   >
                     {/* Top Image Area */}
                     <div className={styles.cardImageWrap}>
-                      
                       {/* Dark Discount Badge */}
-                      {product.discount && product.discount > 0 && product.availableQuantity > 0 ? (
+                      {product.discount &&
+                      product.discount > 0 &&
+                      product.availableQuantity > 0 ? (
                         <div className={styles.discountBadgeImg}>
                           -{Math.round(product.discount)}%
                         </div>
@@ -247,16 +256,22 @@ export default function Products() {
 
                       {/* Wishlist Heart FAB */}
                       <button
-                        onClick={(e) => handleToggleWishlist(product.id.toString(), e)}
+                        onClick={(e) =>
+                          handleToggleWishlist(product.id.toString(), e)
+                        }
                         className={`${styles.wishlistFab} ${wishlistIds.includes(product.id.toString()) ? styles.activeWishlist : ""}`}
                         aria-label="Add to wishlist"
                       >
-                        <svg 
-                          width="20" 
-                          height="20" 
-                          viewBox="0 0 24 24" 
-                          fill={wishlistIds.includes(product.id.toString()) ? "currentColor" : "none"} 
-                          stroke="currentColor" 
+                        <svg
+                          width="20"
+                          height="20"
+                          viewBox="0 0 24 24"
+                          fill={
+                            wishlistIds.includes(product.id.toString())
+                              ? "currentColor"
+                              : "none"
+                          }
+                          stroke="currentColor"
                           strokeWidth="2"
                         >
                           <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
@@ -282,12 +297,13 @@ export default function Products() {
 
                     {/* Bottom Content Area */}
                     <div className={styles.cardContent}>
-                      
                       {/* Title */}
                       <div className={styles.titleSection}>
                         <h3 className={styles.cardTitle}>{product.name}</h3>
                         {product.nameTamil && (
-                          <span className={styles.cardSubtitle}>{product.nameTamil}</span>
+                          <span className={styles.cardSubtitle}>
+                            {product.nameTamil}
+                          </span>
                         )}
                       </div>
 
@@ -300,18 +316,23 @@ export default function Products() {
                           allowFraction
                           fillColor="#FFB800"
                         />
-                        <span className={styles.ratingNum}>({product.reviewCount || 0})</span>
+                        <span className={styles.ratingNum}>
+                          ({product.reviewCount || 0})
+                        </span>
                       </div>
 
                       <div className={styles.cardDivider}></div>
 
                       {/* Price Row and Action Button */}
                       <div className={styles.cardFooter}>
-                        
                         <div className={styles.priceCol}>
-                          <span className={styles.sellingPrice}>₹{Math.round(product.price)}</span>
+                          <span className={styles.sellingPrice}>
+                            ₹{Math.round(product.price)}
+                          </span>
                           {product.originalPrice > product.price && (
-                             <span className={styles.originalPrice}>₹{Math.round(product.originalPrice)}</span>
+                            <span className={styles.originalPrice}>
+                              ₹{Math.round(product.originalPrice)}
+                            </span>
                           )}
                         </div>
 
@@ -332,14 +353,40 @@ export default function Products() {
                             Add to cart
                           </button>
                         ) : (
-                          <div className={styles.qtySelector} onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}>
-                            <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleQuantityChange(product.id, -1); }} className={styles.qtyBtn}>−</button>
-                            <span className={styles.qtyVal}>{cart.find((item) => item.id === product.id)?.quantity || 1}</span>
-                            <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleQuantityChange(product.id, 1); }} className={styles.qtyBtn}>+</button>
+                          <div
+                            className={styles.qtySelector}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                            }}
+                          >
+                            <button
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                handleQuantityChange(product.id, -1);
+                              }}
+                              className={styles.qtyBtn}
+                            >
+                              −
+                            </button>
+                            <span className={styles.qtyVal}>
+                              {cart.find((item) => item.id === product.id)
+                                ?.quantity || 1}
+                            </span>
+                            <button
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                handleQuantityChange(product.id, 1);
+                              }}
+                              className={styles.qtyBtn}
+                            >
+                              +
+                            </button>
                           </div>
                         )}
                       </div>
-
                     </div>
                   </Link>
                 ))}
