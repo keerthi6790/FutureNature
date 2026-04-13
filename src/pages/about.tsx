@@ -70,12 +70,12 @@ export default function About() {
                   <p>
                     At FutureNature, we stepped away from industrial farming. We
                     embraced the wild. Every jar you hold is a result of ethical
-                    patience—harvested only when the bees have stored enough for
+                    patience harvested only when the bees have stored enough for
                     themselves.
                   </p>
                 </div>
 
-                <div className={styles.signature}>-- Vidhya Sri</div>
+                <div className={styles.signature}>— Vidhya Sri</div>
               </div>
             </div>
           </div>
