@@ -8,7 +8,8 @@ import AuthModal from "@/components/AuthModal";
 import { LoadingProvider } from "@/components/LoadingContext";
 
 function GlobalAuthModal() {
-  const { isLoginModalOpen, closeLoginModal, onLoginSuccessCallback } = useAuth();
+  const { isLoginModalOpen, closeLoginModal, onLoginSuccessCallback } =
+    useAuth();
 
   return (
     <AuthModal
