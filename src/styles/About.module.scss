@@ -23,7 +23,7 @@
 
 /* --- HERO SECTION --- */
 .heroSection {
-  padding: 120px 0 80px; 
+  padding: 120px 0 80px;
   text-align: center;
   position: relative;
   background-color: var(--white);
@@ -186,15 +186,15 @@
 }
 
 .fssaiBanner {
-  background: #fffdf5; 
-  border: 1px solid #f3e8d3; 
+  background: #fffdf5;
+  border: 1px solid #f3e8d3;
   border-radius: 20px;
   padding: 40px 60px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  color: var(--dark); 
-  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.05); 
+  color: var(--dark);
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.05);
   position: relative;
   overflow: hidden;
 }
@@ -212,7 +212,7 @@
 .sealRing {
   width: 100px;
   height: 100px;
-  border: 2px solid #f59e0b; 
+  border: 2px solid #f59e0b;
   border-radius: 50%;
   padding: 4px;
   display: flex;
@@ -223,12 +223,12 @@
 .sealInner {
   width: 100%;
   height: 100%;
-  background: #f59e0b; 
+  background: #f59e0b;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fff; 
+  color: #fff;
 }
 
 .fssaiLogoText {
@@ -241,12 +241,12 @@
 .certDetails {
   flex: 1;
   padding: 0 40px;
-  border-right: 1px solid #e7e5e4; 
+  border-right: 1px solid #e7e5e4;
 }
 
 .certHead {
   font-size: 20px;
-  color: #b45309; 
+  color: #b45309;
   margin: 0 0 4px;
   letter-spacing: 1px;
   font-weight: 700;
@@ -254,13 +254,13 @@
 
 .certSub {
   font-size: 14px;
-  color: var(--gray); 
+  color: var(--gray);
   margin-bottom: 16px;
 }
 
 .licenceBox {
   display: inline-block;
-  background: #fff; 
+  background: #fff;
   padding: 8px 16px;
   border-radius: 4px;
   border: 1px solid #e7e5e4;
@@ -270,14 +270,14 @@
   display: block;
   font-size: 10px;
   letter-spacing: 1px;
-  color: var(--gray); 
+  color: var(--gray);
   margin-bottom: 2px;
 }
 
 .licNo {
   font-size: 18px;
   letter-spacing: 2px;
-  color: var(--dark); 
+  color: var(--dark);
   font-weight: 600;
 }
 
@@ -293,7 +293,7 @@
 
 .checkList li {
   font-size: 15px;
-  color: var(--dark); 
+  color: var(--dark);
   margin-bottom: 10px;
   font-weight: 500;
 }
@@ -395,8 +395,8 @@
 
   .certDetails {
     border-right: none;
-    border-top: 1px solid #e7e5e4; 
-    border-bottom: 1px solid #e7e5e4; 
+    border-top: 1px solid #e7e5e4;
+    border-bottom: 1px solid #e7e5e4;
     padding: 24px 0;
     margin: 0;
   }
@@ -419,7 +419,7 @@
   }
 
   .heroSection {
-    padding: 80px 0 60px; 
+    padding: 80px 0 60px;
   }
 
   .heroDesc {

@@ -1,13 +1,15 @@
+"use client";
+
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import toast from "react-hot-toast";
 import { productApi } from "@/api/productApi";
 import apiClient from "@/api/apiClient";
-import { isAdminUser } from "@/utils/authUtils";
-import Cookies from "js-cookie";
 import styles from "@/styles/ManageProducts.module.scss";
 import AdminGuard from "@/components/AdminGuard";
+
+import dynamic from "next/dynamic";
 
 interface Product {
   id: string;
@@ -18,8 +20,7 @@ interface Product {
   isDailyDeals: boolean;
   isDeleted?: boolean;
 }
-
-export default function ManageProducts() {
+export function ManageProducts() {
   const router = useRouter();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
@@ -211,3 +212,5 @@ export default function ManageProducts() {
     </AdminGuard>
   );
 }
+
+export default dynamic(() => Promise.resolve(ManageProducts), { ssr: false });

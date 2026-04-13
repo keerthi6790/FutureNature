@@ -1,23 +1,22 @@
 /* --- VARIABLES --- */
 .pageWrapper {
-    --gold: #d97706;
-    --dark: black;
-    background-color: #ffffff;
-    color: var(--dark);
+  --gold: #d97706;
+  --dark: black;
+  background-color: #ffffff;
+  color: var(--dark);
 }
 
-
 .container {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 0 24px;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 24px;
 }
 
 /* --- HEADER --- */
 .pageHeader {
-    padding: 40px 0 60px;
-    text-align: center;
-    background: linear-gradient(to bottom, var(--cream), #fff);
+  padding: 40px 0 60px;
+  text-align: center;
+  background: linear-gradient(to bottom, var(--cream), #fff);
 }
 
 .heroLine {
@@ -27,13 +26,13 @@
   margin: 0 auto 32px;
 }
 .eyebrow {
-    font-size: 11px;
-    letter-spacing: 2px;
-    color: var(--gold);
-    font-weight: 700;
-    text-transform: uppercase;
-    display: block;
-    margin-bottom: 12px;
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: var(--gold);
+  font-weight: 700;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 12px;
 }
 
 .mainTitle {
@@ -47,210 +46,209 @@
 }
 
 .mainDesc {
-    font-size: 16px;
-    color: var(--gray);
+  font-size: 16px;
+  color: var(--gray);
 }
 
 /* --- CARD LIST --- */
 .catalogSection {
-    padding-bottom: 100px;
+  padding-bottom: 100px;
 }
 
 .cardList {
-    display: flex;
-    flex-direction: column;
-    gap: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
 }
 
 /* --- PRODUCT CARD --- */
 .productCard {
-    display: flex;
-    background: #fff;
-    border: 1px solid #e7e5e4;
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
-    transition:
-        transform 0.3s ease,
-        box-shadow 0.3s ease;
-    min-height: 320px;
+  display: flex;
+  background: #fff;
+  border: 1px solid #e7e5e4;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+  min-height: 320px;
 }
 
 .productCard:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
-    border-color: var(--gold);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+  border-color: var(--gold);
 }
 
 .reverse {
-    flex-direction: row-reverse;
+  flex-direction: row-reverse;
 }
 
 /* --- IMAGE SIDE --- */
 .cardMedia {
-    flex: 0 0 40%;
-    position: relative;
-    background-color: var(--sand);
+  flex: 0 0 40%;
+  position: relative;
+  background-color: var(--sand);
 }
 
 .imgContainer {
-    width: 100%;
-    height: 100%;
-    position: relative;
+  width: 100%;
+  height: 100%;
+  position: relative;
 }
 
 /* --- IMAGE ALIGNMENT FIX --- */
 /* Next.js Image component adds its own classes, we target the global class we add */
 .coverImg {
-    object-fit: cover;
-    /* Add object-position: top to prioritize the top of the image */
-    object-position: top center;
-    transition: transform 0.5s ease;
+  object-fit: cover;
+  /* Add object-position: top to prioritize the top of the image */
+  object-position: top center;
+  transition: transform 0.5s ease;
 }
 
 .productCard:hover .coverImg {
-    transform: scale(1.05);
+  transform: scale(1.05);
 }
 
 /* --- BODY SIDE --- */
 .cardBody {
-    flex: 1;
-    padding: 40px;
-    display: flex;
-    align-items: center;
+  flex: 1;
+  padding: 40px;
+  display: flex;
+  align-items: center;
 }
 
 .cardContent {
-    width: 100%;
+  width: 100%;
 }
 
 .tagRow {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
 }
 
 .idBadge {
-    font-size: 12px;
-    font-weight: 700;
-    color: #d6d3d1;
+  font-size: 12px;
+  font-weight: 700;
+  color: #d6d3d1;
 }
 
 .categoryTag {
-    font-size: 11px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: var(--gold);
-    background: rgba(217, 119, 6, 0.08);
-    padding: 4px 12px;
-    border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--gold);
+  background: rgba(217, 119, 6, 0.08);
+  padding: 4px 12px;
+  border-radius: 20px;
 }
 
 .cardTitle {
-    font-size: 32px;
-    margin: 0 0 16px;
-    color: var(--dark);
-    line-height: 1.1;
+  font-size: 32px;
+  margin: 0 0 16px;
+  color: var(--dark);
+  line-height: 1.1;
 }
 
 .cardDesc {
-    font-size: 15px;
-    line-height: 1.6;
-    color: var(--gray);
-    margin-bottom: 24px;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--gray);
+  margin-bottom: 24px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .shopLink {
-    background: none;
-    border: none;
-    padding: 0;
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--dark);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    cursor: pointer;
-    transition: gap 0.3s;
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--dark);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: gap 0.3s;
 }
 
 .shopLink:hover {
-    gap: 12px;
-    color: var(--gold);
+  gap: 12px;
+  color: var(--gold);
 }
 
 /* --- FOOTER CTA --- */
 .footerCta {
-    text-align: center;
-    padding: 80px 24px;
-    background: var(--sand);
+  text-align: center;
+  padding: 80px 24px;
+  background: var(--sand);
 }
 
 .ctaTitle {
-    font-size: 36px;
-    margin-bottom: 24px;
+  font-size: 36px;
+  margin-bottom: 24px;
 }
 
 .shopBtn {
-    display: inline-block;
-    background: var(--dark);
-    color: #fff;
-    padding: 16px 40px;
-    border-radius: 50px;
-    text-decoration: none;
-    font-weight: 600;
-    transition: background 0.3s;
+  display: inline-block;
+  background: var(--dark);
+  color: #fff;
+  padding: 16px 40px;
+  border-radius: 50px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background 0.3s;
 }
 
 .shopBtn:hover {
-    background: var(--gold);
+  background: var(--gold);
 }
 
 /* ========================================= */
 /* MOBILE RESPONSIVE                         */
 /* ========================================= */
 @media (max-width: 768px) {
+  .productCard,
+  .reverse {
+    flex-direction: column;
+    min-height: auto;
+  }
 
-    .productCard,
-    .reverse {
-        flex-direction: column;
-        min-height: auto;
-    }
+  .cardMedia {
+    height: 250px;
+    flex: none;
+    width: 100%;
+  }
 
-    .cardMedia {
-        height: 250px;
-        flex: none;
-        width: 100%;
-    }
+  .cardBody {
+    padding: 24px;
+  }
 
-    .cardBody {
-        padding: 24px;
-    }
+  .cardTitle {
+    font-size: 24px;
+  }
 
-    .cardTitle {
-        font-size: 24px;
-    }
+  .cardDesc {
+    -webkit-line-clamp: 4;
+  }
 
-    .cardDesc {
-        -webkit-line-clamp: 4;
-    }
+  .mainTitle {
+    font-size: 32px;
+  }
 
-    .mainTitle {
-        font-size: 32px;
-    }
+  .pageHeader {
+    padding: 50px 0 30px;
+  }
 
-    .pageHeader {
-        padding: 50px 0 30px;
-    }
-
-    .mainDesc {
-        font-size: 14px;
-        padding: 0 20px;
-    }
+  .mainDesc {
+    font-size: 14px;
+    padding: 0 20px;
+  }
 }

@@ -1,27 +1,29 @@
-import React from 'react';
-import styles from '../styles/WhatsAppBanner.module.scss';
+import React from "react";
+import styles from "../styles/WhatsAppBanner.module.scss";
 
 export default function WhatsAppBanner() {
   return (
     <div className={styles.bannerWrapper}>
       <div className={styles.bannerCard}>
-
         {/* --- Background Texture (Organic Curves) --- */}
         <div className={styles.bgCurves}>
           <svg viewBox="0 0 100 100" preserveAspectRatio="none">
-            <path d="M0 100 C 20 0 50 0 100 100 Z" fill="rgba(255,255,255,0.05)" />
+            <path
+              d="M0 100 C 20 0 50 0 100 100 Z"
+              fill="rgba(255,255,255,0.05)"
+            />
           </svg>
         </div>
 
         <div className={styles.contentContainer}>
-
           {/* --- Left: Text --- */}
           <div className={styles.textGroup}>
             <h2 className={styles.bannerTitle}>
               Order via <span className={styles.highlight}>WhatsApp</span>
             </h2>
             <p className={styles.bannerSub}>
-              Skip the queue! Chat directly with us to get fresh honey delivered to your doorstep.
+              Skip the queue! Chat directly with us to get fresh honey delivered
+              to your doorstep.
             </p>
           </div>
 
@@ -40,14 +42,16 @@ export default function WhatsAppBanner() {
             <button
               className={styles.chatBtn}
               onClick={() => {
-                window.open('https://api.whatsapp.com/send/?phone=917418187578&text&type=phone_number&app_absent=0', '_blank');
+                window.open(
+                  "https://api.whatsapp.com/send/?phone=917418187578&text&type=phone_number&app_absent=0",
+                  "_blank",
+                );
               }}
             >
               Start Chatting
               <span className={styles.arrowIcon}>→</span>
             </button>
           </div>
-
         </div>
       </div>
     </div>

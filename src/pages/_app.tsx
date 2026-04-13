@@ -23,15 +23,15 @@ function GlobalAuthModal() {
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <AuthProvider>
-      <LoadingProvider>
-        <CartProvider>
+      <CartProvider>
+        <LoadingProvider>
           <div>
             <Toaster position="bottom-center" />
             <GlobalAuthModal />
             <Component {...pageProps} />
           </div>
-        </CartProvider>
-      </LoadingProvider>
+        </LoadingProvider>
+      </CartProvider>
     </AuthProvider>
   );
 }

@@ -1,6 +1,6 @@
 import Head from "next/head";
 import Image from "next/image";
-import Navbar from "../components/Navbar";
+import Navbar from "@/components/Navbar";
 import Footer from "../components/Footer"; // Assuming Footer component is used, though commented out in original.
 import styles from "@/styles/About.module.scss";
 
