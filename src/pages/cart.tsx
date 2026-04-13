@@ -464,27 +464,29 @@ export default function Cart() {
           )}
         </main>
 
-        <button
-          disabled={!selectedAddress}
-          style={{
-            width: "100%",
-            backgroundColor: selectedAddress ? "#fbbf24" : "#d1d5db",
-            color: selectedAddress ? "#000" : "#9ca3af",
-            border: "none",
-            padding: "16px 24px",
-            borderRadius: "8px",
-            fontSize: "16px",
-            fontWeight: "700",
-            cursor: selectedAddress ? "pointer" : "not-allowed",
-            marginTop: "40px",
-            transition: "all 0.2s",
-            opacity: selectedAddress ? 1 : 0.6,
-          }}
-          onClick={() => handlePayment()}
-          className={styles.btnPrimaryFullMobile}
-        >
-          Proceed to Checkout
-        </button>
+        {selectedAddress && (
+          <button
+            disabled={!selectedAddress}
+            style={{
+              width: "100%",
+              backgroundColor: selectedAddress ? "#fbbf24" : "#d1d5db",
+              color: selectedAddress ? "#000" : "#9ca3af",
+              border: "none",
+              padding: "16px 24px",
+              borderRadius: "8px",
+              fontSize: "16px",
+              fontWeight: "700",
+              cursor: selectedAddress ? "pointer" : "not-allowed",
+              marginTop: "40px",
+              transition: "all 0.2s",
+              opacity: selectedAddress ? 1 : 0.6,
+            }}
+            onClick={() => handlePayment()}
+            className={styles.btnPrimaryFullMobile}
+          >
+            Proceed to Checkout
+          </button>
+        )}
 
         <Footer />
       </div>
