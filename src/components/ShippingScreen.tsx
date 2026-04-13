@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Dispatch, SetStateAction } from "react";
 import Cookies from "js-cookie";
 import toast from "react-hot-toast";
 import { addressApi, AddressData } from "../api/addressApi";
@@ -45,23 +45,22 @@ export interface ShippingFormData {
 }
 
 interface ShippingScreenProps {
-  onContinue?: () => void; // Changed signature as we don't pass data anymore but complete payment
-  onClose?: () => void;
+  selectedAddress: AddressData | undefined;
+  setSelectedAddress: Dispatch<SetStateAction<AddressData | undefined>>;
 }
 
 const ShippingScreen: React.FC<ShippingScreenProps> = ({
-  onContinue,
-  onClose,
+  selectedAddress,
+  setSelectedAddress,
 }) => {
+  console.log({ selectedAddress });
   const [addresses, setAddresses] = useState<AddressData[]>([]);
   const [view, setView] = useState<"list" | "add" | "edit">("list");
   const [editingAddress, setEditingAddress] = useState<AddressData | undefined>(
     undefined,
   );
   const [loading, setLoading] = useState(false);
-  const [selectedAddress, setSelectedAddress] = useState<
-    AddressData | undefined
-  >(undefined);
+
   const router = useRouter();
   const { cartId, clearCart } = useCart();
 
@@ -146,128 +145,6 @@ const ShippingScreen: React.FC<ShippingScreenProps> = ({
     }
   };
 
-  const loadRazorpayScript = () => {
-    return new Promise((resolve) => {
-      const script = document.createElement("script");
-      script.src = "https://checkout.razorpay.com/v1/checkout.js";
-      script.onload = () => resolve(true);
-      script.onerror = () => resolve(false);
-      document.body.appendChild(script);
-    });
-  };
-
-  const handlePayment = async () => {
-    if (!selectedAddress) {
-      toast.error("Please select a delivery address");
-      return;
-    }
-
-    if (!cartId) {
-      toast.error("Cart not found");
-      return;
-    }
-
-    setLoading(true);
-    try {
-      const res = await loadRazorpayScript();
-      if (!res) {
-        toast.error("Razorpay SDK failed to load. Are you online?");
-        setLoading(false);
-        return;
-      }
-
-      const token = Cookies.get("token");
-      if (!token) {
-        toast.error("User not authenticated");
-        setLoading(false);
-        return;
-      }
-
-      // Create Order
-      const orderUrl = `${process.env.NEXT_PUBLIC_API_URL}/payment/create-order`;
-      const { data: orderData } = await axios.post(
-        orderUrl,
-        {
-          cartId: cartId,
-          currency: "INR",
-          addressId: selectedAddress.id, // Pass selected address ID
-        },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        },
-      );
-
-      if (!orderData.status) {
-        toast.error("Failed to create order");
-        setLoading(false);
-        return;
-      }
-
-      const { amount, id: razorpay_order_id, currency } = orderData.data;
-      const internalOrderId = orderData.orderId; // Our internal DB order ID
-
-      const options = {
-        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-        amount: amount.toString(),
-        currency: currency,
-        name: "FutureNature",
-        description: "Pure Honey & Nature's Best",
-        image: "/Assets/futurenature-logo.png",
-        order_id: razorpay_order_id,
-        handler: async function (response: {
-          razorpay_payment_id: string;
-          razorpay_order_id: string;
-          razorpay_signature: string;
-        }) {
-          const data = {
-            razorpay_payment_id: response.razorpay_payment_id,
-            razorpay_order_id: response.razorpay_order_id,
-            razorpay_signature: response.razorpay_signature,
-          };
-
-          // Verify Payment
-          try {
-            const verifyUrl = `${process.env.NEXT_PUBLIC_API_URL}/payment/verify-payment`;
-            const verifyRes = await axios.post(verifyUrl, data, {
-              headers: { Authorization: `Bearer ${token}` },
-            });
-
-            if (verifyRes.data.status) {
-              toast.success("Payment Successful!");
-              clearCart();
-              // Redirect to confirmation page with orderId
-              router.push(`/order/confirmation?orderId=${internalOrderId}`);
-            } else {
-              toast.error("Payment verification failed");
-            }
-          } catch (error) {
-            toast.error("Payment verification failed");
-            console.error(error);
-          }
-        },
-        prefill: {
-          name: "Test User",
-          email: "test.user@example.com",
-          contact: selectedAddress.mobileNumber, // Pre-fill with selected address mobile
-        },
-        notes: {
-          address: `${selectedAddress.address1}, ${selectedAddress.city}`,
-        },
-        theme: {
-          color: "#fbbf24",
-        },
-      };
-
-      const paymentObject = new window.Razorpay(options);
-      paymentObject.open();
-    } catch (error) {
-      console.error(error);
-      toast.error("Something went wrong initializing payment");
-    } finally {
-      setLoading(false);
-    }
-  };
-
   return (
     <div
       style={{
@@ -286,58 +163,6 @@ const ShippingScreen: React.FC<ShippingScreenProps> = ({
           position: "relative",
         }}
       >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "flex-start",
-            marginBottom: "30px",
-            gap: "8px",
-          }}
-        >
-          {onClose && (
-            <button
-              onClick={() => {
-                if (view === "list") {
-                  onClose();
-                } else {
-                  setView("list");
-                }
-              }}
-              style={{
-                background: "transparent",
-                border: "none",
-                fontSize: "24px",
-                cursor: "pointer",
-                color: "#666",
-                lineHeight: "1",
-                zIndex: 10,
-                display: "flex",
-                alignItems: "center",
-                gap: "8px",
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = "#000")}
-              onMouseLeave={(e) => (e.currentTarget.style.color = "#666")}
-            >
-              <ArrowLeftIcon />
-            </button>
-          )}
-          <h2
-            style={{
-              fontSize: "24px",
-              fontWeight: "700",
-              color: "#111827",
-              textAlign: "center",
-            }}
-          >
-            {view === "list"
-              ? "SELECT DELIVERY ADDRESS"
-              : view === "add"
-                ? "ADD NEW ADDRESS"
-                : "EDIT ADDRESS"}
-          </h2>
-        </div>
-
         {loading ? (
           <div style={{ textAlign: "center", padding: "40px" }}>
             {/* Spinner or simple text */}
@@ -383,41 +208,6 @@ const ShippingScreen: React.FC<ShippingScreenProps> = ({
                 onSelect={setSelectedAddress}
                 selectedId={selectedAddress?.id}
               />
-            )}
-
-            {addresses.length > 0 && (
-              <button
-                onClick={handlePayment} // Trigger payment instead of just continue
-                disabled={!selectedAddress}
-                style={{
-                  width: "100%",
-                  backgroundColor: selectedAddress ? "#fbbf24" : "#d1d5db",
-                  color: selectedAddress ? "#000" : "#9ca3af",
-                  border: "none",
-                  padding: "16px 24px",
-                  borderRadius: "8px",
-                  fontSize: "16px",
-                  fontWeight: "700",
-                  cursor: selectedAddress ? "pointer" : "not-allowed",
-                  marginTop: "40px",
-                  transition: "all 0.2s",
-                  opacity: selectedAddress ? 1 : 0.6,
-                }}
-                onMouseEnter={(e) => {
-                  if (selectedAddress) {
-                    e.currentTarget.style.backgroundColor = "#000";
-                    e.currentTarget.style.color = "#fff";
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (selectedAddress) {
-                    e.currentTarget.style.backgroundColor = "#fbbf24";
-                    e.currentTarget.style.color = "#000";
-                  }
-                }}
-              >
-                Proceed to Pay
-              </button>
             )}
           </>
         ) : (

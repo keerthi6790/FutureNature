@@ -36,7 +36,10 @@ export default function Blog({
         <header className={styles.pageHeader}>
           <div className={styles.container}>
             <span className={styles.eyebrow}>THE WELLNESS JOURNAL</span>
-            <h1 className={styles.mainTitle}>Nature’s Apothecary</h1>
+            <h1 className={styles.mainTitle}>
+  Nature’s <span className={styles.highlight}>Apothecary</span>
+</h1>
+ <div className={styles.heroLine}></div>
             <p className={styles.mainDesc}>
               Pure, handcrafted blends for modern wellness.
             </p>

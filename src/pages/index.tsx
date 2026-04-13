@@ -29,7 +29,6 @@ export default function Home() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-
   return (
     <>
       <Head>
@@ -49,9 +48,7 @@ export default function Home() {
         <div className={styles.honeyShowcaseSection}>
           {/* Section Title */}
           <div className={styles.sectionHeader}>
-            <h2 className={styles.sectionTitle}>
-              Honey Gallery
-            </h2>
+            <h2 className={styles.sectionTitle}>Honey Gallery</h2>
           </div>
 
           {/* Tile Grid Layout */}
@@ -66,10 +63,7 @@ export default function Home() {
 
       {/* Back to Top Button */}
       {showBackToTop && (
-        <button
-          className={styles.backToTopButton}
-          onClick={scrollToTop}
-        >
+        <button className={styles.backToTopButton} onClick={scrollToTop}>
           <svg
             width="28"
             height="28"

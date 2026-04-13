@@ -390,12 +390,76 @@ $radius-lg: 16px;
   }
 }
 
+/* --- MOBILE SPECIFIC 2-COLUMN LAYOUT --- */
 @media (max-width: 480px) {
   .productsGrid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px; 
   }
   
+  .productCard {
+    min-width: 0; 
+  }
+
   .cardImageWrap {
-    height: 220px;
+    height: 160px;
+  }
+
+  .cardContent {
+    padding: 12px;
+  }
+
+  .cardTitle {
+    font-size: 16px; 
+  }
+
+  .cardSubtitle {
+    font-size: 12px;
+  }
+
+  .ratingRowCard {
+    margin-bottom: 12px;
+    gap: 4px;
+  }
+
+  .ratingNum {
+    font-size: 12px;
+  }
+
+  .priceCol .sellingPrice {
+    font-size: 16px;
+  }
+
+  .cardFooter {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .btnAdd, .btnAddDisabled, .qtySelector {
+    min-width: unset;
+    width: 100%;
+    padding: 8px;
+    height: 36px;
+    font-size: 12px;
+  }
+
+  .wishlistFab {
+    width: 32px;
+    height: 32px;
+    top: 8px;
+    right: 8px;
+    
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  .discountBadgeImg {
+    top: 8px;
+    left: 8px;
+    font-size: 10px;
+    padding: 4px 8px;
   }
 }

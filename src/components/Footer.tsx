@@ -535,7 +535,7 @@ export default function Footer() {
             borderTop: "1px solid #333",
           }}
         >
-          © 2025 Futurenature. Designed & Maintained by BugBrew.
+          © 2025 Futurenature | Designed & Maintained by BugBrew.
         </div>
       </div>
     </footer>
