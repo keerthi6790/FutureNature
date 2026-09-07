@@ -1,295 +1,323 @@
 .pageWrapper {
-    background-color: #f9fafb;
-    min-height: 100vh;
-    padding: 24px;
+  background-color: #f9fafb;
+  min-height: 100vh;
+  padding: 24px;
 }
 
 .container {
-    max-width: 1400px;
-    margin: 0 auto;
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
 .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
 }
 
 .backBtn {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background-color: transparent;
-    border: none;
-    font-size: 18px;
-    font-weight: 600;
-    color: #1f2937;
-    cursor: pointer;
-    padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: transparent;
+  border: none;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1f2937;
+  cursor: pointer;
+  padding: 0;
 
-    span {
-        font-size: 20px;
-    }
+  span {
+    font-size: 20px;
+  }
 }
 
 .subHeader {
-    color: #6b7280;
-    font-size: 14px;
-    margin-top: 4px;
-    margin-left: 28px;
+  color: #6b7280;
+  font-size: 14px;
+  margin-top: 4px;
+  margin-left: 28px;
 }
 
 .btnGroup {
-    display: flex;
-    gap: 12px;
+  display: flex;
+  gap: 12px;
 }
 
 .cancelBtn {
-    padding: 12px 24px;
-    border-radius: 12px;
-    background-color: white;
-    color: #374151;
-    border: 2px solid #e5e7eb;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
+  padding: 12px 24px;
+  border-radius: 12px;
+  background-color: white;
+  color: #374151;
+  border: 2px solid #e5e7eb;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
 
-    &:hover {
-        border-color: #d1d5db;
-        transform: translateY(-2px);
-    }
+  &:hover {
+    border-color: #d1d5db;
+    transform: translateY(-2px);
+  }
 }
 
 .saveBtn {
-    padding: 12px 24px;
-    border-radius: 12px;
-    background-color: #fbbf24;
-    color: #111827;
-    border: none;
-    font-size: 14px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.2s;
-    letter-spacing: 0.5px;
+  padding: 12px 24px;
+  border-radius: 12px;
+  background-color: #fbbf24;
+  color: #111827;
+  border: none;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.5px;
 
-    &:hover {
-        background-color: #000;
-        color: #fff;
-        transform: translateY(-2px);
-    }
+  &:hover {
+    background-color: #000;
+    color: #fff;
+    transform: translateY(-2px);
+  }
 }
 
 .mainGrid {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 24px;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
 
-    @media (max-width: 1024px) {
-        grid-template-columns: 1fr;
-    }
+  @media (max-width: 1024px) {
+    grid-template-columns: 1fr;
+  }
 }
 
 .formColumn {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 }
 
 .card {
-    background-color: white;
-    padding: 24px;
-    border-radius: 8px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  background-color: white;
+  padding: 24px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .cardTitle {
-    font-size: 18px;
-    font-weight: 600;
-    color: #1f2937;
-    margin-bottom: 20px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 20px;
 }
 
 .row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    margin-bottom: 16px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
 
-    &:last-child {
-        margin-bottom: 0;
-    }
+  &:last-child {
+    margin-bottom: 0;
+  }
 
-    @media (max-width: 640px) {
-        grid-template-columns: 1fr;
-    }
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+  }
 }
 
 .fieldGroup {
-    label {
-        display: block;
-        font-size: 13px;
-        font-weight: 500;
-        color: #374151;
-        margin-bottom: 6px;
-    }
+  label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: #374151;
+    margin-bottom: 6px;
+  }
 }
 
 .input,
 .textarea,
 .select {
-    width: 100%;
-    padding: 10px 12px;
-    border-radius: 6px;
-    border: 1px solid #d1d5db;
-    font-size: 14px;
-    color: #374151;
-    background-color: white;
-    outline: none;
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  font-size: 14px;
+  color: #374151;
+  background-color: white;
+  outline: none;
 
-    &:focus {
-        border-color: #fbbf24;
-        box-shadow: 0 0 0 2px rgba(251, 191, 36, 0.1);
-    }
+  &:focus {
+    border-color: #fbbf24;
+    box-shadow: 0 0 0 2px rgba(251, 191, 36, 0.1);
+  }
 }
 
 .textarea {
-    resize: vertical;
-    font-family: inherit;
+  resize: vertical;
+  font-family: inherit;
 }
 
 .readOnlyInput {
-    background-color: #f9fafb;
-    cursor: not-allowed;
+  background-color: #f9fafb;
+  cursor: not-allowed;
 }
 
 .noSpinner {
-    -moz-appearance: textfield;
-    appearance: none;
+  -moz-appearance: textfield;
+  appearance: none;
 
-    &::-webkit-inner-spin-button,
-    &::-webkit-outer-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
-    }
+  &::-webkit-inner-spin-button,
+  &::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
 }
 
 .imageUpdateCard {
-    @extend .card;
+  @extend .card;
 }
 
 .mainImageDisplay {
-    width: 100%;
-    height: 300px;
-    background-color: #f3f4f6;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 16px;
-    position: relative;
-    overflow: hidden;
+  width: 100%;
+  height: 300px;
+  background-color: #f3f4f6;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+  position: relative;
+  overflow: hidden;
 
-    img {
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
-    }
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
 }
 
 .placeholderImage {
-    text-align: center;
-    color: #9ca3af;
+  text-align: center;
+  color: #9ca3af;
 
-    div {
-        font-size: 48px;
-        margin-bottom: 8px;
-    }
+  div {
+    font-size: 48px;
+    margin-bottom: 8px;
+  }
 
-    p {
-        font-size: 14px;
-    }
+  p {
+    font-size: 14px;
+  }
 }
 
 .thumbnailGrid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-    margin-bottom: 16px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 16px;
 }
 
 .thumbnailWrapper {
+  width: 100%;
+  height: 80px;
+  background-color: #f3f4f6;
+  border-radius: 6px;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  border: 2px solid transparent;
+
+  &.active {
+    border-color: #fbbf24;
+  }
+
+  img {
     width: 100%;
-    height: 80px;
-    background-color: #f3f4f6;
-    border-radius: 6px;
-    position: relative;
-    overflow: hidden;
-    cursor: pointer;
-    border: 2px solid transparent;
-
-    &.active {
-        border-color: #fbbf24;
-    }
-
-    img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
+    height: 100%;
+    object-fit: cover;
+  }
 }
 
 .removeImageBtn {
-    position: absolute;
-    top: 4px;
-    right: 4px;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background-color: #ef4444;
-    color: white;
-    border: none;
-    font-size: 12px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: #ef4444;
+  color: white;
+  border: none;
+  font-size: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
 }
 
 .emptyThumbnail {
-    width: 100%;
-    height: 80px;
-    background-color: #f3f4f6;
-    border-radius: 6px;
-    border: 2px dashed #d1d5db;
+  width: 100%;
+  height: 80px;
+  background-color: #f3f4f6;
+  border-radius: 6px;
+  border: 2px dashed #d1d5db;
 }
 
 .uploadLabel {
-    display: block;
-    width: 100%;
-    padding: 14px;
-    background-color: #fbbf24;
-    color: #111827;
-    text-align: center;
-    border-radius: 12px;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 700;
-    transition: all 0.2s;
-    letter-spacing: 0.5px;
+  display: block;
+  width: 100%;
+  padding: 14px;
+  background-color: #fbbf24;
+  color: #111827;
+  text-align: center;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+  transition: all 0.2s;
+  letter-spacing: 0.5px;
 
-    &:hover {
-        background-color: #000;
-        color: #fff;
-        transform: translateY(-2px);
-    }
+  &:hover {
+    background-color: #000;
+    color: #fff;
+    transform: translateY(-2px);
+  }
 }
 
 .uploadNote {
-    font-size: 12px;
-    color: #6b7280;
-    margin-top: 8px;
-    text-align: center;
+  font-size: 12px;
+  color: #6b7280;
+  margin-top: 8px;
+  text-align: center;
+}
+
+.table {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.td,
+.th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.tr:hover {
+  background-color: #ddd;
+}
+
+.th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #04aa6d;
+  color: white;
 }

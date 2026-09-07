@@ -65,6 +65,8 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ isOpen, onClose }) => {
       setShowDailyDealsModal(true); // Open the sub-modal
     } else if (optionId === "constants") {
       setShowConstantModal(true);
+    } else if (optionId === "orders") {
+      router.push("/admin/orders");
     } else {
       // Handle 'banners' or other future options
       console.log("Selected:", optionId);
@@ -242,6 +244,37 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ isOpen, onClose }) => {
       id: "constants",
       title: "Add/ Edit Constants",
       description: "Add and edit your constants",
+      icon: (
+        <svg
+          width="40"
+          height="40"
+          viewBox="0 0 46 45"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M12.0687 23.9536L21.2338 33.1156L40.5027 13.8452L31.3417 4.68259L12.0687 23.9536ZM33.5148 11.6716C34.1512 12.3095 34.1512 13.3427 33.5148 13.9796L22.356 25.1354C22.038 25.4554 21.6205 25.6136 21.2045 25.6136C20.7844 25.6136 20.3679 25.4554 20.0499 25.1354C19.4125 24.4975 19.4125 23.4647 20.0499 22.8278L31.2072 11.6716C31.8436 11.0341 32.8773 11.0341 33.5148 11.6716Z"
+            fill="#FBBF24"
+          />
+          <path
+            d="M7.87408 37.1788L18.0563 34.5578L10.5992 27.1008L7.87408 37.1788Z"
+            fill="#FBBF24"
+          />
+          <path
+            d="M44.2196 5.3099L39.8759 0.964673C38.5879 -0.322316 36.3415 -0.320799 35.0586 0.964673L33.6472 2.37652L42.8113 11.5381L44.2196 10.1288C45.5455 8.79933 45.5455 6.63733 44.2196 5.3099Z"
+            fill="#FBBF24"
+          />
+          <path
+            d="M40.1575 44.2436H1.67723C0.750659 44.2436 0 43.4924 0 42.5659V1.76083C0 0.834255 0.750154 0.0835953 1.67723 0.0835953H27.5146C28.4422 0.0835953 29.1913 0.834255 29.1913 1.76083C29.1913 2.68689 28.4422 3.43806 27.5146 3.43806H3.35446V40.8881H40.1575C41.4677 40.8881 42.5338 39.8225 42.5338 38.5118V17.4696C42.5338 16.543 43.284 15.7923 44.2105 15.7923C45.1366 15.7923 45.8878 16.543 45.8878 17.4696V38.5118C45.8883 41.6721 43.3173 44.2436 40.1575 44.2436Z"
+            fill="#373737"
+          />
+        </svg>
+      ),
+    },
+    {
+      id: "orders",
+      title: "View orders",
+      description: "View your orders",
       icon: (
         <svg
           width="40"
