@@ -79,6 +79,7 @@ const AdminOrders = () => {
               city,
               district,
               state,
+              pincode,
               phone_number,
             } = order?.address;
 
@@ -92,7 +93,7 @@ const AdminOrders = () => {
                 <td className={styles.td}>{order?.address?.receiverName}</td>
                 <td
                   className={styles.td}
-                >{`${address1}, ${address2}, ${address3}, ${address4}, ${city}, ${district}, ${state}`}</td>
+                >{`${address1}, ${address2}, ${address3}, ${address4}, ${city}, ${district}, ${state} ${pincode}`}</td>
                 <td className={styles.td}>{phone_number}</td>
                 <td className={styles.td}>{orderItems?.join(", ")}</td>
                 <td className={styles.td}>{order?.total_price}</td>
