@@ -13,6 +13,7 @@ export interface AddressData {
     state: string;
     pincode: string;
     mobileNumber: string;
+    phone_number?: string;
 }
 
 export const addressApi = {

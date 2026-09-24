@@ -111,7 +111,7 @@ export default function Cart() {
           }
         },
         prefill: {
-          contact: address.phone_number || "",
+          contact: address.phone_number || address.mobileNumber || "",
         },
         theme: {
           color: "#A0522D",
