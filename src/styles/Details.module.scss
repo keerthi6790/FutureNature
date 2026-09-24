@@ -83,36 +83,96 @@ $radius-lg: 24px;
 
 .imageCard {
   background: $card-bg;
-  border-radius: $radius-lg;
+  border-radius: 0px;
+  border: 1px solid rgba(139, 134, 128, 0.25);
   padding: 40px;
   aspect-ratio: 1/1;
   position: relative;
-  box-shadow: $shadow-sm;
+  box-shadow: 0 2px 12px rgba(54, 69, 79, 0.05);
   display: flex;
   align-items: center;
   justify-content: center;
 
   .badge {
     position: absolute;
-    top: 24px;
-    left: 24px;
-    background: $text-main;
-    color: white;
-    padding: 8px 16px;
-    border-radius: 8px;
-    font-size: 12px;
-    font-weight: 700;
+    top: 20px;
+    left: 20px;
+    background: #36454F;
+    color: #FAF0E6;
+    border: 1px solid #D4AF37;
+    padding: 6px 14px;
+    border-radius: 0px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 1px;
     z-index: 2;
+  }
+
+  .galleryOutOfStockBadge {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(54, 69, 79, 0.94);
+    color: #FAF0E6;
+    border: 1px solid #D4AF37;
+    padding: 10px 24px;
+    border-radius: 0px;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 600;
+    font-size: 14px;
+    z-index: 5;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    box-shadow: 0 4px 20px rgba(54, 69, 79, 0.3);
+    white-space: nowrap;
+  }
+
+  .imageOutOfStock {
+    opacity: 0.65;
+    filter: grayscale(30%);
   }
 
   .mainImage {
     object-fit: contain;
     padding: 20px;
     transition: transform 0.4s ease;
-    &:hover { transform: scale(1.05); }
+    &:hover { transform: scale(1.03); }
   }
+}
+
+.stockBadgeIn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(107, 123, 58, 0.1);
+  color: #6B7B3A;
+  border: 1px solid rgba(107, 123, 58, 0.3);
+  padding: 5px 12px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 0px;
+  margin-bottom: 16px;
+  width: fit-content;
+}
+
+.stockBadgeOut {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(160, 82, 45, 0.08);
+  color: #A0522D;
+  border: 1px solid rgba(160, 82, 45, 0.35);
+  padding: 5px 12px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 0px;
+  margin-bottom: 16px;
+  width: fit-content;
 }
 
 .thumbnailTrack {
@@ -365,29 +425,32 @@ $radius-lg: 24px;
   gap: 16px;
 }
 
-/* --- BUTTONS (Yellow Default -> Black Hover) --- */
+/* --- BUTTONS --- */
 .btnPrimary {
   flex: 1;
-  background: $primary;
-  color: $text-main;
-  border: none;
-  border-radius: 12px;
+  background: #A0522D;
+  color: #FAF0E6;
+  border: 1px solid #A0522D;
+  border-radius: 0px;
+  font-family: 'Cormorant Garamond', Georgia, serif;
   font-size: 16px;
-  font-weight: 700;
-  padding: 16px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  padding: 14px 24px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(255, 184, 0, 0.2);
+  transition: all 0.2s ease-out;
 
   &:hover {
-    background: $text-main; /* Vice versa black hover */
-    color: #ffffff; /* White text on hover */
+    background: #36454F;
+    border-color: #D4AF37;
+    color: #FAF0E6;
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 16px rgba(54, 69, 79, 0.15);
   }
 }
 
@@ -397,16 +460,28 @@ $radius-lg: 24px;
 }
 
 .btnDisabled {
-  @extend .btnPrimary;
-  background: #e5e7eb;
-  color: #9ca3af;
+  flex: 1;
+  background: #FAF0E6;
+  color: #8B8680;
+  border: 1px solid rgba(139, 134, 128, 0.4);
+  border-radius: 0px;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  padding: 14px 24px;
   box-shadow: none;
   cursor: not-allowed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   
   &:hover { 
     transform: none; 
-    background: #e5e7eb; 
-    color: #9ca3af;
+    background: #FAF0E6; 
+    color: #8B8680;
+    border-color: rgba(139, 134, 128, 0.4);
     box-shadow: none;
   }
 }

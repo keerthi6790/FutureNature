@@ -21,11 +21,12 @@
 }
 
 .heroLine {
-  width: 2px;
-  height: 60px;
-  background: var(--gold);
-  margin: 0 auto 32px;
+    width: 2px;
+    height: 60px;
+    background: var(--gold);
+    margin: 0 auto 32px;
 }
+
 .eyebrow {
     font-size: 11px;
     letter-spacing: 2px;
@@ -37,18 +38,20 @@
 }
 
 .mainTitle {
-  font-size: 48px;
-  color: var(--dark); /* Keep this for "Nature's" */
-  margin: 0 0 16px;
+    font-size: 48px;
+    color: var(--dark);
+    /* Keep this for "Nature's" */
+    margin: 0 0 16px;
 }
 
 .highlight {
-  color: #b45309;
+    color: #b45309;
 }
 
 .mainDesc {
     font-size: 16px;
     color: var(--gray);
+    width: 100%;
 }
 
 /* --- CARD LIST --- */

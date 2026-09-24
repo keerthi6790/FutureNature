@@ -112,7 +112,37 @@ export default function ManageProducts() {
               </button>
               <h1 className={styles.title}>Manage Products</h1>
             </div>
-            <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
+            <div style={{ display: "flex", gap: "12px", alignItems: "center", flexWrap: "wrap" }}>
+              <button
+                onClick={() => router.push("/admin/orders")}
+                style={{
+                  backgroundColor: "transparent",
+                  border: "1px solid rgba(139, 134, 128, 0.4)",
+                  color: "#36454F",
+                  padding: "10px 16px",
+                  borderRadius: "0px",
+                  fontFamily: "'JetBrains Mono', monospace",
+                  fontSize: "0.85rem",
+                  cursor: "pointer",
+                }}
+              >
+                Customer Orders
+              </button>
+              <button
+                onClick={() => router.push("/admin/manageBanners")}
+                style={{
+                  backgroundColor: "transparent",
+                  border: "1px solid rgba(139, 134, 128, 0.4)",
+                  color: "#36454F",
+                  padding: "10px 16px",
+                  borderRadius: "0px",
+                  fontFamily: "'JetBrains Mono', monospace",
+                  fontSize: "0.85rem",
+                  cursor: "pointer",
+                }}
+              >
+                Hero Banners
+              </button>
               <label
                 style={{
                   display: "flex",

@@ -192,7 +192,7 @@ export default function DailyDeals() {
                       readonly
                       size={14}
                       allowFraction
-                      fillColor="#FFB800"
+                      fillColor="#D4AF37"
                     />
                     <span>{product.overall_rating}</span>
                   </div>
@@ -213,12 +213,8 @@ export default function DailyDeals() {
                     <button
                       className={styles.addBtn}
                       disabled
-                      style={{
-                        backgroundColor: "#9ca3af",
-                        cursor: "not-allowed",
-                      }}
                     >
-                      Sold Out
+                      Out of Stock
                     </button>
                   ) : !showQuantityControls[product.id] ? (
                     <button

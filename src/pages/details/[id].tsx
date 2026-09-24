@@ -303,12 +303,15 @@ export default function ViewProduct() {
             <div className={styles.galleryColumn}>
               <div className={styles.imageCard}>
                 {product.isBestSeller && <div className={styles.badge}>Most Popular</div>}
+                {product.available_quantity <= 0 && (
+                  <div className={styles.galleryOutOfStockBadge}>Out of Stock</div>
+                )}
                 <Image
                   src={product.imageUrl[selectedImageIndex]}
                   alt={product.product_name}
                   fill
                   unoptimized
-                  className={styles.mainImage}
+                  className={`${styles.mainImage} ${product.available_quantity <= 0 ? styles.imageOutOfStock : ""}`}
                   priority
                 />
               </div>
@@ -330,6 +333,19 @@ export default function ViewProduct() {
               
               {/* Card 1: Main Info & Price */}
               <div className={styles.infoCard}>
+                {/* Stock Status Indicator */}
+                {product.available_quantity > 0 ? (
+                  <div className={styles.stockBadgeIn}>
+                    <svg width="8" height="8" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="12"/></svg>
+                    In Stock ({product.available_quantity} available)
+                  </div>
+                ) : (
+                  <div className={styles.stockBadgeOut}>
+                    <svg width="8" height="8" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="12"/></svg>
+                    Currently Out of Stock
+                  </div>
+                )}
+
                 {/* Top Meta Row (Ratings, Reviews, Sold) */}
                 <div className={styles.topMetaRow}>
                   <svg className={styles.starIcon} viewBox="0 0 24 24">
@@ -420,9 +436,9 @@ export default function ViewProduct() {
                 <div className={styles.quantityWrapper}>
                   <label>Quantity</label>
                   <div className={styles.quantityControl}>
-                    <button onClick={() => handleQuantityChange(-1)}>-</button>
+                    <button onClick={() => handleQuantityChange(-1)} disabled={product.available_quantity <= 0}>-</button>
                     <span>{quantity}</span>
-                    <button onClick={() => handleQuantityChange(1)}>+</button>
+                    <button onClick={() => handleQuantityChange(1)} disabled={product.available_quantity <= 0}>+</button>
                   </div>
                 </div>
 

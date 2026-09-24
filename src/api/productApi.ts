@@ -10,10 +10,19 @@ interface IAddProductPayload {
   discountedAmount: string;
   imageUrl: string[];
   availableQuantity: string;
+  categoryId?: string;
 }
 
 export const productApi = {
-  getAllProducts: () => apiClient.get("/product/products"),
+  getAllProducts: (categories?: string | string[]) => {
+    if (Array.isArray(categories) && categories.length > 0) {
+      return apiClient.get(`/product/products?categories=${categories.join(",")}`);
+    }
+    if (typeof categories === "string" && categories.length > 0 && categories !== "all") {
+      return apiClient.get(`/product/products?categories=${categories}`);
+    }
+    return apiClient.get("/product/products");
+  },
   getProductById: (id: string) =>
     apiClient.get(`/product/getProductInfo/${id}`),
   addProduct: (data: IAddProductPayload) =>

@@ -4,9 +4,10 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.6);
-    z-index: 9998;
-    animation: fadeIn 0.3s ease-in-out;
+    background-color: rgba(54, 69, 79, 0.7);
+    backdrop-filter: blur(4px);
+    z-index: 200;
+    animation: fadeIn 0.3s ease-out;
 }
 
 .modal {
@@ -14,83 +15,89 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: #ffffff;
-    border-radius: 24px;
-    padding: 30px 40px 35px;
+    background-color: #FAF0E6;
+    border: 1px solid rgba(139, 134, 128, 0.3);
+    border-radius: 0px;
+    padding: 36px 36px;
     width: 90%;
-    max-width: 460px;
+    max-width: 440px;
     max-height: 90vh;
     overflow-y: auto;
-    z-index: 9999;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-    animation: slideUp 0.3s ease-in-out;
-    transition: max-width 0.3s ease;
+    z-index: 300;
+    box-shadow: 0 4px 20px rgba(54, 69, 79, 0.15);
+    animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    color: #36454F;
 }
 
 .closeButton {
     position: absolute;
-    top: 20px;
-    right: 20px;
+    top: 16px;
+    right: 16px;
     background-color: transparent;
-    border: none;
-    font-size: 28px;
+    border: 1px solid rgba(139, 134, 128, 0.25);
+    border-radius: 0px;
+    font-size: 22px;
     cursor: pointer;
-    color: #999;
-    width: 36px;
-    height: 36px;
+    color: #8B8680;
+    width: 32px;
+    height: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 50%;
     transition: all 0.2s;
 
     &:hover {
-        background-color: #f3f4f6;
-        color: #000;
+        background-color: rgba(160, 82, 45, 0.1);
+        color: #A0522D;
+        border-color: #A0522D;
     }
 }
 
 .logoContainer {
     display: flex;
-    justify-content: flex-start;
+    justify-content: center;
     margin-bottom: 20px;
 }
 
 .title {
-    font-size: 28px;
+    font-size: 26px;
     font-weight: 700;
-    color: #1f2937;
-    margin-bottom: 20px;
+    color: #36454F;
+    margin-bottom: 16px;
     text-align: center;
+    letter-spacing: -0.01em;
 }
 
 .formGroup {
-    margin-bottom: 25px;
+    margin-bottom: 20px;
 }
 
 .label {
     display: block;
-    font-size: 13px;
-    font-weight: 500;
-    color: #1f2937;
-    margin-bottom: 5px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #36454F;
+    margin-bottom: 6px;
+    letter-spacing: 0.02em;
 }
 
 .input {
     width: 100%;
-    padding: 14px 18px;
-    font-size: 15px;
-    border: 2px solid #e5e7eb;
-    border-radius: 12px;
-    background-color: white;
-    color: #1f2937;
+    padding: 12px 14px;
+    font-size: 16px;
+    border: 1px solid rgba(139, 134, 128, 0.4);
+    border-radius: 0px;
+    background-color: #FFFFFF;
+    color: #36454F;
     outline: none;
     transition: border-color 0.2s;
     font-family: inherit;
     box-sizing: border-box;
 
     &:focus {
-        border-color: #ffb400;
+        border-color: #A0522D;
+        box-shadow: 0 0 0 2px rgba(160, 82, 45, 0.2);
     }
 
     &.error {
@@ -100,61 +107,53 @@
 
 .submitButton {
     width: 100%;
-    padding: 16px;
+    padding: 14px;
     font-size: 17px;
-    font-weight: 700;
-    color: #1f2937;
-    background-color: #ffb400;
+    font-weight: 600;
+    color: #FAF0E6;
+    background-color: #A0522D;
     border: none;
-    border-radius: 12px;
+    border-radius: 0px;
     cursor: pointer;
-    margin-top: 20px;
-    transition: all 0.2s;
-    box-shadow: 0 4px 12px rgba(255, 180, 0, 0.3);
+    margin-top: 16px;
+    transition: all 0.2s ease-out;
+    letter-spacing: 0.03em;
+    font-family: inherit;
 
     &:hover {
-        background-color: #000000;
-        color: #ffffff;
+        background-color: #8B4513;
+        transform: translateY(-1px);
+    }
+
+    &:active {
+        transform: translateY(0);
     }
 }
 
 .otpContainer {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     margin: 20px 0;
 }
 
 .otpInput {
-    width: 45px !important;
-    height: 55px !important;
+    width: 44px !important;
+    height: 52px !important;
     font-size: 20px;
     font-weight: 600;
     text-align: center;
-    border: 2px solid #e5e7eb;
-    border-radius: 12px;
-    background-color: white;
-    color: #1f2937;
+    border: 1px solid rgba(139, 134, 128, 0.4);
+    border-radius: 0px;
+    background-color: #FFFFFF;
+    color: #36454F;
     outline: none;
     transition: border-color 0.2s;
-    font-family: inherit;
-
-    ::webkit-inner-spin-button {
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        appearance: none;
-        margin: 0;
-    }
-
-    ::webkit-outer-spin-button {
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        appearance: none;
-        margin: 0;
-    }
+    font-family: 'JetBrains Mono', monospace !important;
 
     &:focus {
-        border-color: #ffb400;
+        border-color: #A0522D;
+        box-shadow: 0 0 0 2px rgba(160, 82, 45, 0.2);
     }
 
     &.error {
@@ -166,59 +165,65 @@
     text-align: center;
     margin-top: 15px;
     font-size: 14px;
-    color: #6b7280;
+    color: #8B8680;
 }
 
 .changeNumberButton {
     background: none;
     border: none;
-    color: #ffb400;
+    color: #A0522D;
     font-weight: 600;
     cursor: pointer;
     text-decoration: underline;
+    font-family: inherit;
+    font-size: 14px;
 }
 
 .resendButton {
     background: none;
     border: none;
-    color: #ffb400;
+    color: #A0522D;
     font-weight: 600;
     cursor: pointer;
     text-decoration: underline;
+    font-family: inherit;
+    font-size: 14px;
 
     &:disabled {
-        color: #9ca3af;
+        color: #8B8680;
         cursor: not-allowed;
         text-decoration: none;
+        opacity: 0.6;
     }
 }
 
 .timerText {
-    color: #6b7280;
+    color: #8B8680;
     font-size: 14px;
 
     b {
-        color: #1f2937;
+        color: #36454F;
         min-width: 25px;
         display: inline-block;
+        font-family: 'JetBrains Mono', monospace;
     }
 }
 
 .registerForm {
     display: flex;
     flex-direction: column;
-    gap: 15px;
-    margin-bottom: 20px;
+    gap: 14px;
+    margin-bottom: 16px;
 }
 
 .nameRow {
     display: flex;
-    gap: 15px;
+    gap: 12px;
     width: 100%;
 
     @media (max-width: 480px) {
         flex-direction: column;
-        gap: 15px;
+        gap: 12px;
     }
 }
 
@@ -227,23 +232,24 @@
 }
 
 .optInContainer {
-    margin-top: 10px;
+    margin-top: 8px;
 }
 
 .checkboxLabel {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     font-size: 14px;
-    color: #4b5563;
+    color: #36454F;
     cursor: pointer;
     user-select: none;
 
     input[type="checkbox"] {
-        width: 18px;
-        height: 18px;
+        width: 16px;
+        height: 16px;
         cursor: pointer;
-        accent-color: #ffb400;
+        accent-color: #A0522D;
+        border-radius: 0px;
     }
 }
 
@@ -255,26 +261,26 @@
 
 .registerInput {
     width: 100%;
-    padding: 14px 18px;
+    padding: 12px 14px;
     font-size: 15px;
-    border: 2px solid #e5e7eb;
-    border-radius: 12px;
-    background-color: white;
-    color: #1f2937;
+    border: 1px solid rgba(139, 134, 128, 0.4);
+    border-radius: 0px;
+    background-color: #FFFFFF;
+    color: #36454F;
     outline: none;
     transition: all 0.2s;
     font-family: inherit;
     box-sizing: border-box;
 
     &:focus {
-        border-color: #ffb400;
-        background-color: #fff;
-        box-shadow: 0 0 0 4px rgba(255, 180, 0, 0.1);
+        border-color: #A0522D;
+        background-color: #FFFFFF;
+        box-shadow: 0 0 0 2px rgba(160, 82, 45, 0.2);
     }
 
     &.error {
         border-color: #ef4444;
-        background-color: #fef2f2;
+        background-color: #fff8f8;
     }
 }
 
@@ -282,7 +288,6 @@
     from {
         opacity: 0;
     }
-
     to {
         opacity: 1;
     }
@@ -291,9 +296,8 @@
 @keyframes slideUp {
     from {
         opacity: 0;
-        transform: translate(-50%, -45%);
+        transform: translate(-50%, -46%);
     }
-
     to {
         opacity: 1;
         transform: translate(-50%, -50%);

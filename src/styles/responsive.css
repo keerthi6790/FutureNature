@@ -12,24 +12,24 @@
   /* New Dropdown Mobile Menu */
   .navbar-links {
     position: fixed;
-    top: 70px;
+    top: 75px;
     left: 0;
     right: 0;
-    background: rgba(255, 255, 255, 0.95);
+    background: rgba(250, 240, 230, 0.98);
     backdrop-filter: blur(20px);
     WebkitBackdropFilter: blur(20px);
     flex-direction: column !important;
     gap: 0 !important;
     padding: 10px 0 !important;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 10px 20px rgba(54, 69, 79, 0.08);
     transform: translateY(-20px);
     opacity: 0;
     pointer-events: none;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    max-height: calc(100vh - 70px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    max-height: calc(100vh - 75px);
     overflow-y: auto;
-    z-index: 999;
-    border-bottom: 1px solid rgba(229, 231, 235, 0.5);
+    z-index: 99;
+    border-bottom: 1px solid rgba(139, 134, 128, 0.3);
   }
 
   .navbar-links.mobile-menu-open {

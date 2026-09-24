@@ -10,10 +10,22 @@ export default function ManageBanners() {
   const router = useRouter();
   const [banners, setBanners] = useState<Banner[]>([]);
   const [loading, setLoading] = useState(true);
-  const [imageUrl, setImageUrl] = useState("");
+
+  // Form States
+  const [title, setTitle] = useState("");
+  const [desktopImageUrl, setDesktopImageUrl] = useState("");
+  const [mobileImageUrl, setMobileImageUrl] = useState("");
+  const [desktopHref, setDesktopHref] = useState("");
+  const [mobileHref, setMobileHref] = useState("");
+  const [order, setOrder] = useState<number>(0);
   const [isActive, setIsActive] = useState(true);
+
   const [editingId, setEditingId] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Drag states
+  const [dragDesktopActive, setDragDesktopActive] = useState(false);
+  const [dragMobileActive, setDragMobileActive] = useState(false);
 
   useEffect(() => {
     fetchBanners();
@@ -34,64 +46,7 @@ export default function ManageBanners() {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!imageUrl) {
-      toast.error("Please upload an image");
-      return;
-    }
-
-    setIsSubmitting(true);
-    try {
-      if (editingId) {
-        const response = await bannerApi.updateBanner(editingId, {
-          imageUrl,
-          isActive,
-        });
-        if (response.status) {
-          toast.success("Banner updated successfully");
-          setEditingId(null);
-        }
-      } else {
-        const response = await bannerApi.addBanner({ imageUrl, isActive });
-        if (response.status) {
-          toast.success("Banner added successfully");
-        }
-      }
-      setImageUrl("");
-      setIsActive(true);
-      fetchBanners();
-    } catch (error) {
-      console.error("Error saving banner:", error);
-      toast.error("Failed to save banner");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const [dragActive, setDragActive] = useState(false);
-
-  const handleDrag = (e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (e.type === "dragenter" || e.type === "dragover") {
-      setDragActive(true);
-    } else if (e.type === "dragleave") {
-      setDragActive(false);
-    }
-  };
-
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setDragActive(false);
-    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      const file = e.dataTransfer.files[0];
-      processFile(file);
-    }
-  };
-
-  const processFile = (file: File) => {
+  const processFile = (file: File, type: "desktop" | "mobile") => {
     if (!file.type.startsWith("image/")) {
       toast.error("Please upload an image file");
       return;
@@ -99,23 +54,66 @@ export default function ManageBanners() {
     const reader = new FileReader();
     reader.onload = (event) => {
       if (event.target?.result) {
-        setImageUrl(event.target.result as string);
+        if (type === "desktop") {
+          setDesktopImageUrl(event.target.result as string);
+        } else {
+          setMobileImageUrl(event.target.result as string);
+        }
       }
     };
     reader.readAsDataURL(file);
   };
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      processFile(file);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!desktopImageUrl) {
+      toast.error("Please upload a Desktop Banner image");
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const payload = {
+        title: title.trim() || undefined,
+        desktopImageUrl,
+        mobileImageUrl: mobileImageUrl.trim() || undefined,
+        desktopHref: desktopHref.trim() || undefined,
+        mobileHref: mobileHref.trim() || undefined,
+        order: Number(order) || 0,
+        isActive,
+      };
+
+      if (editingId) {
+        const response = await bannerApi.updateBanner(editingId, payload);
+        if (response.status) {
+          toast.success("Banner updated successfully");
+          resetForm();
+        }
+      } else {
+        const response = await bannerApi.addBanner(payload);
+        if (response.status) {
+          toast.success("Banner added successfully");
+          resetForm();
+        }
+      }
+      fetchBanners();
+    } catch (error: any) {
+      console.error("Error saving banner:", error);
+      toast.error(error.response?.data?.message || "Failed to save banner");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   const handleEdit = (banner: Banner) => {
     setEditingId(banner.id);
-    setImageUrl(banner.imageUrl);
-    setIsActive(banner.isActive);
+    setTitle(banner.title || "");
+    setDesktopImageUrl(banner.desktopImageUrl || banner.imageUrl || "");
+    setMobileImageUrl(banner.mobileImageUrl || "");
+    setDesktopHref(banner.desktopHref || banner.href || "");
+    setMobileHref(banner.mobileHref || "");
+    setOrder(banner.order || 0);
+    setIsActive(banner.isActive !== undefined ? banner.isActive : true);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -134,9 +132,14 @@ export default function ManageBanners() {
     }
   };
 
-  const cancelEdit = () => {
+  const resetForm = () => {
     setEditingId(null);
-    setImageUrl("");
+    setTitle("");
+    setDesktopImageUrl("");
+    setMobileImageUrl("");
+    setDesktopHref("");
+    setMobileHref("");
+    setOrder(0);
     setIsActive(true);
   };
 
@@ -154,6 +157,38 @@ export default function ManageBanners() {
               </button>
               <h1 className={styles.title}>Banner Management</h1>
             </div>
+            <div style={{ display: "flex", gap: "12px", alignItems: "center", flexWrap: "wrap" }}>
+              <button
+                onClick={() => router.push("/admin/orders")}
+                style={{
+                  backgroundColor: "transparent",
+                  border: "1px solid rgba(139, 134, 128, 0.4)",
+                  color: "#36454F",
+                  padding: "10px 16px",
+                  borderRadius: "0px",
+                  fontFamily: "'JetBrains Mono', monospace",
+                  fontSize: "0.85rem",
+                  cursor: "pointer",
+                }}
+              >
+                Customer Orders
+              </button>
+              <button
+                onClick={() => router.push("/admin/manageProducts")}
+                style={{
+                  backgroundColor: "transparent",
+                  border: "1px solid rgba(139, 134, 128, 0.4)",
+                  color: "#36454F",
+                  padding: "10px 16px",
+                  borderRadius: "0px",
+                  fontFamily: "'JetBrains Mono', monospace",
+                  fontSize: "0.85rem",
+                  cursor: "pointer",
+                }}
+              >
+                Manage Products
+              </button>
+            </div>
           </div>
 
           <div className={styles.mainGrid}>
@@ -161,62 +196,73 @@ export default function ManageBanners() {
             <form className={styles.addForm} onSubmit={handleSubmit}>
               <h2>{editingId ? "Edit Banner" : "Create New Banner"}</h2>
 
+              {/* Title & Order */}
+              <div className={styles.formGrid2}>
+                <div className={styles.formGroup}>
+                  <label>Banner Title (Optional)</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Summer Harvest Deal"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                  />
+                </div>
+                <div className={styles.formGroup}>
+                  <label>Display Order</label>
+                  <input
+                    type="number"
+                    placeholder="0"
+                    value={order}
+                    onChange={(e) => setOrder(Number(e.target.value))}
+                  />
+                </div>
+              </div>
+
+              {/* Desktop Image Upload */}
               <div className={styles.formGroup}>
-                <label>Banner Image</label>
-                {!imageUrl ? (
+                <label>Desktop Banner Image *</label>
+                {!desktopImageUrl ? (
                   <div
-                    className={`${styles.dropZone} ${dragActive ? styles.dragActive : ""}`}
-                    onDragEnter={handleDrag}
-                    onDragLeave={handleDrag}
-                    onDragOver={handleDrag}
-                    onDrop={handleDrop}
-                    onClick={() =>
-                      document.getElementById("imageUpload")?.click()
-                    }
+                    className={`${styles.dropZone} ${dragDesktopActive ? styles.dragActive : ""}`}
+                    onDragEnter={(e) => { e.preventDefault(); setDragDesktopActive(true); }}
+                    onDragLeave={(e) => { e.preventDefault(); setDragDesktopActive(false); }}
+                    onDragOver={(e) => { e.preventDefault(); setDragDesktopActive(true); }}
+                    onDrop={(e) => {
+                      e.preventDefault();
+                      setDragDesktopActive(false);
+                      if (e.dataTransfer.files?.[0]) processFile(e.dataTransfer.files[0], "desktop");
+                    }}
+                    onClick={() => document.getElementById("desktopImageUpload")?.click()}
                   >
                     <div className={styles.icon}>
-                      <svg
-                        width="40"
-                        height="40"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                        <polyline points="17 8 12 3 7 8" />
-                        <line x1="12" y1="3" x2="12" y2="15" />
+                      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                        <line x1="8" y1="21" x2="16" y2="21"/>
+                        <line x1="12" y1="17" x2="12" y2="21"/>
                       </svg>
                     </div>
                     <div className={styles.text}>
-                      <strong>Click to upload</strong> or drag and drop
-                      <p
-                        style={{
-                          marginTop: "4px",
-                          fontSize: "12px",
-                          color: "#9ca3af",
-                        }}
-                      >
-                        SVG, PNG, JPG (Recommended: 1560x360px)
-                      </p>
+                      <strong>Click to upload Desktop Image</strong> or drag & drop
+                      <p>Recommended: 1920x600px or 1600x500px</p>
                     </div>
                     <input
-                      id="imageUpload"
+                      id="desktopImageUpload"
                       type="file"
                       accept="image/*"
-                      onChange={handleImageChange}
+                      onChange={(e) => {
+                        if (e.target.files?.[0]) processFile(e.target.files[0], "desktop");
+                      }}
                       style={{ display: "none" }}
                     />
                   </div>
                 ) : (
                   <div className={styles.imagePreview}>
-                    <Image src={imageUrl} alt="Preview" fill />
+                    <Image src={desktopImageUrl} alt="Desktop Preview" fill unoptimized />
                     <button
                       type="button"
                       className={styles.removeBtn}
-                      onClick={() => setImageUrl("")}
+                      onClick={() => setDesktopImageUrl("")}
+                      title="Remove image"
                     >
                       &times;
                     </button>
@@ -224,15 +270,93 @@ export default function ManageBanners() {
                 )}
               </div>
 
+              {/* Mobile Image Upload */}
+              <div className={styles.formGroup}>
+                <label>Mobile Banner Image (Optional - Falls back to desktop image)</label>
+                {!mobileImageUrl ? (
+                  <div
+                    className={`${styles.dropZone} ${dragMobileActive ? styles.dragActive : ""}`}
+                    onDragEnter={(e) => { e.preventDefault(); setDragMobileActive(true); }}
+                    onDragLeave={(e) => { e.preventDefault(); setDragMobileActive(false); }}
+                    onDragOver={(e) => { e.preventDefault(); setDragMobileActive(true); }}
+                    onDrop={(e) => {
+                      e.preventDefault();
+                      setDragMobileActive(false);
+                      if (e.dataTransfer.files?.[0]) processFile(e.dataTransfer.files[0], "mobile");
+                    }}
+                    onClick={() => document.getElementById("mobileImageUpload")?.click()}
+                  >
+                    <div className={styles.icon}>
+                      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
+                        <line x1="12" y1="18" x2="12.01" y2="18"/>
+                      </svg>
+                    </div>
+                    <div className={styles.text}>
+                      <strong>Click to upload Mobile Image</strong> or drag & drop
+                      <p>Recommended: 800x800px or 750x600px portrait/square</p>
+                    </div>
+                    <input
+                      id="mobileImageUpload"
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => {
+                        if (e.target.files?.[0]) processFile(e.target.files[0], "mobile");
+                      }}
+                      style={{ display: "none" }}
+                    />
+                  </div>
+                ) : (
+                  <div className={styles.imagePreview} style={{ height: "140px" }}>
+                    <Image src={mobileImageUrl} alt="Mobile Preview" fill unoptimized />
+                    <button
+                      type="button"
+                      className={styles.removeBtn}
+                      onClick={() => setMobileImageUrl("")}
+                      title="Remove image"
+                    >
+                      &times;
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {/* Href Inputs for Desktop and Mobile */}
+              <div className={styles.formGrid2}>
+                <div className={styles.formGroup}>
+                  <label>Desktop Link URL (Href)</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. /products or /details/123"
+                    value={desktopHref}
+                    onChange={(e) => setDesktopHref(e.target.value)}
+                  />
+                  <p className={styles.hint}>Where desktop visitors are navigated on click</p>
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label>Mobile Link URL (Href)</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. /products or /details/123"
+                    value={mobileHref}
+                    onChange={(e) => setMobileHref(e.target.value)}
+                  />
+                  <p className={styles.hint}>Where mobile visitors are navigated on click</p>
+                </div>
+              </div>
+
+              {/* Active Checkbox */}
               <label className={styles.checkboxGroup}>
                 <input
                   type="checkbox"
                   checked={isActive}
                   onChange={(e) => setIsActive(e.target.checked)}
                 />
-                Show this banner on homepage
+                Show this banner on live homepage
               </label>
 
+              {/* Buttons */}
               <div className={styles.btnGroup}>
                 <button
                   type="submit"
@@ -240,16 +364,16 @@ export default function ManageBanners() {
                   disabled={isSubmitting}
                 >
                   {isSubmitting
-                    ? "Working..."
+                    ? "Saving..."
                     : editingId
                       ? "Update Banner"
-                      : "Save Banner"}
+                      : "Publish Banner"}
                 </button>
                 {editingId && (
                   <button
                     type="button"
                     className={styles.cancelBtn}
-                    onClick={cancelEdit}
+                    onClick={resetForm}
                   >
                     Cancel
                   </button>
@@ -257,7 +381,7 @@ export default function ManageBanners() {
               </div>
             </form>
 
-            {/* Right Side: List */}
+            {/* Right Side: List of Banners */}
             <div className={styles.bannerListCard}>
               <h2>Live Banners ({banners.length})</h2>
               {loading ? (
@@ -270,21 +394,49 @@ export default function ManageBanners() {
                 <div className={styles.bannerGrid}>
                   {banners.map((banner) => (
                     <div key={banner.id} className={styles.bannerItem}>
-                      <div className={styles.imageArea}>
-                        <Image src={banner.imageUrl} alt="Banner" fill />
+                      <div className={styles.imageGridDual}>
+                        <div className={styles.imageArea}>
+                          <span className={styles.imageLabel}>Desktop</span>
+                          <Image
+                            src={banner.desktopImageUrl || banner.imageUrl || "/Assets/Header_Images/Product.png"}
+                            alt={banner.title || "Desktop Banner"}
+                            fill
+                            unoptimized
+                          />
+                        </div>
+                        {banner.mobileImageUrl ? (
+                          <div className={styles.imageArea}>
+                            <span className={styles.imageLabel}>Mobile</span>
+                            <Image
+                              src={banner.mobileImageUrl}
+                              alt={banner.title || "Mobile Banner"}
+                              fill
+                              unoptimized
+                            />
+                          </div>
+                        ) : (
+                          <div className={styles.imageArea} style={{ display: "flex", alignItems: "center", justifyContent: "center", background: "#FAF0E6" }}>
+                            <span style={{ fontSize: "12px", color: "#8B8680", padding: "8px", textAlign: "center" }}>Same as desktop</span>
+                          </div>
+                        )}
                       </div>
+
                       <div className={styles.cardContent}>
-                        <div
-                          style={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                          }}
-                        >
+                        <div className={styles.metaInfo}>
+                          {banner.title && <h3 className={styles.bannerTitleText}>{banner.title}</h3>}
+                          <div className={styles.hrefLine}>
+                            <strong>Desktop Link:</strong> {banner.desktopHref || banner.href || "None (Not clickable)"}
+                          </div>
+                          <div className={styles.hrefLine}>
+                            <strong>Mobile Link:</strong> {banner.mobileHref || banner.desktopHref || banner.href || "None"}
+                          </div>
+                        </div>
+
+                        <div className={styles.cardBottomRow}>
                           <span
                             className={`${styles.status} ${banner.isActive ? styles.active : styles.inactive}`}
                           >
-                            {banner.isActive ? "Visible" : "Hidden"}
+                            {banner.isActive ? "Active / Visible" : "Hidden / Inactive"}
                           </span>
                           <div className={styles.actions}>
                             <button

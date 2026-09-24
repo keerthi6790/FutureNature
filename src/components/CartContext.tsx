@@ -48,22 +48,38 @@ export interface BackendCartItem {
   mrp_price: string;
   cartId: string;
   productId: string;
-  product: {
+  product?: {
     id: string;
     product_name: string;
-    imageUrl: string[];
+    imageUrl?: string[];
     selling_price: string;
   };
 }
 
-const mapBackendItemToCartItem = (item: BackendCartItem): CartItem => ({
-  id: item.productId,
-  quantity: parseInt(item.selected_quantity),
-  name: item.product.product_name,
-  price: parseFloat(item.product.selling_price),
-  image: item.product.imageUrl[0] || "",
-  cartItemId: item.id,
-});
+const mapBackendItemToCartItem = (item: BackendCartItem): CartItem => {
+  const qty = parseInt(item.selected_quantity) || 1;
+  const unitPrice = item.product?.selling_price
+    ? parseFloat(item.product.selling_price)
+    : item.total_price
+    ? parseFloat(item.total_price) / qty
+    : 0;
+
+  let imgUrl = "";
+  if (item.product?.imageUrl && Array.isArray(item.product.imageUrl) && item.product.imageUrl.length > 0) {
+    imgUrl = item.product.imageUrl[0];
+  } else if (typeof (item.product as any)?.imageUrl === "string") {
+    imgUrl = (item.product as any).imageUrl;
+  }
+
+  return {
+    id: item.productId,
+    quantity: qty,
+    name: item.product?.product_name || `Harvest Item #${item.productId.slice(0, 8)}`,
+    price: unitPrice,
+    image: imgUrl || "/Assets/Products/15.png",
+    cartItemId: item.id,
+  };
+};
 
 export function CartProvider({ children }: { children: ReactNode }) {
   const [cart, setCart] = useState<CartItem[]>([]);

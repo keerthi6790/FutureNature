@@ -98,29 +98,30 @@ export default function Navbar() {
     <>
       <nav
         style={{
-          backgroundColor: "rgba(255, 255, 255, 0.85)",
+          backgroundColor: "rgba(250, 240, 230, 0.96)",
           backdropFilter: "blur(12px)",
           WebkitBackdropFilter: "blur(12px)",
-          borderBottom: "1px solid rgba(229, 231, 235, 0.5)",
-          position: "fixed",
+          borderBottom: "1px solid rgba(139, 134, 128, 0.25)",
+          position: "sticky",
           top: 0,
           left: 0,
           right: 0,
           width: "100%",
-          zIndex: 1000,
-          boxShadow: "0 4px 12px rgba(0, 0, 0, 0.05)",
+          zIndex: 100,
+          boxShadow: "0 2px 8px rgba(54, 69, 79, 0.05)",
+          fontFamily: "'Cormorant Garamond', Georgia, serif",
         }}
       >
         <div
           className="navbar-container"
           style={{
-            maxWidth: "1400px",
+            maxWidth: "1280px",
             margin: "0 auto",
             padding: "0 24px",
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            height: "80px",
+            height: "75px",
           }}
         >
           {/* Logo */}
@@ -135,10 +136,11 @@ export default function Navbar() {
             <Image
               src="https://futurenature.s3.ap-south-1.amazonaws.com/others/logo.png"
               alt="FutureNature Logo"
-              width={150}
-              height={60}
+              width={140}
+              height={55}
               className="navbar-logo"
               style={{ objectFit: "contain" }}
+              priority
             />
           </Link>
 
@@ -150,45 +152,46 @@ export default function Navbar() {
               display: "none",
               flexDirection: "column",
               justifyContent: "space-around",
-              width: "30px",
-              height: "24px",
+              width: "32px",
+              height: "26px",
               background: "transparent",
-              border: "none",
+              border: "1px solid rgba(139, 134, 128, 0.3)",
+              borderRadius: "0px",
               cursor: "pointer",
-              padding: 0,
+              padding: "4px",
               zIndex: 10,
             }}
             aria-label="Toggle menu"
           >
             <span
               style={{
-                width: "30px",
-                height: "3px",
-                background: "#f59e0b",
-                borderRadius: "10px",
+                width: "100%",
+                height: "2px",
+                background: "#A0522D",
+                borderRadius: "0px",
                 transition: "all 0.3s",
-                transformOrigin: "1px",
+                transformOrigin: "2px",
                 transform: isMobileMenuOpen ? "rotate(45deg)" : "rotate(0)",
               }}
             />
             <span
               style={{
-                width: "30px",
-                height: "3px",
-                background: "#f59e0b",
-                borderRadius: "10px",
+                width: "100%",
+                height: "2px",
+                background: "#A0522D",
+                borderRadius: "0px",
                 transition: "all 0.3s",
                 opacity: isMobileMenuOpen ? 0 : 1,
               }}
             />
             <span
               style={{
-                width: "30px",
-                height: "3px",
-                background: "#f59e0b",
-                borderRadius: "10px",
+                width: "100%",
+                height: "2px",
+                background: "#A0522D",
+                borderRadius: "0px",
                 transition: "all 0.3s",
-                transformOrigin: "1px",
+                transformOrigin: "2px",
                 transform: isMobileMenuOpen ? "rotate(-45deg)" : "rotate(0)",
               }}
             />
@@ -200,125 +203,41 @@ export default function Navbar() {
             style={{
               display: "flex",
               alignItems: "center",
-              gap: "40px",
+              gap: "36px",
             }}
           >
-            <Link
-              href="/"
-              onClick={() => setIsMobileMenuOpen(false)}
-              style={{
-                color: router.pathname === "/" ? "#f59e0b" : "#374151",
-                fontSize: "16px",
-                fontWeight: router.pathname === "/" ? "600" : "500",
-                textDecoration: "none",
-                transition: "color 0.2s",
-                position: "relative",
-                paddingBottom: "8px",
-                borderBottom:
-                  router.pathname === "/"
-                    ? "3px solid #f59e0b"
-                    : "3px solid transparent",
-              }}
-            >
-              Home
-            </Link>
-            <Link
-              href="/products"
-              onClick={() => setIsMobileMenuOpen(false)}
-              style={{
-                color: router.pathname === "/products" ? "#f59e0b" : "#374151",
-                fontSize: "16px",
-                fontWeight: router.pathname === "/products" ? "600" : "500",
-                textDecoration: "none",
-                transition: "color 0.2s",
-                position: "relative",
-                paddingBottom: "8px",
-                borderBottom:
-                  router.pathname === "/products"
-                    ? "3px solid #f59e0b"
-                    : "3px solid transparent",
-              }}
-            >
-              Products
-            </Link>
-
-            <Link
-              href="/blog"
-              onClick={() => setIsMobileMenuOpen(false)}
-              prefetch
-              style={{
-                color: router.pathname === "/blog" ? "#f59e0b" : "#374151",
-                fontSize: "16px",
-                fontWeight: router.pathname === "/blog" ? "600" : "500",
-                textDecoration: "none",
-                transition: "color 0.2s",
-                position: "relative",
-                paddingBottom: "8px",
-                borderBottom:
-                  router.pathname === "/blog"
-                    ? "3px solid #f59e0b"
-                    : "3px solid transparent",
-              }}
-            >
-              Blog
-            </Link>
-            <Link
-              href="/wishlist"
-              onClick={() => setIsMobileMenuOpen(false)}
-              style={{
-                color: router.pathname === "/wishlist" ? "#f59e0b" : "#374151",
-                fontSize: "16px",
-                fontWeight: router.pathname === "/wishlist" ? "600" : "500",
-                textDecoration: "none",
-                transition: "color 0.2s",
-                position: "relative",
-                paddingBottom: "8px",
-                borderBottom:
-                  router.pathname === "/wishlist"
-                    ? "3px solid #f59e0b"
-                    : "3px solid transparent",
-              }}
-            >
-              Wishlist
-            </Link>
-            <Link
-              href="/about"
-              onClick={() => setIsMobileMenuOpen(false)}
-              style={{
-                color: router.pathname === "/about" ? "#f59e0b" : "#374151",
-                fontSize: "16px",
-                fontWeight: router.pathname === "/about" ? "600" : "500",
-                textDecoration: "none",
-                transition: "color 0.2s",
-                position: "relative",
-                paddingBottom: "8px",
-                borderBottom:
-                  router.pathname === "/about"
-                    ? "3px solid #f59e0b"
-                    : "3px solid transparent",
-              }}
-            >
-              About Us
-            </Link>
-            <Link
-              href="/contact"
-              onClick={() => setIsMobileMenuOpen(false)}
-              style={{
-                color: router.pathname === "/contact" ? "#f59e0b" : "#374151",
-                fontSize: "16px",
-                fontWeight: router.pathname === "/contact" ? "600" : "500",
-                textDecoration: "none",
-                transition: "color 0.2s",
-                position: "relative",
-                paddingBottom: "8px",
-                borderBottom:
-                  router.pathname === "/contact"
-                    ? "3px solid #f59e0b"
-                    : "3px solid transparent",
-              }}
-            >
-              Contact Us
-            </Link>
+            {[
+              { label: "Home", path: "/" },
+              { label: "Products", path: "/products" },
+              { label: "Blog", path: "/blog" },
+              { label: "Wishlist", path: "/wishlist" },
+              { label: "About Us", path: "/about" },
+              { label: "Contact Us", path: "/contact" },
+            ].map(({ label, path }) => {
+              const isActive = router.pathname === path;
+              return (
+                <Link
+                  key={path}
+                  href={path}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  style={{
+                    color: isActive ? "#A0522D" : "#36454F",
+                    fontSize: "17px",
+                    fontWeight: isActive ? 600 : 400,
+                    textDecoration: "none",
+                    transition: "all 0.2s ease-out",
+                    position: "relative",
+                    paddingBottom: "4px",
+                    borderBottom: isActive
+                      ? "2px solid #A0522D"
+                      : "2px solid transparent",
+                    letterSpacing: "0.02em",
+                  }}
+                >
+                  {label}
+                </Link>
+              );
+            })}
           </div>
 
           {/* Cart and Login - Desktop */}
@@ -336,13 +255,13 @@ export default function Navbar() {
               style={{
                 display: "flex",
                 alignItems: "center",
-                gap: "12px",
+                gap: "10px",
                 backgroundColor: "transparent",
-                color: "#000",
+                color: "#36454F",
                 border: "none",
                 padding: "0",
-                fontSize: "18px",
-                fontWeight: "400",
+                fontSize: "17px",
+                fontWeight: "500",
                 cursor: "pointer",
                 transition: "all 0.2s",
                 textDecoration: "none",
@@ -360,26 +279,27 @@ export default function Navbar() {
                 <Image
                   src="https://futurenature.s3.ap-south-1.amazonaws.com/others/cart.svg"
                   alt="Cart"
-                  width={42}
-                  height={42}
+                  width={36}
+                  height={36}
                 />
                 {cartItemCount > 0 && (
                   <span
-                    className="navbar-cart-badge"
+                    className="navbar-cart-badge mono-val"
                     style={{
                       position: "absolute",
-                      top: "-8px",
-                      right: "-8px",
-                      backgroundColor: "#f59e0b",
-                      color: "white",
-                      borderRadius: "50%",
-                      width: "24px",
-                      height: "24px",
+                      top: "-6px",
+                      right: "-6px",
+                      backgroundColor: "#A0522D",
+                      color: "#FAF0E6",
+                      borderRadius: "0px",
+                      padding: "1px 5px",
+                      minWidth: "18px",
+                      height: "18px",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      fontSize: "12px",
-                      fontWeight: "bold",
+                      fontSize: "11px",
+                      fontWeight: 600,
                     }}
                   >
                     {cartItemCount}
@@ -391,7 +311,7 @@ export default function Navbar() {
 
             <span
               className="navbar-divider"
-              style={{ color: "#d1d5db", fontSize: "24px", fontWeight: "300" }}
+              style={{ color: "#8B8680", opacity: 0.4, fontSize: "20px", fontWeight: "300" }}
             >
               |
             </span>
@@ -404,22 +324,37 @@ export default function Navbar() {
                   style={{
                     display: "flex",
                     alignItems: "center",
-                    gap: "12px",
+                    gap: "10px",
                     backgroundColor: "transparent",
-                    color: "#000",
+                    color: "#36454F",
                     border: "none",
                     padding: "0",
-                    fontSize: "18px",
-                    fontWeight: "400",
+                    fontSize: "17px",
+                    fontWeight: "500",
                     cursor: "pointer",
                     transition: "all 0.2s",
+                    fontFamily: "inherit",
                   }}
                 >
                   <span className="navbar-login-text">
-                    {profileData?.firstName || ""}
+                    {profileData?.firstName || "Account"}
                   </span>
-                  <div className="profileWrapper">
-                    {profileData?.firstName?.[0]?.toUpperCase()}
+                  <div
+                    className="profileWrapper mono-val"
+                    style={{
+                      width: "32px",
+                      height: "32px",
+                      backgroundColor: "#A0522D",
+                      color: "#FAF0E6",
+                      borderRadius: "0px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontSize: "14px",
+                      fontWeight: 600,
+                    }}
+                  >
+                    {profileData?.firstName?.[0]?.toUpperCase() || "U"}
                   </div>
                 </button>
 
@@ -428,40 +363,39 @@ export default function Navbar() {
                   <div
                     style={{
                       position: "absolute",
-                      top: "120%",
+                      top: "130%",
                       right: 0,
                       width: "200px",
-                      backgroundColor: "white",
-                      borderRadius: "8px",
-                      boxShadow:
-                        "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
-                      border: "1px solid #e5e7eb",
-                      zIndex: 1001,
+                      backgroundColor: "#FAF0E6",
+                      borderRadius: "0px",
+                      boxShadow: "0 4px 16px rgba(54, 69, 79, 0.12)",
+                      border: "1px solid rgba(139, 134, 128, 0.3)",
+                      zIndex: 101,
                       overflow: "hidden",
                     }}
                   >
-                    <div style={{ padding: "8px 0" }}>
+                    <div style={{ padding: "4px 0" }}>
                       {isAdmin && (
                         <div
                           onClick={() => setIsAdminPanelOpen(true)}
                           style={{
                             display: "block",
                             padding: "10px 16px",
-                            color: "#374151",
+                            color: "#36454F",
                             textDecoration: "none",
                             fontSize: "15px",
                             transition: "background-color 0.2s",
                             cursor: "pointer",
+                            borderBottom: "1px solid rgba(139, 134, 128, 0.15)",
                           }}
                           onMouseOver={(e) =>
-                            (e.currentTarget.style.backgroundColor = "#f3f4f6")
+                            (e.currentTarget.style.backgroundColor = "rgba(160, 82, 45, 0.08)")
                           }
                           onMouseOut={(e) =>
-                            (e.currentTarget.style.backgroundColor =
-                              "transparent")
+                            (e.currentTarget.style.backgroundColor = "transparent")
                           }
                         >
-                          Admin
+                          Admin Panel
                         </div>
                       )}
                       <Link
@@ -470,17 +404,16 @@ export default function Navbar() {
                         style={{
                           display: "block",
                           padding: "10px 16px",
-                          color: "#374151",
+                          color: "#36454F",
                           textDecoration: "none",
                           fontSize: "15px",
                           transition: "background-color 0.2s",
                         }}
                         onMouseOver={(e) =>
-                          (e.currentTarget.style.backgroundColor = "#f3f4f6")
+                          (e.currentTarget.style.backgroundColor = "rgba(160, 82, 45, 0.08)")
                         }
                         onMouseOut={(e) =>
-                          (e.currentTarget.style.backgroundColor =
-                            "transparent")
+                          (e.currentTarget.style.backgroundColor = "transparent")
                         }
                       >
                         My Orders
@@ -491,17 +424,16 @@ export default function Navbar() {
                         style={{
                           display: "block",
                           padding: "10px 16px",
-                          color: "#374151",
+                          color: "#36454F",
                           textDecoration: "none",
                           fontSize: "15px",
                           transition: "background-color 0.2s",
                         }}
                         onMouseOver={(e) =>
-                          (e.currentTarget.style.backgroundColor = "#f3f4f6")
+                          (e.currentTarget.style.backgroundColor = "rgba(160, 82, 45, 0.08)")
                         }
                         onMouseOut={(e) =>
-                          (e.currentTarget.style.backgroundColor =
-                            "transparent")
+                          (e.currentTarget.style.backgroundColor = "transparent")
                         }
                       >
                         My Addresses
@@ -512,20 +444,21 @@ export default function Navbar() {
                           width: "100%",
                           textAlign: "left",
                           padding: "10px 16px",
-                          color: "#ef4444",
+                          color: "#A0522D",
                           backgroundColor: "transparent",
                           border: "none",
+                          borderRadius: "0px",
                           fontSize: "15px",
                           cursor: "pointer",
                           transition: "background-color 0.2s",
-                          borderTop: "1px solid #f3f4f6",
+                          borderTop: "1px solid rgba(139, 134, 128, 0.15)",
+                          fontFamily: "inherit",
                         }}
                         onMouseOver={(e) =>
-                          (e.currentTarget.style.backgroundColor = "#fef2f2")
+                          (e.currentTarget.style.backgroundColor = "rgba(160, 82, 45, 0.12)")
                         }
                         onMouseOut={(e) =>
-                          (e.currentTarget.style.backgroundColor =
-                            "transparent")
+                          (e.currentTarget.style.backgroundColor = "transparent")
                         }
                       >
                         Logout
@@ -541,15 +474,16 @@ export default function Navbar() {
                 style={{
                   display: "flex",
                   alignItems: "center",
-                  gap: "12px",
+                  gap: "10px",
                   backgroundColor: "transparent",
-                  color: "#000",
+                  color: "#36454F",
                   border: "none",
                   padding: "0",
-                  fontSize: "18px",
-                  fontWeight: "400",
+                  fontSize: "17px",
+                  fontWeight: "500",
                   cursor: "pointer",
                   transition: "all 0.2s",
+                  fontFamily: "inherit",
                 }}
               >
                 <span className="navbar-login-text">Login</span>
@@ -563,8 +497,8 @@ export default function Navbar() {
                   <Image
                     src="https://futurenature.s3.ap-south-1.amazonaws.com/others/profile.svg"
                     alt="Login"
-                    width={42}
-                    height={42}
+                    width={36}
+                    height={36}
                   />
                 </div>
               </button>
@@ -576,7 +510,6 @@ export default function Navbar() {
         isOpen={isAdminPanelOpen}
         onClose={() => setIsAdminPanelOpen(false)}
       />
-      <div className="navbar-spacer" />
     </>
   );
 }

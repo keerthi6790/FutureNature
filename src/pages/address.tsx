@@ -3,12 +3,12 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
 import toast from "react-hot-toast";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
-import AccountSidebar from "../components/AccountSidebar";
-import { addressApi, AddressData } from "../api/addressApi";
-import AddressList from "../components/AddressList";
-import AddressForm from "../components/AddressForm";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import AccountSidebar from "@/components/AccountSidebar";
+import { addressApi, AddressData } from "@/api/addressApi";
+import AddressList from "@/components/AddressList";
+import AddressForm from "@/components/AddressForm";
 import styles from "@/styles/Address.module.scss";
 
 export default function AddressPage() {
