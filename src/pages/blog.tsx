@@ -1,7 +1,7 @@
-import Head from "next/head";
 import Image from "next/image";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import SEO from "@/components/SEO";
 import styles from "@/styles/Blog.module.scss";
 
 interface IServerSideProsp {
@@ -17,17 +17,37 @@ export default function Blog({
 }: {
   WELLNESS_BLENDS: IServerSideProsp[];
 }) {
+  const blogJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    name: "The Wellness Journal - FutureNature",
+    description: "Discover the therapeutic and medicinal benefits of pure raw honey and herbal infusions.",
+    publisher: {
+      "@type": "Organization",
+      name: "FutureNature",
+      url: "https://futurenature.in",
+    },
+    blogPost: WELLNESS_BLENDS.map((item) => ({
+      "@type": "BlogPosting",
+      headline: item.name,
+      description: item.description,
+      image: item.image,
+      author: {
+        "@type": "Organization",
+        name: "FutureNature Apiaries",
+      },
+    })),
+  };
+
   return (
     <>
-      <Head>
-        <title>The Wellness Journal - FutureNature</title>
-        <meta
-          name="description"
-          content="Discover the healing benefits of our herbal honey blends."
-        />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+      <SEO
+        title="The Wellness Journal | Herbal Honey & Botanical Healing"
+        description="Discover the therapeutic healing benefits of raw wildflower honey, Ayurvedic botanical infusions, and sustainable beekeeping recipes."
+        canonical="/blog"
+        jsonLd={blogJsonLd}
+        noindex
+      />
 
       <div className={styles.pageWrapper}>
         <Navbar />

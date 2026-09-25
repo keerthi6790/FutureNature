@@ -146,83 +146,66 @@ const ShippingScreen: React.FC<ShippingScreenProps> = ({
   };
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        backgroundColor: "#f9fafb",
-        padding: "40px 20px",
-      }}
-    >
-      <div
-        style={{
-          backgroundColor: "white",
-          borderRadius: "12px",
-          maxWidth: "1000px",
-          width: "100%",
-          margin: "0 auto",
-          position: "relative",
-        }}
-      >
-        {loading ? (
-          <div style={{ textAlign: "center", padding: "40px" }}>
-            {/* Spinner or simple text */}
-            <p>Processing...</p>
-          </div>
-        ) : view === "list" ? (
-          <>
-            {addresses.length === 0 ? (
-              <div style={{ textAlign: "center", padding: "40px" }}>
-                <p style={{ color: "#6b7280", marginBottom: "20px" }}>
-                  No saved addresses found.
-                </p>
-                <button
-                  onClick={() => {
-                    setView("add");
-                    setEditingAddress(undefined);
-                  }}
-                  style={{
-                    backgroundColor: "#fbbf24",
-                    color: "#000",
-                    border: "none",
-                    padding: "12px 24px",
-                    borderRadius: "8px",
-                    fontWeight: "700",
-                    cursor: "pointer",
-                  }}
-                >
-                  Add New Address
-                </button>
-              </div>
-            ) : (
-              <AddressList
-                addresses={addresses}
-                onEdit={(addr) => {
-                  setEditingAddress(addr);
-                  setView("edit");
-                }}
-                onDelete={handleDelete}
-                onAddNew={() => {
-                  setEditingAddress(undefined);
+    <div style={{ width: "100%", maxWidth: "100%", boxSizing: "border-box" }}>
+      {loading ? (
+        <div style={{ textAlign: "center", padding: "30px 10px", color: "#8B8680", fontFamily: "'JetBrains Mono', monospace" }}>
+          <p>Processing...</p>
+        </div>
+      ) : view === "list" ? (
+        <>
+          {addresses.length === 0 ? (
+            <div style={{ textAlign: "center", padding: "30px 10px" }}>
+              <p style={{ color: "#8B8680", marginBottom: "16px", fontSize: "15px" }}>
+                No saved addresses found.
+              </p>
+              <button
+                onClick={() => {
                   setView("add");
+                  setEditingAddress(undefined);
                 }}
-                onSelect={setSelectedAddress}
-                selectedId={selectedAddress?.id}
-              />
-            )}
-          </>
-        ) : (
-          <div style={{ maxWidth: "600px", margin: "0 auto" }}>
-            <AddressForm
-              initialData={editingAddress}
-              onSubmit={editingAddress ? handleEdit : handleAddNew}
-              onCancel={() => {
-                setView("list");
-                setEditingAddress(undefined);
+                style={{
+                  backgroundColor: "#A0522D",
+                  color: "#FAF0E6",
+                  border: "1px solid #A0522D",
+                  padding: "10px 20px",
+                  borderRadius: "0px",
+                  fontWeight: "600",
+                  cursor: "pointer",
+                  fontSize: "14px",
+                }}
+              >
+                Add New Address
+              </button>
+            </div>
+          ) : (
+            <AddressList
+              addresses={addresses}
+              onEdit={(addr) => {
+                setEditingAddress(addr);
+                setView("edit");
               }}
+              onDelete={handleDelete}
+              onAddNew={() => {
+                setEditingAddress(undefined);
+                setView("add");
+              }}
+              onSelect={setSelectedAddress}
+              selectedId={selectedAddress?.id}
             />
-          </div>
-        )}
-      </div>
+          )}
+        </>
+      ) : (
+        <div style={{ maxWidth: "600px", width: "100%", margin: "0 auto", boxSizing: "border-box" }}>
+          <AddressForm
+            initialData={editingAddress}
+            onSubmit={editingAddress ? handleEdit : handleAddNew}
+            onCancel={() => {
+              setView("list");
+              setEditingAddress(undefined);
+            }}
+          />
+        </div>
+      )}
     </div>
   );
 };

@@ -1,4 +1,3 @@
-import Head from "next/head";
 import Image from "next/image";
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/router";
@@ -13,6 +12,7 @@ import { wishlistApi } from "@/api/wishlistApi";
 import Cookies from "js-cookie";
 import styles from "@/styles/Details.module.scss";
 import SkeletonDetail from "@/components/SkeletonDetail";
+import SEO from "@/components/SEO";
 
 interface Product {
   id: string;
@@ -168,10 +168,14 @@ export default function ViewProduct() {
 
   const handleAddToCart = () => {
     if (!product) return;
+    const safeImage =
+      Array.isArray(product.imageUrl) && product.imageUrl.length > 0
+        ? product.imageUrl[0]
+        : "/Assets/Products/15.png";
     addToCart(product.id, quantity, {
       name: product.product_name,
       price: parseFloat(product.selling_price),
-      image: product.imageUrl[0],
+      image: safeImage,
     });
     toast.success("Added to cart!");
   };
@@ -273,16 +277,70 @@ export default function ViewProduct() {
     );
   }
 
+  const productJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.product_name,
+    image:
+      product.imageUrl && product.imageUrl.length > 0
+        ? product.imageUrl
+        : ["https://futurenature.in/Assets/Products/15.png"],
+    description: product.description || "100% pure, raw, and unfiltered honey from FutureNature.",
+    sku: product.id,
+    brand: {
+      "@type": "Brand",
+      name: "FutureNature",
+    },
+    offers: {
+      "@type": "Offer",
+      url: `https://futurenature.in/details/${product.id}`,
+      priceCurrency: "INR",
+      price: product.selling_price || product.price,
+      priceValidUntil: "2027-12-31",
+      itemCondition: "https://schema.org/NewCondition",
+      availability:
+        product.available_quantity > 0
+          ? "https://schema.org/InStock"
+          : "https://schema.org/OutOfStock",
+      seller: {
+        "@type": "Organization",
+        name: "FutureNature",
+      },
+    },
+    ...(product.overall_rating && product.review_count
+      ? {
+        aggregateRating: {
+          "@type": "AggregateRating",
+          ratingValue: product.overall_rating,
+          reviewCount: product.review_count,
+          bestRating: 5,
+          worstRating: 1,
+        },
+      }
+      : {}),
+  };
+
+  const productImages =
+    Array.isArray(product.imageUrl) && product.imageUrl.length > 0
+      ? product.imageUrl
+      : ["/Assets/Products/15.png"];
+  const currentImage =
+    productImages[selectedImageIndex] || productImages[0] || "/Assets/Products/15.png";
+
   const descLimit = 150;
   const benefitsLimit = 100;
 
   return (
     <>
-      <Head>
-        <title>{product.product_name} - FutureNature</title>
-        <meta name="description" content={product.description} />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-      </Head>
+      <SEO
+        title={product.product_name}
+        description={product.product_name}
+        canonical={`/details/${product.id}`}
+        ogImage={productImages[0]}
+        ogType="product"
+        noindex
+        jsonLd={productJsonLd}
+      />
 
       <div className={styles.pageWrapper}>
         <Navbar />
@@ -291,14 +349,14 @@ export default function ViewProduct() {
           {/* Breadcrumbs */}
           <nav className={styles.breadcrumbs}>
             <span onClick={() => router.push('/')}>Home</span>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 18l6-6-6-6"/></svg>
-            <span>Products</span>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 18l6-6-6-6"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 18l6-6-6-6" /></svg>
+            <span onClick={() => router.push('/products')}>Products</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 18l6-6-6-6" /></svg>
             <span className={styles.current}>{product.product_name}</span>
           </nav>
 
           <div className={styles.productGrid}>
-            
+
             {/* Left: Image Gallery */}
             <div className={styles.galleryColumn}>
               <div className={styles.imageCard}>
@@ -307,7 +365,7 @@ export default function ViewProduct() {
                   <div className={styles.galleryOutOfStockBadge}>Out of Stock</div>
                 )}
                 <Image
-                  src={product.imageUrl[selectedImageIndex]}
+                  src={currentImage}
                   alt={product.product_name}
                   fill
                   unoptimized
@@ -316,7 +374,7 @@ export default function ViewProduct() {
                 />
               </div>
               <div className={styles.thumbnailTrack}>
-                {product.imageUrl.map((img, idx) => (
+                {productImages.map((img, idx) => (
                   <button
                     key={idx}
                     className={`${styles.thumbBtn} ${idx === selectedImageIndex ? styles.thumbActive : ""}`}
@@ -330,18 +388,18 @@ export default function ViewProduct() {
 
             {/* Right: Product Details Cards */}
             <div className={styles.detailsColumn}>
-              
+
               {/* Card 1: Main Info & Price */}
               <div className={styles.infoCard}>
                 {/* Stock Status Indicator */}
                 {product.available_quantity > 0 ? (
                   <div className={styles.stockBadgeIn}>
-                    <svg width="8" height="8" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="12"/></svg>
+                    <svg width="8" height="8" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="12" /></svg>
                     In Stock ({product.available_quantity} available)
                   </div>
                 ) : (
                   <div className={styles.stockBadgeOut}>
-                    <svg width="8" height="8" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="12"/></svg>
+                    <svg width="8" height="8" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="12" /></svg>
                     Currently Out of Stock
                   </div>
                 )}
@@ -395,7 +453,7 @@ export default function ViewProduct() {
                   <button className={styles.textBtn} onClick={() => setShowFullDesc(!showFullDesc)}>
                     {showFullDesc ? "Read Less" : "Read More"}
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ transform: showFullDesc ? 'rotate(180deg)' : 'rotate(0deg)' }}>
-                      <path d="M6 9l6 6 6-6"/>
+                      <path d="M6 9l6 6 6-6" />
                     </svg>
                   </button>
                 )}
@@ -407,16 +465,16 @@ export default function ViewProduct() {
                   <h3 className={styles.cardHeader}>Key Benefits</h3>
                   <div className={styles.cardBody}>
                     <div className={styles.benefitsGrid}>
-                      {showFullBenefits 
+                      {showFullBenefits
                         ? product.benefits.map((benefit, i) => (
-                            <div key={i} className={styles.benefitItem}>
-                              <div className={styles.checkIcon}>✓</div>
-                              <span>{benefit}</span>
-                            </div>
-                          ))
+                          <div key={i} className={styles.benefitItem}>
+                            <div className={styles.checkIcon}>✓</div>
+                            <span>{benefit}</span>
+                          </div>
+                        ))
                         : truncateText(product.benefits.join(" • "), benefitsLimit)}
                     </div>
-                    <p className={styles.textSecondary} style={{marginTop: '12px'}}>
+                    <p className={styles.textSecondary} style={{ marginTop: '12px' }}>
                       {showFullBenefits ? product.benefitsTamil?.join(" • ") : truncateText(product.benefitsTamil?.join(" • ") || "", benefitsLimit)}
                     </p>
                   </div>
@@ -424,7 +482,7 @@ export default function ViewProduct() {
                     <button className={styles.textBtn} onClick={() => setShowFullBenefits(!showFullBenefits)}>
                       {showFullBenefits ? "View Less" : "View All Benefits"}
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ transform: showFullBenefits ? 'rotate(180deg)' : 'rotate(0deg)' }}>
-                        <path d="M6 9l6 6 6-6"/>
+                        <path d="M6 9l6 6 6-6" />
                       </svg>
                     </button>
                   )}
@@ -447,16 +505,16 @@ export default function ViewProduct() {
                     <button disabled className={styles.btnDisabled}>Out of Stock</button>
                   ) : (
                     <button onClick={handleAddToCart} className={styles.btnPrimary}>
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 20a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/><path d="M20 20a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 20a1 1 0 1 0 0 2 1 1 0 0 0 0-2z" /><path d="M20 20a1 1 0 1 0 0 2 1 1 0 0 0 0-2z" /><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" /></svg>
                       Add to Cart
                     </button>
                   )}
                   <div className={styles.iconButtons}>
                     <button onClick={handleToggleWishlist} className={`${styles.iconBtn} ${isWishlisted ? styles.activeWishlist : ""}`} title="Wishlist">
-                      <svg width="22" height="22" viewBox="0 0 24 24" fill={isWishlisted ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                      <svg width="22" height="22" viewBox="0 0 24 24" fill={isWishlisted ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" /></svg>
                     </button>
                     <button onClick={handleShare} className={styles.shareTextBtn}>
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="18" cy="5" r="3" /><circle cx="6" cy="12" r="3" /><circle cx="18" cy="19" r="3" /><line x1="8.59" y1="13.51" x2="15.42" y2="17.49" /><line x1="15.41" y1="6.51" x2="8.59" y2="10.49" /></svg>
                       Share
                     </button>
                   </div>
@@ -506,7 +564,7 @@ export default function ViewProduct() {
                   ))
                 ) : (
                   <div className={styles.emptyState}>
-                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#d1d5db" strokeWidth="1"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#d1d5db" strokeWidth="1"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>
                     <p>No reviews yet. Be the first to share your thoughts!</p>
                   </div>
                 )}
@@ -520,25 +578,25 @@ export default function ViewProduct() {
         {showReviewModal && (
           <div className={styles.modalOverlay} onClick={() => setShowReviewModal(false)}>
             <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-              
+
               <button className={styles.closeModalBtn} onClick={() => setShowReviewModal(false)}>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6L6 18M6 6l12 12" /></svg>
               </button>
 
               <h3 className={styles.modalTitle}>Rate this product</h3>
               <p className={styles.modalSubtitle}>How was your experience with {product.product_name}?</p>
-              
+
               <div className={styles.ratingInputCenter}>
                 <Rating onClick={setNewRating} initialValue={newRating} size={36} transition allowFraction fillColor="#FFB800" />
               </div>
-              
+
               <textarea
                 value={newReview}
                 onChange={(e) => setNewReview(e.target.value)}
                 placeholder="Share your experience (optional but helpful!)"
                 className={styles.modalTextarea}
               />
-              
+
               <button onClick={handlePostReview} disabled={isSubmitting} className={styles.btnPrimaryFull}>
                 {isSubmitting ? "Submitting..." : "Post Review"}
               </button>

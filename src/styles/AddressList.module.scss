@@ -1,92 +1,101 @@
-/* --- Variables --- */
-$c-primary: #f59e0b;
-$c-primary-dark: #d97706;
-$c-text-main: #111827;
-$c-text-muted: #6b7280;
-$c-bg-light: #f9fafb;
-$c-border: #e5e7eb;
+/* --- Variables (Wabi-Sabi) --- */
+$c-primary: #A0522D;
+$c-primary-dark: #8B4513;
+$c-text-main: #36454F;
+$c-text-muted: #8B8680;
+$c-bg-light: #FAF0E6;
+$c-border: rgba(139, 134, 128, 0.25);
 $c-white: #ffffff;
+$c-accent: #D4AF37;
 
 .container {
     width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
 }
 
 .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 24px;
+    margin-bottom: 20px;
+    gap: 12px;
 
     @media (max-width: 640px) {
         flex-direction: column;
         align-items: stretch;
-        gap: 12px;
+        gap: 10px;
+        margin-bottom: 16px;
     }
 }
 
 .title {
-    font-size: 24px;
-    font-weight: 800;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 22px;
+    font-weight: 700;
     color: $c-text-main;
     margin: 0;
 
     @media (max-width: 640px) {
-        font-size: 20px;
+        font-size: 19px;
     }
 }
 
 .addButton {
     background-color: $c-primary;
-    color: white;
-    border: none;
-    padding: 12px 24px;
-    border-radius: 8px;
+    color: #FAF0E6;
+    border: 1px solid $c-primary;
+    padding: 10px 18px;
+    border-radius: 0px;
     font-size: 14px;
-    font-weight: 700;
+    font-weight: 600;
     cursor: pointer;
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 8px;
     transition: all 0.2s ease;
-    box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
+    box-shadow: none;
+    box-sizing: border-box;
 
     &:hover {
-        background-color: $c-primary-dark;
-        transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+        background-color: #36454F;
+        border-color: $c-accent;
+        color: #FAF0E6;
     }
 
     svg {
-        width: 18px;
-        height: 18px;
+        width: 16px;
+        height: 16px;
     }
 
     @media (max-width: 640px) {
         width: 100%;
-        justify-content: center;
-        padding: 14px 24px;
+        padding: 11px 16px;
     }
 }
 
 .emptyState {
     text-align: center;
-    padding: 60px 20px;
+    padding: 40px 16px;
     background: $c-white;
-    border-radius: 16px;
-    border: 2px dashed $c-border;
+    border-radius: 0px;
+    border: 1px dashed $c-border;
+    box-sizing: border-box;
 
     svg {
-        width: 64px;
-        height: 64px;
-        color: #d1d5db;
-        margin-bottom: 16px;
+        width: 48px;
+        height: 48px;
+        color: $c-text-muted;
+        margin-bottom: 12px;
     }
 
     h3 {
-        font-size: 18px;
+        font-family: 'Cormorant Garamond', Georgia, serif;
+        font-size: 20px;
         font-weight: 700;
         color: $c-text-main;
-        margin: 0 0 8px 0;
+        margin: 0 0 6px 0;
     }
 
     p {
@@ -100,109 +109,122 @@ $c-white: #ffffff;
     display: flex;
     flex-direction: column;
     gap: 12px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
 }
 
 .addressItem {
     background: $c-white;
     border: 1px solid $c-border;
-    border-radius: 12px;
-    padding: 20px;
+    border-radius: 0px;
+    padding: 16px;
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    gap: 16px;
+    gap: 12px;
     transition: all 0.2s ease;
     position: relative;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    word-break: break-word;
 
     &:hover {
-        border-color: darken($c-border, 10%);
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        border-color: $c-primary;
     }
 
     &.selected {
-        border-color: $c-primary;
-        background-color: #fffbeb;
-        box-shadow: 0 0 0 1px $c-primary;
+        border-color: $c-accent;
+        background-color: rgba(250, 240, 230, 0.4);
+        box-shadow: 0 0 0 1px $c-accent;
     }
 
     @media (max-width: 640px) {
-        padding: 16px;
+        padding: 14px 12px;
         flex-direction: column;
-        gap: 12px;
+        gap: 10px;
     }
 }
 
 .addressContent {
     flex: 1;
     min-width: 0;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .addressHeader {
     display: flex;
     align-items: center;
-    gap: 12px;
-    margin-bottom: 12px;
-
-    @media (max-width: 640px) {
-        flex-wrap: wrap;
-    }
+    gap: 10px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
 }
 
 .addressIcon {
-    width: 40px;
-    height: 40px;
-    background: #fffbeb;
-    border-radius: 8px;
+    width: 36px;
+    height: 36px;
+    background: #FAF0E6;
+    border: 1px solid rgba(160, 82, 45, 0.3);
+    border-radius: 0px;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
 
     svg {
-        width: 20px;
-        height: 20px;
+        width: 18px;
+        height: 18px;
         color: $c-primary;
     }
 }
 
 .addressLabel {
-    background: $c-bg-light;
-    padding: 4px 10px;
-    border-radius: 6px;
+    background: #FAF0E6;
+    border: 1px solid rgba(139, 134, 128, 0.3);
+    padding: 3px 8px;
+    border-radius: 0px;
     font-size: 11px;
-    font-weight: 700;
-    color: $c-text-muted;
+    font-weight: 600;
+    color: $c-primary;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    font-family: 'JetBrains Mono', monospace;
 }
 
 .addressDetails {
+    width: 100%;
+    word-break: break-word;
+
     .mainAddress {
         font-size: 15px;
         font-weight: 700;
         color: $c-text-main;
-        margin: 0 0 6px 0;
+        margin: 0 0 4px 0;
         line-height: 1.4;
     }
 
     .subAddress {
         font-size: 14px;
         color: $c-text-muted;
-        margin: 0 0 4px 0;
-        line-height: 1.5;
+        margin: 0 0 3px 0;
+        line-height: 1.4;
     }
 
     .phone {
-        font-size: 14px;
+        font-size: 13px;
         color: $c-text-muted;
         margin: 8px 0 0 0;
         display: flex;
         align-items: center;
         gap: 6px;
+        font-family: 'JetBrains Mono', monospace;
 
         svg {
-            width: 16px;
-            height: 16px;
+            width: 14px;
+            height: 14px;
+            color: $c-primary;
         }
 
         strong {

@@ -406,8 +406,10 @@ $radius-lg: 16px;
 
 .priceCol {
   display: flex;
-  flex-direction: column;
-  gap: 2px;
+  flex-direction: row;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
 
   .sellingPrice {
     font-size: 20px;
@@ -417,7 +419,7 @@ $radius-lg: 16px;
   }
 
   .originalPrice {
-    font-size: 14px;
+    font-size: 13px;
     color: #9ca3af;
     text-decoration: line-through;
     font-weight: 500;

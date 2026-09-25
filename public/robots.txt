@@ -1,0 +1,12 @@
+# Robots.txt for FutureNature
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /admin/*
+Disallow: /cart
+Disallow: /orders
+Disallow: /address
+Disallow: /account
+
+# Sitemap location
+Sitemap: https://futurenature.in/sitemap.xml

@@ -197,7 +197,7 @@ export default function Navbar() {
             />
           </button>
 
-          {/* Navigation Links */}
+          {/* Navigation Links (Mobile & Desktop) */}
           <div
             className={`navbar-links ${isMobileMenuOpen ? "mobile-menu-open" : ""}`}
             style={{
@@ -220,6 +220,7 @@ export default function Navbar() {
                   key={path}
                   href={path}
                   onClick={() => setIsMobileMenuOpen(false)}
+                  className="navbar-link"
                   style={{
                     color: isActive ? "#A0522D" : "#36454F",
                     fontSize: "17px",
@@ -234,10 +235,142 @@ export default function Navbar() {
                     letterSpacing: "0.02em",
                   }}
                 >
-                  {label}
+                  <span>{label}</span>
                 </Link>
               );
             })}
+
+            {/* Mobile-Only Account & Management Section */}
+            <div className="mobile-only-account-section" style={{ display: "none", width: "100%", padding: "14px 20px", borderTop: "1px solid rgba(139, 134, 128, 0.2)" }}>
+              {isLoggedIn ? (
+                <div style={{ display: "flex", flexDirection: "column", gap: "8px", width: "100%" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "12px", paddingBottom: "8px", borderBottom: "1px dashed rgba(139, 134, 128, 0.2)" }}>
+                    <div
+                      style={{
+                        width: "42px",
+                        height: "42px",
+                        backgroundColor: "#A0522D",
+                        color: "#FAF0E6",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        fontSize: "18px",
+                        fontWeight: 700,
+                        fontFamily: "'JetBrains Mono', monospace",
+                      }}
+                    >
+                      {profileData?.firstName?.[0]?.toUpperCase() || "U"}
+                    </div>
+                    <div>
+                      <div style={{ fontWeight: 700, color: "#36454F", fontSize: "18px", lineHeight: 1.2 }}>
+                        {profileData?.firstName || "Account"}
+                      </div>
+                      <div style={{ fontSize: "13px", color: "#8B8680", fontFamily: "'JetBrains Mono', monospace", marginTop: "2px" }}>
+                        {profileData?.phone_number || "Verified Member"}
+                      </div>
+                    </div>
+                  </div>
+
+                  {isAdmin && (
+                    <button
+                      onClick={() => {
+                        setIsMobileMenuOpen(false);
+                        setIsAdminPanelOpen(true);
+                      }}
+                      style={{
+                        width: "100%",
+                        textAlign: "left",
+                        padding: "10px 14px",
+                        background: "rgba(160, 82, 45, 0.08)",
+                        border: "1px solid rgba(160, 82, 45, 0.2)",
+                        color: "#A0522D",
+                        fontSize: "16px",
+                        fontWeight: 600,
+                        cursor: "pointer",
+                      }}
+                    >
+                      Admin Panel
+                    </button>
+                  )}
+
+                  <Link
+                    href="/orders"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      padding: "8px 0",
+                      color: "#36454F",
+                      fontSize: "17px",
+                      textDecoration: "none",
+                      fontWeight: 500,
+                    }}
+                  >
+                    <span>My Orders</span>
+                  </Link>
+
+                  <Link
+                    href="/address"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      padding: "8px 0",
+                      color: "#36454F",
+                      fontSize: "17px",
+                      textDecoration: "none",
+                      fontWeight: 500,
+                    }}
+                  >
+                    <span>Saved Addresses</span>
+                  </Link>
+
+                  <button
+                    onClick={() => {
+                      setIsMobileMenuOpen(false);
+                      handleLogout();
+                    }}
+                    style={{
+                      width: "100%",
+                      textAlign: "center",
+                      padding: "9px",
+                      background: "transparent",
+                      border: "1px solid rgba(139, 134, 128, 0.3)",
+                      color: "#A0522D",
+                      fontSize: "15px",
+                      fontWeight: 600,
+                      marginTop: "4px",
+                      cursor: "pointer",
+                    }}
+                  >
+                    Logout
+                  </button>
+                </div>
+              ) : (
+                <button
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    openLoginModal();
+                  }}
+                  style={{
+                    width: "100%",
+                    padding: "12px 20px",
+                    backgroundColor: "#A0522D",
+                    color: "#FAF0E6",
+                    border: "1px solid #A0522D",
+                    fontSize: "15px",
+                    fontWeight: 600,
+                    cursor: "pointer",
+                    textTransform: "uppercase",
+                    letterSpacing: "1px",
+                  }}
+                >
+                  Sign In / Register
+                </button>
+              )}
+            </div>
           </div>
 
           {/* Cart and Login - Desktop */}

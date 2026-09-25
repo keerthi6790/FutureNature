@@ -1,7 +1,7 @@
-import Head from "next/head";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useState } from "react";
+import SEO from "@/components/SEO";
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -26,17 +26,32 @@ export default function Contact() {
     setFormData({ Name: "", email: "", message: "" });
   };
 
+  const contactJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    name: "Contact FutureNature Apiaries",
+    description: "Get in touch with the FutureNature apiary team for queries, bulk orders, or mindful beekeeping consultation.",
+    mainEntity: {
+      "@type": "Organization",
+      name: "FutureNature",
+      url: "https://futurenature.in",
+      contactPoint: {
+        "@type": "ContactPoint",
+        contactType: "customer service",
+        availableLanguage: ["English", "Tamil"],
+      },
+    },
+  };
+
   return (
     <>
-      <Head>
-        <title>Contact Our Sanctuary - FutureNature</title>
-        <meta
-          name="description"
-          content="Get in touch with FutureNature for pure honey inquiries and artisan batch orders."
-        />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+      <SEO
+        title="Contact Us | Customer Support & Hive Inquiries"
+        description="Get in touch with the FutureNature apiary team for pure honey inquiries, wholesale orders, and mindful apiculture guidance."
+        canonical="/contact"
+        jsonLd={contactJsonLd}
+        noindex
+      />
 
       <div style={{ minHeight: "100vh", backgroundColor: "#FAF0E6" }}>
         <Navbar />

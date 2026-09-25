@@ -1,4 +1,3 @@
-import Head from "next/head";
 import Image from "next/image";
 import { useState, useEffect, useCallback } from "react";
 import Navbar from "@/components/Navbar";
@@ -7,12 +6,12 @@ import { useCart } from "@/components/CartContext";
 import { productApi } from "@/api/productApi";
 import { Category, categoryApi } from "@/api/categoryApi";
 import Link from "next/link";
-import { Rating } from "react-simple-star-rating";
 import { wishlistApi } from "@/api/wishlistApi";
 import Cookies from "js-cookie";
 import toast from "react-hot-toast";
 import styles from "@/styles/Products.module.scss";
 import SkeletonProducts from "@/components/SkeletonProducts";
+import SEO from "@/components/SEO";
 
 interface Product {
   id: string;
@@ -220,14 +219,41 @@ export default function Products() {
     toast.success("Added to cart");
   };
 
+  const productsJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "FutureNature Raw Honey & Botanical Collection",
+    description: "Pure raw honey and botanical blends from the Western Ghats.",
+    itemListElement: products.map((item, idx) => ({
+      "@type": "ListItem",
+      position: idx + 1,
+      item: {
+        "@type": "Product",
+        name: item.name,
+        description: item.description,
+        image: item.image,
+        offers: {
+          "@type": "Offer",
+          price: item.price,
+          priceCurrency: "INR",
+          availability:
+            item.availableQuantity > 0
+              ? "https://schema.org/InStock"
+              : "https://schema.org/OutOfStock",
+        },
+      },
+    })),
+  };
+
   return (
     <>
-      <Head>
-        <title>Our Collection - FutureNature</title>
-        <meta name="description" content="Browse our natural honey and herbal products" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+      <SEO
+        title="Our Collection | Pure Raw Honey & Botanical Harvests"
+        description="Browse 100% pure raw honey, unfiltered nectar, and artisanal herbal infusions. Lab-certified single origin from Tamil Nadu apiaries."
+        canonical="/products"
+        jsonLd={productsJsonLd}
+        noindex
+      />
 
       <div className={styles.pageWrapper}>
         <Navbar />
@@ -403,20 +429,6 @@ export default function Products() {
                             {product.nameTamil}
                           </span>
                         )}
-                      </div>
-
-                      {/* Meta: Rating */}
-                      <div className={styles.ratingRowCard}>
-                        <Rating
-                          initialValue={product.rating}
-                          readonly
-                          size={16}
-                          allowFraction
-                          fillColor="#D4AF37"
-                        />
-                        <span className={styles.ratingNum}>
-                          ({product.reviewCount || 0})
-                        </span>
                       </div>
 
                       <div className={styles.cardDivider}></div>
