@@ -372,6 +372,11 @@ export default function ManageCategories() {
                     placeholder="e.g. Wild Honey, Flower Teas..."
                     required
                     autoFocus
+                    style={{
+                      backgroundColor: "#ffffff",
+                      color: "#111827",
+                      colorScheme: "light",
+                    }}
                   />
                 </div>
 
@@ -466,6 +471,11 @@ export default function ManageCategories() {
                 placeholder="Search products by name..."
                 value={productSearch}
                 onChange={(e) => setProductSearch(e.target.value)}
+                style={{
+                  backgroundColor: "#ffffff",
+                  color: "#111827",
+                  colorScheme: "light",
+                }}
               />
 
               {/* Quick Select Bar */}

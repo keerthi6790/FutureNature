@@ -213,6 +213,9 @@ export default function ManageBanners() {
                     border: "1px solid #d1d5db",
                     fontSize: "14px",
                     outline: "none",
+                    backgroundColor: "#ffffff",
+                    color: "#111827",
+                    colorScheme: "light",
                   }}
                 />
               </div>
@@ -283,6 +286,9 @@ export default function ManageBanners() {
                       border: "1px solid #d1d5db",
                       fontSize: "13px",
                       outline: "none",
+                      backgroundColor: "#ffffff",
+                      color: "#111827",
+                      colorScheme: "light",
                     }}
                   />
                 </div>
@@ -350,6 +356,9 @@ export default function ManageBanners() {
                       border: "1px solid #d1d5db",
                       fontSize: "13px",
                       outline: "none",
+                      backgroundColor: "#ffffff",
+                      color: "#111827",
+                      colorScheme: "light",
                     }}
                   />
                 </div>
@@ -379,6 +388,9 @@ export default function ManageBanners() {
                       borderRadius: "6px",
                       border: "1px solid #d1d5db",
                       fontSize: "14px",
+                      backgroundColor: "#ffffff",
+                      color: "#111827",
+                      colorScheme: "light",
                     }}
                   />
                 </div>

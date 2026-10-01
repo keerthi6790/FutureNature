@@ -319,6 +319,9 @@
       border-radius: 8px;
       font-size: 14px;
       outline: none;
+      background-color: #ffffff;
+      color: #111827;
+      color-scheme: light;
       transition: border-color 0.2s;
 
       &:focus {
@@ -454,6 +457,9 @@
     font-size: 14px;
     margin-bottom: 16px;
     outline: none;
+    background-color: #ffffff;
+    color: #111827;
+    color-scheme: light;
 
     &:focus {
       border-color: #fbbf24;

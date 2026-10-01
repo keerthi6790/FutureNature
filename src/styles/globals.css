@@ -36,15 +36,18 @@ nextjs-portal {
   display: none !important;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Enforce light theme consistency across mobile & desktop */
+:root,
+html {
+  color-scheme: light;
+}
 
-  html {
-    color-scheme: dark;
-  }
+input,
+select,
+textarea {
+  color-scheme: light;
+  background-color: #ffffff;
+  color: #111827;
 }
 
 .navbar-spacer {

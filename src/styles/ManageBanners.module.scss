@@ -87,6 +87,14 @@
         align-items: center;
         gap: 6px;
     }
+
+    input[type="text"],
+    input[type="number"],
+    input {
+        background-color: #ffffff;
+        color: #111827;
+        color-scheme: light;
+    }
 }
 
 .uploadGrid {
@@ -131,6 +139,13 @@
             color: #92400e;
             text-transform: uppercase;
         }
+    }
+
+    input[type="text"],
+    input {
+        background-color: #ffffff;
+        color: #111827;
+        color-scheme: light;
     }
 }
 
