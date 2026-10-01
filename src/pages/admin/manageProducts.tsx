@@ -131,6 +131,25 @@ export default function ManageProducts() {
                 Show Deleted
               </label>
               <button
+                onClick={() => router.push("/admin/manageCategories")}
+                style={{
+                  backgroundColor: "#ffffff",
+                  color: "#374151",
+                  border: "1px solid #d1d5db",
+                  padding: "10px 18px",
+                  borderRadius: "8px",
+                  fontWeight: 600,
+                  fontSize: "14px",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "6px",
+                  transition: "all 0.2s",
+                }}
+              >
+                🏷️ Manage Categories
+              </button>
+              <button
                 onClick={() => router.push("/admin/addProduct")}
                 className={styles.addBtn}
               >

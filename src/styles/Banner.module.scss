@@ -33,6 +33,7 @@ $c-white: #ffffff;
 }
 
 @keyframes flutter {
+
   0%,
   100% {
     transform: scaleY(1) rotate(0deg);
@@ -71,20 +72,58 @@ $c-white: #ffffff;
   font-size: clamp(5px, 1.5vw, 16px);
   position: relative;
   width: 78em;
+  max-width: 100%;
   height: 28em;
-  min-width: 78em;
+  min-width: auto;
   background-color: $c-yellow;
   border-radius: 1.5em;
   overflow: hidden;
   box-shadow: 0 0.5em 1.5em rgba(0, 0, 0, 0.05);
   user-select: none;
 
-  @media (max-width: 768px) {
-    font-size: 1.35vw;
-    min-width: auto;
+  @media (max-width: 1024px) {
     width: 100%;
     height: auto;
-    aspect-ratio: 78 / 26;
+    aspect-ratio: 16 / 6.5;
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 8;
+  }
+
+  /* Vertically lengthy / portrait format on mobile */
+  @media (max-width: 640px) {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 5; /* Vertically lengthy */
+    min-height: 480px;
+    max-height: 75vh;
+    border-radius: 1.2em;
+  }
+
+  @media (max-width: 480px) {
+    aspect-ratio: 9 / 14; /* Tall vertical portrait */
+    min-height: 520px;
+    max-height: 82vh;
+    border-radius: 1em;
+  }
+}
+
+.desktopImage {
+  display: block;
+
+  @media (max-width: 640px) {
+    display: none !important;
+  }
+}
+
+.mobileImage {
+  display: none;
+
+  @media (max-width: 640px) {
+    display: block !important;
   }
 }
 
@@ -172,9 +211,7 @@ $c-white: #ffffff;
 .beeSvg {
   width: 100%;
   height: 100%;
-  filter: drop-shadow(
-    0 0.5em 0.3em rgba(0, 0, 0, 0.2)
-  ); // Corrected to filter: drop-shadow
+  filter: drop-shadow(0 0.5em 0.3em rgba(0, 0, 0, 0.2)); // Corrected to filter: drop-shadow
 }
 
 // Wing animations

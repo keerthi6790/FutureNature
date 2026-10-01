@@ -55,6 +55,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ isOpen, onClose }) => {
     if (optionId === "banners") {
       onClose();
       router.push("/admin/manageBanners");
+    } else if (optionId === "categories") {
+      onClose();
+      router.push("/admin/manageCategories");
     } else if (optionId === "add-product") {
       onClose();
       router.push("/admin/addProduct");
@@ -299,6 +302,49 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ isOpen, onClose }) => {
             d="M40.1575 44.2436H1.67723C0.750659 44.2436 0 43.4924 0 42.5659V1.76083C0 0.834255 0.750154 0.0835953 1.67723 0.0835953H27.5146C28.4422 0.0835953 29.1913 0.834255 29.1913 1.76083C29.1913 2.68689 28.4422 3.43806 27.5146 3.43806H3.35446V40.8881H40.1575C41.4677 40.8881 42.5338 39.8225 42.5338 38.5118V17.4696C42.5338 16.543 43.284 15.7923 44.2105 15.7923C45.1366 15.7923 45.8878 16.543 45.8878 17.4696V38.5118C45.8883 41.6721 43.3173 44.2436 40.1575 44.2436Z"
             fill="#373737"
           />
+        </svg>
+      ),
+    },
+    {
+      id: "categories",
+      title: "Manage Categories",
+      description: "Create, edit categories & assign products",
+      icon: (
+        <svg
+          width="40"
+          height="40"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#FBBF24"
+          strokeWidth="2.2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <rect x="3" y="3" width="7" height="7" rx="1.5"></rect>
+          <rect x="14" y="3" width="7" height="7" rx="1.5"></rect>
+          <rect x="14" y="14" width="7" height="7" rx="1.5"></rect>
+          <rect x="3" y="14" width="7" height="7" rx="1.5"></rect>
+        </svg>
+      ),
+    },
+    {
+      id: "banners",
+      title: "Manage Banners",
+      description: "Upload and organize store banners",
+      icon: (
+        <svg
+          width="40"
+          height="40"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#FBBF24"
+          strokeWidth="2.2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <rect x="2" y="3" width="20" height="14" rx="2"></rect>
+          <line x1="8" y1="21" x2="16" y2="21"></line>
+          <line x1="12" y1="17" x2="12" y2="21"></line>
         </svg>
       ),
     },

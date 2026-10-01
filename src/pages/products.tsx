@@ -8,6 +8,7 @@ import { productApi } from "@/api/productApi";
 import Link from "next/link";
 import { Rating } from "react-simple-star-rating";
 import { wishlistApi } from "@/api/wishlistApi";
+import { categoryApi, ICategory } from "@/api/categoryApi";
 import Cookies from "js-cookie";
 import toast from "react-hot-toast";
 import styles from "@/styles/Products.module.scss";
@@ -29,6 +30,12 @@ interface Product {
   discount?: number;
   reviewCount?: number;
   availableQuantity: number;
+  categoryId?: string | null;
+  category?: {
+    id?: string;
+    name?: string;
+    category_name?: string;
+  } | null;
 }
 
 interface BackendProduct {
@@ -44,6 +51,12 @@ interface BackendProduct {
   description_tamil: string;
   discounted_amount: string;
   available_quantity: number;
+  categoryId?: string | null;
+  category?: {
+    id?: string;
+    name?: string;
+    category_name?: string;
+  } | null;
 }
 
 export default function Products() {
@@ -52,14 +65,20 @@ export default function Products() {
   const [wishlistIds, setWishlistIds] = useState<string[]>([]);
   const [pendingWishlistId, setPendingWishlistId] = useState<string | null>(null);
   const [products, setProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<ICategory[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [loading, setLoading] = useState(true);
 
-  // --- Fetch Products Logic ---
+  // --- Fetch Products & Categories Logic ---
   useEffect(() => {
-    const fetchProducts = async () => {
+    const fetchData = async () => {
       try {
-        const response = await productApi.getAllProducts();
-        const data = response.data;
+        const [productRes, categoryRes] = await Promise.all([
+          productApi.getAllProducts(),
+          categoryApi.getAllCategories(),
+        ]);
+
+        const data = productRes.data;
         let productsData: Product[] = [];
 
         if (data && data.status && Array.isArray(data.data)) {
@@ -72,7 +91,8 @@ export default function Products() {
             id: item.id?.toString() || "",
             name: item.product_name || "Unknown Product",
             nameTamil: item.product_name_tamil || "",
-            image: Array.isArray(item.imageUrl) && item.imageUrl.length > 0
+            image:
+              Array.isArray(item.imageUrl) && item.imageUrl.length > 0
                 ? item.imageUrl[0]
                 : "/Assets/Products/15.png",
             rating: item.overall_rating || 0,
@@ -86,16 +106,22 @@ export default function Products() {
             discount: safeParseFloat(item.discounted_amount),
             isBestSeller: false,
             availableQuantity: item.available_quantity || 0,
+            categoryId: item.categoryId || item.category?.id || null,
+            category: item.category || null,
           }));
         }
         setProducts(productsData);
+
+        if (categoryRes.data && categoryRes.data.status && Array.isArray(categoryRes.data.data)) {
+          setCategories(categoryRes.data.data);
+        }
       } catch (error) {
-        console.error("Error fetching products:", error);
+        console.error("Error fetching data:", error);
       } finally {
         setLoading(false);
       }
     };
-    fetchProducts();
+    fetchData();
   }, []);
 
   // --- Wishlist Logic ---
@@ -181,6 +207,15 @@ export default function Products() {
     toast.success("Added to cart");
   };
 
+  const filteredProducts =
+    selectedCategory === "all"
+      ? products
+      : products.filter(
+          (product) =>
+            product.categoryId === selectedCategory ||
+            product.category?.id === selectedCategory
+        );
+
   return (
     <>
       <Head>
@@ -223,13 +258,93 @@ export default function Products() {
             <p className={styles.subtitle}>Direct from our hives to your home. Pure, raw, and unfiltered nature.</p>
           </div>
 
+          {/* Quick View Category Filter */}
+          {!loading && categories.length > 0 && (
+            <div className={styles.categoryFilterSection}>
+              <div className={styles.categoryFilterHeader}>
+                <span className={styles.filterLabel}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+                  </svg>
+                  Filter By Category
+                </span>
+                <span className={styles.filterCountBadge}>
+                  {filteredProducts.length} {filteredProducts.length === 1 ? "Product" : "Products"}
+                </span>
+              </div>
+
+              <div className={styles.categoryFilterList}>
+                {/* All Pill (Default) */}
+                <button
+                  type="button"
+                  onClick={() => setSelectedCategory("all")}
+                  className={`${styles.categoryPill} ${
+                    selectedCategory === "all" ? styles.activeCategoryPill : ""
+                  }`}
+                  aria-pressed={selectedCategory === "all"}
+                >
+                  <span className={styles.categoryPillAllIcon}>✦</span>
+                  <span className={styles.categoryPillText}>All Products</span>
+                  <span className={styles.categoryPillCount}>{products.length}</span>
+                </button>
+
+                {/* Individual Category Pills */}
+                {categories.map((cat) => {
+                  const catName = cat.name || cat.category_name || "Category";
+                  const catImg = cat.image_url || cat.category_image;
+                  const catCount = products.filter(
+                    (p) => p.categoryId === cat.id || p.category?.id === cat.id
+                  ).length;
+                  const isActive = selectedCategory === cat.id;
+
+                  return (
+                    <button
+                      key={cat.id}
+                      type="button"
+                      onClick={() => setSelectedCategory(cat.id)}
+                      className={`${styles.categoryPill} ${
+                        isActive ? styles.activeCategoryPill : ""
+                      }`}
+                      aria-pressed={isActive}
+                    >
+                      {catImg && (
+                        <img
+                          src={catImg}
+                          alt={catName}
+                          className={styles.categoryPillThumb}
+                        />
+                      )}
+                      <span className={styles.categoryPillText}>{catName}</span>
+                      <span className={styles.categoryPillCount}>{catCount}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
           {/* Products Grid Section */}
           <section className={styles.catalogSection}>
             {loading ? (
               <SkeletonProducts />
+            ) : filteredProducts.length === 0 ? (
+              <div className={styles.noProductsFound}>
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="8" y1="12" x2="16" y2="12"></line>
+                </svg>
+                <h3>No products in this category yet</h3>
+                <p>Try selecting another category or view all available products.</p>
+                <button
+                  onClick={() => setSelectedCategory("all")}
+                  className={styles.resetFilterBtn}
+                >
+                  View All Products
+                </button>
+              </div>
             ) : (
               <div className={styles.productsGrid}>
-                {products?.map((product, index) => (
+                {filteredProducts.map((product, index) => (
                   <Link
                     href={`/details/${product.id}`}
                     key={product.id || index}

@@ -10,10 +10,14 @@ interface IAddProductPayload {
   discountedAmount: string;
   imageUrl: string[];
   availableQuantity: string;
+  categoryId?: string | null;
 }
 
 export const productApi = {
-  getAllProducts: () => apiClient.get("/product/products"),
+  getAllProducts: (categories?: string) =>
+    apiClient.get("/product/products", {
+      params: categories ? { categories } : undefined,
+    }),
   getProductById: (id: string) =>
     apiClient.get(`/product/getProductInfo/${id}`),
   addProduct: (data: IAddProductPayload) =>

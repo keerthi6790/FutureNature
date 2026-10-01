@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import toast from "react-hot-toast";
 import { productApi } from "@/api/productApi";
+import { categoryApi, ICategory } from "@/api/categoryApi";
 import { isAdminUser } from "@/utils/authUtils";
 import Cookies from "js-cookie";
 import styles from "@/styles/AddProduct.module.scss";
@@ -18,13 +19,30 @@ export default function AddProduct() {
     salePrice: "",
     discountPercentage: "",
     availableQuantity: "",
+    categoryId: "",
   });
 
+  const [categories, setCategories] = useState<ICategory[]>([]);
   const [uploadedImages, setUploadedImages] = useState<string[]>([]);
   const [mainImage, setMainImage] = useState<string>("");
   const [loading, setLoading] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const { id } = router.query;
+
+  // Fetch categories on mount
+  useEffect(() => {
+    const loadCategories = async () => {
+      try {
+        const res = await categoryApi.getAllCategories();
+        if (res.data?.status) {
+          setCategories(res.data.data || []);
+        }
+      } catch (err) {
+        console.error("Error loading categories:", err);
+      }
+    };
+    loadCategories();
+  }, []);
 
   // Fetch product if in edit mode
   useEffect(() => {
@@ -50,6 +68,7 @@ export default function AddProduct() {
           salePrice: product.selling_price || "",
           discountPercentage: product.discounted_amount || "",
           availableQuantity: product.available_quantity || "",
+          categoryId: product.categoryId || product.category?.id || "",
         });
         setUploadedImages(product.imageUrl || []);
         if (product.imageUrl && product.imageUrl.length > 0) {
@@ -160,6 +179,7 @@ export default function AddProduct() {
         discountedAmount: formData.discountPercentage || "0",
         imageUrl: uploadedImages,
         availableQuantity: formData.availableQuantity,
+        categoryId: formData.categoryId || null,
       };
 
       const response = isEditMode
@@ -346,6 +366,28 @@ export default function AddProduct() {
                       className={`${styles.input} ${styles.noSpinner}`}
                     />
                   </div>
+                </div>
+              </div>
+
+              {/* Category */}
+              <div className={styles.card}>
+                <h2 className={styles.cardTitle}>Category</h2>
+                <div className={styles.fieldGroup}>
+                  <label>Product Category (Optional)</label>
+                  <select
+                    name="categoryId"
+                    value={formData.categoryId}
+                    onChange={handleInputChange}
+                    className={styles.input}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <option value="">— No Category —</option>
+                    {categories.map((cat) => (
+                      <option key={cat.id} value={cat.id}>
+                        {cat.name || cat.category_name}
+                      </option>
+                    ))}
+                  </select>
                 </div>
               </div>
             </div>

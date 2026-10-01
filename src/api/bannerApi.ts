@@ -2,8 +2,27 @@ import apiClient from "./apiClient";
 
 export interface Banner {
   id: string;
-  imageUrl: string;
+  title?: string | null;
+  desktopImageUrl: string;
+  mobileImageUrl?: string | null;
+  imageUrl?: string;
+  desktopHref?: string | null;
+  mobileHref?: string | null;
   isActive: boolean;
+  order?: number;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface BannerPayload {
+  title?: string;
+  desktopImageUrl?: string;
+  mobileImageUrl?: string;
+  imageUrl?: string;
+  desktopHref?: string;
+  mobileHref?: string;
+  isActive?: boolean;
+  order?: number;
 }
 
 export const bannerApi = {
@@ -14,7 +33,14 @@ export const bannerApi = {
     return response.data;
   },
 
-  addBanner: async (data: { imageUrl: string; isActive?: boolean }) => {
+  getBannersByDevice: async (device: "desktop" | "mobile" = "desktop") => {
+    const response = await apiClient.get<{ status: boolean; data: Banner[] }>(
+      `/banner/device/${device}`,
+    );
+    return response.data;
+  },
+
+  addBanner: async (data: BannerPayload) => {
     const response = await apiClient.post<{
       status: boolean;
       message: string;
@@ -23,10 +49,7 @@ export const bannerApi = {
     return response.data;
   },
 
-  updateBanner: async (
-    id: string,
-    data: { imageUrl?: string; isActive?: boolean },
-  ) => {
+  updateBanner: async (id: string, data: Partial<BannerPayload>) => {
     const response = await apiClient.put<{
       status: boolean;
       message: string;
