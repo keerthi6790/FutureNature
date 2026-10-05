@@ -111,11 +111,8 @@ export default function Banner() {
               "/Assets/Header_Images/Product.png";
 
           const bannerHref = isMobile
-            ? banner.mobileHref ||
-              banner.desktopHref ||
-              banner.href ||
-              "/products"
-            : banner.desktopHref || banner.href || "/products";
+            ? banner.mobileHref || banner.desktopHref || "/products"
+            : banner.desktopHref || "/products";
 
           const headingText =
             banner.title || "Nature's Finest Butterfly Pea Flowers";
