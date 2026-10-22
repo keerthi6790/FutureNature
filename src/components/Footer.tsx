@@ -49,7 +49,7 @@ export default function Footer() {
           <div>
             <div style={{ marginBottom: "24px" }}>
               <Image
-                src="https://futurenature.s3.ap-south-1.amazonaws.com/others/logo.png"
+                src="/Assets/logo.png"
                 alt="FutureNature Logo"
                 width={180}
                 height={120}

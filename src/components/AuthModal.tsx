@@ -233,7 +233,7 @@ export default function AuthModal({
         {/* Logo */}
         <div className={styles.logoContainer}>
           <Image
-            src="https://futurenature.s3.ap-south-1.amazonaws.com/others/logo.png"
+            src="/Assets/logo.png"
             alt="FutureNature Logo"
             width={130}
             height={65}

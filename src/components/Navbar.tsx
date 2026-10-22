@@ -133,10 +133,10 @@ export default function Navbar() {
             }}
           >
             <Image
-              src="https://futurenature.s3.ap-south-1.amazonaws.com/others/logo.png"
+              src="/Assets/logo.png"
               alt="FutureNature Logo"
-              width={150}
-              height={60}
+              width={140}
+              height={70}
               className="navbar-logo"
               style={{ objectFit: "contain" }}
             />

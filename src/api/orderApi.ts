@@ -18,6 +18,7 @@ export interface OrderData {
   discounted_price: string;
   mrp_price: string;
   paymentStatus: string;
+  order_status?: string;
   createdAt: string;
   items: OrderItem[];
   address: {
@@ -30,6 +31,7 @@ export interface OrderData {
     state: string;
     pincode: string;
     phone_number: string;
+    receiverName?: string;
   };
 }
 
@@ -37,4 +39,7 @@ export const orderApi = {
   getMyOrders: () => apiClient.get("/order/all"),
   getAllOrders: () => apiClient.get("/order/admin/all"),
   getOrderById: (id: string) => apiClient.get(`/order/${id}`),
+  updateOrderStatus: (id: string, order_status: string) =>
+    apiClient.put(`/order/admin/status/${id}`, { order_status }),
 };
+

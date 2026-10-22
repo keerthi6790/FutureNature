@@ -17,4 +17,7 @@ export const userApi = {
   register: (userData: UserData) => apiClient.post("/user/register", userData),
 
   getUserData: () => apiClient.get("/user/userData"),
+  getContacts: (params?: { page?: number; limit?: number; all?: boolean }) =>
+    apiClient.get("/user/admin/contacts", { params }),
 };
+

@@ -69,7 +69,11 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ isOpen, onClose }) => {
     } else if (optionId === "constants") {
       setShowConstantModal(true);
     } else if (optionId === "orders") {
+      onClose();
       router.push("/admin/orders");
+    } else if (optionId === "contacts") {
+      onClose();
+      router.push("/admin/contacts");
     } else {
       // Handle 'banners' or other future options
       console.log("Selected:", optionId);
@@ -306,6 +310,28 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ isOpen, onClose }) => {
       ),
     },
     {
+      id: "contacts",
+      title: "Contacts",
+      description: "View customer contacts and phone numbers",
+      icon: (
+        <svg
+          width="40"
+          height="40"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#FBBF24"
+          strokeWidth="2.2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+          <circle cx="9" cy="7" r="4" />
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+          <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+        </svg>
+      ),
+    },
+    {
       id: "categories",
       title: "Manage Categories",
       description: "Create, edit categories & assign products",
@@ -382,7 +408,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ isOpen, onClose }) => {
           {/* Header with Logo */}
           <div style={{ marginBottom: "20px" }}>
             <Image
-              src="https://futurenature.s3.ap-south-1.amazonaws.com/others/logo.png"
+              src="/Assets/logo.png"
               alt="FutureNature Logo"
               width={120}
               height={50}
