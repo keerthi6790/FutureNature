@@ -85,7 +85,7 @@ export default function Banner() {
     slidesToShow: 1,
     slidesToScroll: 1,
     autoplay: banners.length > 1,
-    autoplaySpeed: 5500,
+    autoplaySpeed: 2000,
     pauseOnHover: true,
     arrows: false,
     dots: banners.length > 1,
@@ -103,12 +103,12 @@ export default function Banner() {
         {banners.map((banner) => {
           const bannerImg = isMobile
             ? banner.mobileImageUrl ||
-              banner.desktopImageUrl ||
-              banner.imageUrl ||
-              "/Assets/Header_Images/Product.png"
+            banner.desktopImageUrl ||
+            banner.imageUrl ||
+            "/Assets/Header_Images/Product.png"
             : banner.desktopImageUrl ||
-              banner.imageUrl ||
-              "/Assets/Header_Images/Product.png";
+            banner.imageUrl ||
+            "/Assets/Header_Images/Product.png";
 
           const bannerHref = isMobile
             ? banner.mobileHref || banner.desktopHref || "/products"
