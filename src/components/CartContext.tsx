@@ -13,6 +13,8 @@ import { AddressData } from "@/api/addressApi";
 
 export interface CartItem {
   id: string; // Product ID
+  variantId?: string;
+  variantName?: string;
   quantity: number;
   name?: string;
   price?: number;
@@ -33,7 +35,11 @@ interface CartContextType {
   ) => Promise<void>;
   updateAddress: (addressId: string) => Promise<void>;
   removeFromCart: (productId: string, cartItemId?: string) => Promise<void>;
-  updateQuantity: (productId: string, quantity: number) => Promise<void>;
+  updateQuantity: (
+    productId: string,
+    quantity: number,
+    cartItemId?: string,
+  ) => Promise<void>;
   clearCart: () => void;
   getTotalItems: () => number;
 }
@@ -48,6 +54,15 @@ export interface BackendCartItem {
   mrp_price: string;
   cartId: string;
   productId: string;
+  variantId?: string | null;
+  variant?: {
+    id: string;
+    name: string;
+    imageUrl?: string | null;
+    price: string;
+    selling_price: string;
+    discounted_amount: string;
+  } | null;
   product: {
     id: string;
     product_name: string;
@@ -58,10 +73,16 @@ export interface BackendCartItem {
 
 const mapBackendItemToCartItem = (item: BackendCartItem): CartItem => ({
   id: item.productId,
+  variantId: item.variantId || item.variant?.id,
+  variantName: item.variant?.name,
   quantity: parseInt(item.selected_quantity),
-  name: item.product.product_name,
-  price: parseFloat(item.product.selling_price),
-  image: item.product.imageUrl[0] || "",
+  name: item.variant
+    ? `${item.product.product_name} (${item.variant.name})`
+    : item.product.product_name,
+  price: item.variant
+    ? parseFloat(item.variant.selling_price)
+    : parseFloat(item.product.selling_price),
+  image: item.variant?.imageUrl || item.product.imageUrl[0] || "",
   cartItemId: item.id,
 });
 
@@ -121,6 +142,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       try {
         const response = await cartApi.addToCart({
           productId,
+          variantId: productDetails?.variantId,
           cartId: cartId || undefined,
         });
 
@@ -177,7 +199,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
           setCartId(newCartId === "0" ? null : newCartId);
 
           setCart((prevCart) =>
-            prevCart.filter((item) => item.id !== productId),
+            prevCart.filter((item) =>
+              cartItemId ? item.cartItemId !== cartItemId : item.id !== productId
+            ),
           );
           toast.success("Removed from cart");
         }
@@ -188,21 +212,26 @@ export function CartProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const updateQuantity = async (productId: string, quantity: number) => {
+  const updateQuantity = async (
+    productId: string,
+    quantity: number,
+    cartItemId?: string,
+  ) => {
     const token = Cookies.get("token");
 
     if (token && cartId) {
       if (quantity <= 0) {
-        const item = cart.find((i) => i.id === productId);
-        await removeFromCart(productId, item?.cartItemId);
+        await removeFromCart(productId, cartItemId);
         return;
       }
 
       try {
-        const item = cart.find((i) => i.id === productId);
+        const item = cartItemId
+          ? cart.find((i) => i.cartItemId === cartItemId)
+          : cart.find((i) => i.id === productId);
         const response = await cartApi.updateQuantity({
           cartId,
-          cartItemId: item?.cartItemId || productId, // Fallback to productId
+          cartItemId: cartItemId || item?.cartItemId || productId,
           quantity,
         });
 
@@ -225,9 +254,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
     } else {
       // Local state update for guests (if applicable) or if cartId missing
       setCart((prevCart) =>
-        prevCart.map((item) =>
-          item.id === productId ? { ...item, quantity } : item,
-        ),
+        prevCart.map((item) => {
+          const match = cartItemId
+            ? item.cartItemId === cartItemId
+            : item.id === productId;
+          return match ? { ...item, quantity } : item;
+        }),
       );
     }
   };

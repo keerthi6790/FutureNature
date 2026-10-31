@@ -3,6 +3,13 @@ import apiClient from "./apiClient";
 export interface OrderItem {
   id: string;
   productId: string;
+  variantId?: string;
+  variant?: {
+    id: string;
+    name: string;
+    imageUrl?: string | null;
+    price: string;
+  };
   product: {
     product_name: string;
     imageUrl: string[];

@@ -2,6 +2,7 @@ import apiClient from "./apiClient";
 
 export interface AddCartRequest {
   productId: string;
+  variantId?: string;
   cartId?: string;
 }
 

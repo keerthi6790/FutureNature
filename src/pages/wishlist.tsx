@@ -6,7 +6,6 @@ import Footer from "@/components/Footer";
 import { wishlistApi } from "@/api/wishlistApi";
 import Link from "next/link";
 import toast from "react-hot-toast";
-import { Rating } from "react-simple-star-rating";
 import styles from "@/styles/Wishlist.module.scss";
 
 interface Product {
@@ -148,19 +147,6 @@ export default function WishlistPage() {
 
                     {/* Bottom Content Area */}
                     <div className={styles.cardContent}>
-                      
-                      {/* Meta: Rating */}
-                      <div className={styles.ratingRowCard}>
-                        <Rating
-                          initialValue={product.overall_rating}
-                          readonly
-                          size={16}
-                          allowFraction
-                          fillColor="#FFB800"
-                        />
-                        <span className={styles.ratingNum}>({product.review_count || 0})</span>
-                      </div>
-
                       {/* Title */}
                       <div className={styles.titleSection}>
                         <Link href={`/details/${product.id}`}>

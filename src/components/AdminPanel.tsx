@@ -55,6 +55,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ isOpen, onClose }) => {
     if (optionId === "banners") {
       onClose();
       router.push("/admin/manageBanners");
+    } else if (optionId === "blogs") {
+      onClose();
+      router.push("/admin/manageBlogs");
     } else if (optionId === "categories") {
       onClose();
       router.push("/admin/manageCategories");
@@ -371,6 +374,28 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ isOpen, onClose }) => {
           <rect x="2" y="3" width="20" height="14" rx="2"></rect>
           <line x1="8" y1="21" x2="16" y2="21"></line>
           <line x1="12" y1="17" x2="12" y2="21"></line>
+        </svg>
+      ),
+    },
+    {
+      id: "blogs",
+      title: "Manage Blogs",
+      description: "Add, edit, and delete blog products & journal links",
+      icon: (
+        <svg
+          width="40"
+          height="40"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#FBBF24"
+          strokeWidth="2.2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+          <line x1="8" y1="7" x2="16" y2="7"></line>
+          <line x1="8" y1="11" x2="16" y2="11"></line>
         </svg>
       ),
     },

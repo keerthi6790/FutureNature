@@ -5,24 +5,41 @@ import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { orderApi, OrderData } from "@/api/orderApi";
-import styles from "@/styles/Cart.module.scss";
-
-// Reusing some styles from Cart for consistency, or we could create Confirmation.module.scss
-// For speed and consistency, I'll use inline styles for the unique parts or generic global classes if available.
+import styles from "@/styles/Confirmation.module.scss";
 
 const SuccessIcon = () => (
   <svg
-    width="64"
-    height="64"
     viewBox="0 0 24 24"
     fill="none"
-    stroke="#059669"
-    strokeWidth="2"
+    stroke="currentColor"
+    strokeWidth="2.5"
     strokeLinecap="round"
     strokeLinejoin="round"
   >
     <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
     <polyline points="22 4 12 14.01 9 11.01"></polyline>
+  </svg>
+);
+
+const PackageIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+    <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+    <line x1="12" y1="22.08" x2="12" y2="12" />
+  </svg>
+);
+
+const LocationIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+    <circle cx="12" cy="10" r="3" />
+  </svg>
+);
+
+const CreditCardIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <rect x="1" y="4" width="22" height="16" rx="2" ry="2" />
+    <line x1="1" y1="10" x2="23" y2="10" />
   </svg>
 );
 
@@ -56,8 +73,9 @@ export default function OrderConfirmation() {
     return (
       <div className={styles.pageWrapper}>
         <Navbar />
-        <main style={{ textAlign: "center", padding: "100px" }}>
-          <p>Loading order details...</p>
+        <main className={styles.stateContainer}>
+          <h1>Loading Order Details</h1>
+          <p>Please wait while we retrieve your order confirmation...</p>
         </main>
         <Footer />
       </div>
@@ -68,14 +86,10 @@ export default function OrderConfirmation() {
     return (
       <div className={styles.pageWrapper}>
         <Navbar />
-        <main style={{ textAlign: "center", padding: "100px" }}>
+        <main className={styles.stateContainer}>
           <h1>Order Not Found</h1>
-          <p>We couldn't find the details for this order.</p>
-          <Link
-            href="/products"
-            className={styles.primaryBtn}
-            style={{ marginTop: "20px", display: "inline-block" }}
-          >
+          <p>We couldn&apos;t find the details for this order.</p>
+          <Link href="/products" className={styles.primaryBtn}>
             Back to Shop
           </Link>
         </main>
@@ -84,188 +98,148 @@ export default function OrderConfirmation() {
     );
   }
 
+  const orderNumber = (order.id || "").slice(0, 8).toUpperCase();
+  const mrp = Number(order.mrp_price || 0);
+  const total = Number(order.total_price || 0);
+  const discount = Math.max(0, mrp - total);
+
   return (
     <div className={styles.pageWrapper}>
       <Head>
-        <title>Order Confirmed - FutureNature</title>
+        <title>Order Confirmed #{orderNumber} - FutureNature</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
       </Head>
       <Navbar />
 
-      <main
-        style={{ maxWidth: "800px", margin: "60px auto", padding: "0 20px" }}
-      >
-        <div style={{ textAlign: "center", marginBottom: "40px" }}>
-          <SuccessIcon />
-          <h1
-            style={{
-              fontSize: "32px",
-              fontWeight: "800",
-              marginTop: "20px",
-              color: "#111827",
-            }}
-          >
-            Thank you for your order!
-          </h1>
-          <p style={{ color: "#4b5563", fontSize: "18px", marginTop: "10px" }}>
-            Your order <strong>#{order.id.slice(0, 8).toUpperCase()}</strong>{" "}
-            has been placed successfully.
+      <main className={styles.mainContainer}>
+        {/* Success Header */}
+        <div className={styles.headerSection}>
+          <div className={styles.successIconWrapper}>
+            <SuccessIcon />
+          </div>
+          <h1 className={styles.pageTitle}>Thank you for your order!</h1>
+          <p className={styles.orderSubtitle}>
+            Your order <span className={styles.orderCode}>#{orderNumber}</span> has been placed successfully.
           </p>
         </div>
 
-        <div
-          style={{
-            backgroundColor: "white",
-            borderRadius: "16px",
-            boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
-            padding: "30px",
-            marginBottom: "30px",
-          }}
-        >
-          <h2
-            style={{
-              fontSize: "20px",
-              fontWeight: "700",
-              marginBottom: "20px",
-              borderBottom: "1px solid #f3f4f6",
-              paddingBottom: "10px",
-            }}
-          >
-            Order Summary
-          </h2>
+        {/* Order Summary Card */}
+        <section className={styles.card}>
+          <div className={styles.cardHeader}>
+            <h2 className={styles.cardTitle}>
+              <PackageIcon />
+              Order Summary
+            </h2>
+            <span className={styles.cardItemCount}>
+              {order.items?.length || 0} {order.items?.length === 1 ? "Item" : "Items"}
+            </span>
+          </div>
 
-          {order.items.map((item) => (
-            <div
-              key={item.id}
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                marginBottom: "15px",
-              }}
-            >
-              <div style={{ display: "flex" }}>
-                <img
-                  src={item.product.imageUrl[0] || "/Assets/Products/15.png"}
-                  alt={item.product.product_name}
-                  style={{
-                    width: "60px",
-                    height: "60px",
-                    borderRadius: "8px",
-                    objectFit: "contain",
-                    backgroundColor: "#f9fafb",
-                  }}
-                />
-                <div style={{ marginLeft: "15px" }}>
-                  <p style={{ fontWeight: "600", color: "#111827" }}>
-                    {item.product.product_name}
-                  </p>
-                  <p style={{ fontSize: "14px", color: "#6b7280" }}>
-                    Quantity: {item.selected_quantity}
-                  </p>
+          <div className={styles.itemsList}>
+            {order.items?.map((item) => (
+              <div key={item.id} className={styles.orderItem}>
+                <div className={styles.itemLeft}>
+                  <img
+                    src={item.variant?.imageUrl || item.product?.imageUrl?.[0] || "/Assets/Products/15.png"}
+                    alt={item.product?.product_name || "Product"}
+                    className={styles.itemImage}
+                  />
+                  <div className={styles.itemDetails}>
+                    <p className={styles.itemName}>{item.product?.product_name}</p>
+                    {item.variant?.name && (
+                      <p style={{ fontSize: "12px", color: "#d97706", fontWeight: 600 }}>
+                        Variant: {item.variant.name}
+                      </p>
+                    )}
+                    <p className={styles.itemQty}>Quantity: {item.selected_quantity}</p>
+                  </div>
                 </div>
+                <div className={styles.itemPrice}>₹{item.total_price}</div>
               </div>
-              <p style={{ fontWeight: "600" }}>₹{item.total_price}</p>
-            </div>
-          ))}
+            ))}
+          </div>
 
-          <div
-            style={{
-              marginTop: "20px",
-              paddingTop: "20px",
-              borderTop: "1px solid #f3f4f6",
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                marginBottom: "8px",
-              }}
-            >
-              <span style={{ color: "#4b5563" }}>Subtotal (MRP)</span>
+          <div className={styles.priceSummary}>
+            <div className={styles.priceRow}>
+              <span>Subtotal (MRP)</span>
               <span>₹{order.mrp_price}</span>
             </div>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                marginBottom: "8px",
-              }}
-            >
-              <span style={{ color: "#4b5563" }}>Discount</span>
-              <span style={{ color: "#059669" }}>
-                -₹{Number(order.mrp_price) - Number(order.total_price)}
-              </span>
-            </div>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                marginTop: "10px",
-                fontSize: "20px",
-                fontWeight: "800",
-              }}
-            >
+            {discount > 0 && (
+              <div className={`${styles.priceRow} ${styles.discount}`}>
+                <span>Discount</span>
+                <span>-₹{discount}</span>
+              </div>
+            )}
+            <div className={`${styles.priceRow} ${styles.totalRow}`}>
               <span>Total</span>
-              <span style={{ color: "#fbbf24" }}>₹{order.total_price}</span>
+              <span className={styles.totalValue}>₹{order.total_price}</span>
+            </div>
+          </div>
+        </section>
+
+        {/* Info Grid (Shipping Address & Payment Info) */}
+        <div className={styles.infoGrid}>
+          {/* Shipping Address */}
+          <div className={styles.infoCard}>
+            <div className={styles.infoCardHeader}>
+              <LocationIcon />
+              <h3>Shipping Address</h3>
+            </div>
+            <div className={styles.addressContent}>
+              {order.address?.receiverName && (
+                <div className={styles.receiverName}>{order.address.receiverName}</div>
+              )}
+              {order.address?.address1 && <div>{order.address.address1}</div>}
+              {order.address?.address2 && <div>{order.address.address2}</div>}
+              {order.address?.address3 && <div>{order.address.address3}</div>}
+              <div>
+                {[order.address?.city, order.address?.district, order.address?.state]
+                  .filter(Boolean)
+                  .join(", ")}
+                {order.address?.pincode ? ` - ${order.address.pincode}` : ""}
+              </div>
+              {order.address?.phone_number && (
+                <div className={styles.phone}>Phone: {order.address.phone_number}</div>
+              )}
+            </div>
+          </div>
+
+          {/* Payment Info */}
+          <div className={styles.infoCard}>
+            <div className={styles.infoCardHeader}>
+              <CreditCardIcon />
+              <h3>Payment Info</h3>
+            </div>
+            <div className={styles.paymentContent}>
+              <div className={styles.paymentRow}>
+                <span>Payment Method</span>
+                <strong>Razorpay</strong>
+              </div>
+              <div className={styles.paymentRow}>
+                <span>Payment Status</span>
+                <span
+                  className={`${styles.badge} ${
+                    order.paymentStatus?.toUpperCase() === "PAID" ? styles.paid : styles.pending
+                  }`}
+                >
+                  {order.paymentStatus || "PENDING"}
+                </span>
+              </div>
+              {order.order_status && (
+                <div className={styles.paymentRow}>
+                  <span>Order Status</span>
+                  <span style={{ textTransform: "capitalize", fontWeight: 600, color: "#111827" }}>
+                    {order.order_status}
+                  </span>
+                </div>
+              )}
             </div>
           </div>
         </div>
 
-        <div
-          className={styles.infoMode}
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: "20px",
-            marginBottom: "40px",
-          }}
-        >
-          <div
-            style={{
-              backgroundColor: "white",
-              borderRadius: "16px",
-              padding: "25px",
-              boxShadow: "0 1px 3px 0 rgb(0 0 0 / 0.1)",
-            }}
-          >
-            <h3 style={{ fontWeight: "700", marginBottom: "10px" }}>
-              Shipping Address
-            </h3>
-            <p style={{ color: "#4b5563", lineHeight: "1.6" }}>
-              {order.address.address1}
-              <br />
-              {order.address.city}, {order.address.state}
-              <br />
-              {order.address.pincode}
-            </p>
-          </div>
-          <div
-            style={{
-              backgroundColor: "white",
-              borderRadius: "16px",
-              padding: "25px",
-              boxShadow: "0 1px 3px 0 rgb(0 0 0 / 0.1)",
-            }}
-          >
-            <h3 style={{ fontWeight: "700", marginBottom: "10px" }}>
-              Payment Info
-            </h3>
-            <p style={{ color: "#4b5563" }}>Mode: Razorpay</p>
-            <p style={{ color: "#4b5563" }}>
-              Status:{" "}
-              <span style={{ color: "#059669", fontWeight: "600" }}>
-                {order.paymentStatus}
-              </span>
-            </p>
-          </div>
-        </div>
-
-        <div style={{ textAlign: "center" }}>
-          <Link
-            href="/products"
-            className={styles.primaryBtn}
-            style={{ padding: "15px 40px", fontSize: "18px" }}
-          >
+        {/* Action Button */}
+        <div className={styles.actions}>
+          <Link href="/products" className={styles.primaryBtn}>
             Continue Shopping
           </Link>
         </div>

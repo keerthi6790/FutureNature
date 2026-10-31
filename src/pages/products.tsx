@@ -6,13 +6,15 @@ import Footer from "@/components/Footer";
 import { useCart } from "@/components/CartContext";
 import { productApi } from "@/api/productApi";
 import Link from "next/link";
-import { Rating } from "react-simple-star-rating";
 import { wishlistApi } from "@/api/wishlistApi";
 import { categoryApi, ICategory } from "@/api/categoryApi";
 import Cookies from "js-cookie";
 import toast from "react-hot-toast";
 import styles from "@/styles/Products.module.scss";
 import SkeletonProducts from "@/components/SkeletonProducts";
+import VariantSelectionDrawer, {
+  IVariantOption,
+} from "@/components/VariantSelectionDrawer";
 
 interface Product {
   id: string;
@@ -36,6 +38,15 @@ interface Product {
     name?: string;
     category_name?: string;
   } | null;
+  variants?: {
+    id: string;
+    name: string;
+    imageUrl?: string;
+    price: string;
+    selling_price: string;
+    discounted_amount: string;
+    available_quantity: number;
+  }[];
 }
 
 interface BackendProduct {
@@ -57,6 +68,15 @@ interface BackendProduct {
     name?: string;
     category_name?: string;
   } | null;
+  variants?: {
+    id: string;
+    name: string;
+    imageUrl?: string;
+    price: string;
+    selling_price: string;
+    discounted_amount: string;
+    available_quantity: number;
+  }[];
 }
 
 export default function Products() {
@@ -68,6 +88,8 @@ export default function Products() {
   const [categories, setCategories] = useState<ICategory[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [loading, setLoading] = useState(true);
+  const [drawerProduct, setDrawerProduct] = useState<Product | null>(null);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   // --- Fetch Products & Categories Logic ---
   useEffect(() => {
@@ -108,6 +130,7 @@ export default function Products() {
             availableQuantity: item.available_quantity || 0,
             categoryId: item.categoryId || item.category?.id || null,
             category: item.category || null,
+            variants: item.variants || [],
           }));
         }
         setProducts(productsData);
@@ -199,12 +222,39 @@ export default function Products() {
 
   const handleAddToCart = (product: Product) => {
     setQuantities((prev) => ({ ...prev, [product.id]: 1 }));
+    const defaultVariant = product.variants && product.variants.length > 0 ? product.variants[0] : null;
     addToCart(product.id, 1, {
-      name: product.name,
-      price: product.price,
-      image: product.image,
+      name: defaultVariant ? `${product.name} (${defaultVariant.name})` : product.name,
+      price: defaultVariant ? parseFloat(defaultVariant.selling_price) : product.price,
+      image: defaultVariant?.imageUrl || product.image,
+      variantId: defaultVariant?.id,
+      variantName: defaultVariant?.name,
     });
-    toast.success("Added to cart");
+    toast.success("Added to bag");
+  };
+
+  const handleCardAddClick = (product: Product, e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    // Always show drawer irrespective of previous choice or variant count
+    setDrawerProduct(product);
+    setIsDrawerOpen(true);
+  };
+
+  const handleDrawerAddToCart = (
+    prod: any,
+    selectedVariant: IVariantOption
+  ) => {
+    setQuantities((prev) => ({ ...prev, [prod.id]: 1 }));
+    addToCart(prod.id, 1, {
+      name: `${prod.name} (${selectedVariant.name})`,
+      price: parseFloat(selectedVariant.selling_price),
+      image: selectedVariant.imageUrl || prod.image,
+      variantId: selectedVariant.id,
+      variantName: selectedVariant.name,
+    });
+    toast.success("Added to bag");
   };
 
   const filteredProducts =
@@ -406,18 +456,6 @@ export default function Products() {
                         )}
                       </div>
 
-                      {/* Meta: Rating matches image layout */}
-                      <div className={styles.ratingRowCard}>
-                        <Rating
-                          initialValue={product.rating}
-                          readonly
-                          size={16}
-                          allowFraction
-                          fillColor="#FFB800"
-                        />
-                        <span className={styles.ratingNum}>({product.reviewCount || 0})</span>
-                      </div>
-
                       <div className={styles.cardDivider}></div>
 
                       {/* Price Row and Action Button */}
@@ -428,30 +466,25 @@ export default function Products() {
                           {product.originalPrice > product.price && (
                              <span className={styles.originalPrice}>₹{Math.round(product.originalPrice)}</span>
                           )}
+                          {product.variants && product.variants.length > 1 && (
+                            <span style={{ fontSize: '11px', color: '#92400e', background: '#fef3c7', padding: '2px 6px', borderRadius: '4px', fontWeight: 600, display: 'inline-block', marginTop: '2px' }}>
+                              {product.variants.length} options
+                            </span>
+                          )}
                         </div>
 
-                        {/* Action Buttons */}
+                        {/* Action Buttons: Always show Add to bag so clicking it always opens the drawer */}
                         {product.availableQuantity <= 0 ? (
                           <button disabled className={styles.btnAddDisabled}>
                             Sold Out
                           </button>
-                        ) : !cart.find((item) => item.id === product.id) ? (
+                        ) : (
                           <button
-                            onClick={(e) => {
-                              e.preventDefault();
-                              e.stopPropagation();
-                              handleAddToCart(product);
-                            }}
+                            onClick={(e) => handleCardAddClick(product, e)}
                             className={styles.btnAdd}
                           >
-                            Add to cart
+                            Add to bag
                           </button>
-                        ) : (
-                          <div className={styles.qtySelector} onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}>
-                            <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleQuantityChange(product.id, -1); }} className={styles.qtyBtn}>−</button>
-                            <span className={styles.qtyVal}>{cart.find((item) => item.id === product.id)?.quantity || 1}</span>
-                            <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleQuantityChange(product.id, 1); }} className={styles.qtyBtn}>+</button>
-                          </div>
                         )}
                       </div>
 
@@ -463,6 +496,15 @@ export default function Products() {
           </section>
         </div>
       </div>
+
+      {/* Variant Selection Drawer (Bottom on Mobile, Right on Desktop) */}
+      <VariantSelectionDrawer
+        isOpen={isDrawerOpen}
+        product={drawerProduct}
+        onClose={() => setIsDrawerOpen(false)}
+        onAddToCart={handleDrawerAddToCart}
+      />
+
       <Footer />
     </>
   );

@@ -160,7 +160,7 @@ export default function Orders() {
                                     {order.items.slice(0, 5).map((item) => (
                                         <div key={item.id} className={styles.itemPreview}>
                                             <img
-                                                src={item.product.imageUrl[0] || "/Assets/Products/15.png"}
+                                                src={item.variant?.imageUrl || item.product.imageUrl[0] || "/Assets/Products/15.png"}
                                                 alt={item.product.product_name}
                                             />
                                         </div>

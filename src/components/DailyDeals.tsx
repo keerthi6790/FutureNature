@@ -1,11 +1,14 @@
 import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
 import { useCart } from "./CartContext";
-import { Rating } from "react-simple-star-rating";
 import { productApi } from "@/api/productApi";
 import styles from "@/styles/DailyDeals.module.scss";
 import SkeletonDeals from "./SkeletonDeals";
 import Link from "next/link";
+import toast from "react-hot-toast";
+import VariantSelectionDrawer, {
+  IVariantOption,
+} from "./VariantSelectionDrawer";
 
 interface Product {
   id: string;
@@ -16,6 +19,14 @@ interface Product {
   selling_price: string;
   overall_rating: number;
   available_quantity: number;
+  variants?: {
+    id: string;
+    name: string;
+    imageUrl?: string;
+    price: string;
+    selling_price: string;
+    available_quantity: number;
+  }[];
 }
 
 // --- HEXAGONAL ARROW ICONS ---
@@ -57,6 +68,8 @@ export default function DailyDeals() {
   }>({});
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [drawerProduct, setDrawerProduct] = useState<any>(null);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   // Slider State & Refs
   const sliderRef = useRef<HTMLDivElement>(null);
@@ -102,6 +115,20 @@ export default function DailyDeals() {
     if (sliderRef.current) {
       sliderRef.current.scrollBy({ left: amount, behavior: "smooth" });
     }
+  };
+
+  const handleDrawerAddToCart = (
+    prod: any,
+    selectedVariant: IVariantOption
+  ) => {
+    addToCart(prod.id, 1, {
+      name: `${prod.name} (${selectedVariant.name})`,
+      price: parseFloat(selectedVariant.selling_price),
+      image: selectedVariant.imageUrl || prod.image,
+      variantId: selectedVariant.id,
+      variantName: selectedVariant.name,
+    });
+    toast.success("Added to cart!");
   };
 
   if (loading) return <SkeletonDeals />;
@@ -186,17 +213,7 @@ export default function DailyDeals() {
                 </div>
 
                 <div className={styles.metaRow}>
-                  <div className={styles.ratingBox}>
-                    <Rating
-                      initialValue={product.overall_rating}
-                      readonly
-                      size={14}
-                      allowFraction
-                      fillColor="#FFB800"
-                    />
-                    <span>{product.overall_rating}</span>
-                  </div>
-                  <span className={styles.weightTag}>Standard</span>
+                  <span className={styles.weightTag}>{product.variants?.[0]?.name || "Standard"}</span>
                 </div>
 
                 <div className={styles.actionRow}>
@@ -220,63 +237,24 @@ export default function DailyDeals() {
                     >
                       Sold Out
                     </button>
-                  ) : !showQuantityControls[product.id] ? (
+                  ) : (
                     <button
                       className={styles.addBtn}
                       onClick={() => {
-                        setShowQuantityControls((prev) => ({
-                          ...prev,
-                          [product.id]: true,
-                        }));
-                        addToCart(product.id, 1);
+                        setDrawerProduct({
+                          id: product.id,
+                          name: product.product_name,
+                          nameTamil: product.product_name_tamil,
+                          image: product.imageUrl?.[0] || "",
+                          price: parseFloat(product.selling_price),
+                          originalPrice: parseFloat(product.price),
+                          variants: product.variants,
+                        });
+                        setIsDrawerOpen(true);
                       }}
                     >
                       ADD TO CART
                     </button>
-                  ) : (
-                    <div className={styles.qtyControl}>
-                      <button
-                        onClick={() => {
-                          const newQty = (quantities[product.id] || 1) - 1;
-                          if (newQty === 0) {
-                            setShowQuantityControls((prev) => ({
-                              ...prev,
-                              [product.id]: false,
-                            }));
-                            setQuantities((prev) => ({
-                              ...prev,
-                              [product.id]: 1,
-                            }));
-                            updateQuantity(product.id, 0);
-                          } else {
-                            setQuantities((prev) => ({
-                              ...prev,
-                              [product.id]: newQty,
-                            }));
-                            updateQuantity(product.id, newQty);
-                          }
-                        }}
-                      >
-                        −
-                      </button>
-
-                      <div className={styles.qtyValue}>
-                        {quantities[product.id] || 1}
-                      </div>
-
-                      <button
-                        onClick={() => {
-                          const newQty = (quantities[product.id] || 1) + 1;
-                          setQuantities((prev) => ({
-                            ...prev,
-                            [product.id]: newQty,
-                          }));
-                          updateQuantity(product.id, newQty);
-                        }}
-                      >
-                        +
-                      </button>
-                    </div>
                   )}
                 </div>
               </div>
@@ -297,6 +275,14 @@ export default function DailyDeals() {
           </button>
         )}
       </div>
+
+      {/* Variant Selection Drawer */}
+      <VariantSelectionDrawer
+        isOpen={isDrawerOpen}
+        product={drawerProduct}
+        onClose={() => setIsDrawerOpen(false)}
+        onAddToCart={handleDrawerAddToCart}
+      />
     </div>
   );
 }

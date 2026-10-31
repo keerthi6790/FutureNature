@@ -112,7 +112,7 @@ const AdminOrders = () => {
 
               const orderItems = order?.items?.map(
                 (item: any) =>
-                  `${item?.product?.product_name}(${item.selected_quantity}qty)`,
+                  `${item?.product?.product_name}${item?.variant?.name ? ` [${item.variant.name}]` : ""}(${item.selected_quantity}qty)`,
               );
               return (
                 <tr key={order?.id} className={styles.tr}>

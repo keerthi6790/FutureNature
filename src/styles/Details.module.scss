@@ -232,6 +232,116 @@ $radius-lg: 24px;
   }
 }
 
+/* --- Variant Selection --- */
+.variantSection {
+  margin: 16px 0 24px;
+  padding: 16px 0;
+  border-top: 1px solid #f3f4f6;
+  border-bottom: 1px solid #f3f4f6;
+
+  .variantSectionHeader {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .variantSectionLabel {
+    font-size: 13px;
+    font-weight: 700;
+    color: $text-muted;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .variantSelectedName {
+    font-size: 14px;
+    font-weight: 700;
+    color: $text-main;
+  }
+
+  .variantChips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .variantChip {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 14px;
+    background: #ffffff;
+    border: 2px solid $border-color;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+    position: relative;
+    user-select: none;
+
+    &:hover {
+      border-color: #cbd5e1;
+      transform: translateY(-1px);
+    }
+
+    &.variantChipActive {
+      border-color: #ff8c42;
+      background: #fff8f3;
+      box-shadow: 0 2px 10px rgba(255, 140, 66, 0.15);
+    }
+
+    &.variantChipDisabled {
+      opacity: 0.55;
+      border-style: dashed;
+      cursor: not-allowed;
+    }
+  }
+
+  .variantThumbWrap {
+    width: 32px;
+    height: 32px;
+    position: relative;
+    border-radius: 6px;
+    overflow: hidden;
+    background: #f8fafc;
+    flex-shrink: 0;
+  }
+
+  .variantThumb {
+    object-fit: cover;
+  }
+
+  .variantChipInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .variantChipName {
+    font-size: 13px;
+    font-weight: 700;
+    color: $text-main;
+  }
+
+  .variantChipPrice {
+    font-size: 13px;
+    font-weight: 600;
+    color: #ff8c42;
+  }
+
+  .variantOutOfStockBadge {
+    font-size: 10px;
+    font-weight: 700;
+    background: #fee2e2;
+    color: #dc2626;
+    padding: 2px 6px;
+    border-radius: 6px;
+    margin-left: 4px;
+    text-transform: uppercase;
+  }
+}
+
 .bottomRatingRow {
   display: flex;
   align-items: center;

@@ -17,6 +17,12 @@ interface Product {
   selling_price: string;
   isDailyDeals: boolean;
   isDeleted?: boolean;
+  variants?: {
+    id: string;
+    name: string;
+    selling_price: string;
+    available_quantity: number;
+  }[];
 }
 
 export default function ManageProducts() {
@@ -103,49 +109,30 @@ export default function ManageProducts() {
       <div className={styles.pageWrapper}>
         <div className={styles.container}>
           <div className={styles.header}>
-            <div>
-              <button
-                onClick={() => router.push("/")}
-                className={styles.backBtn}
-              >
-                &larr; Back to Home
-              </button>
+            <div className={styles.headerTitleSection}>
+              <div className={styles.headerTop}>
+                <button
+                  onClick={() => router.push("/")}
+                  className={styles.backBtn}
+                >
+                  &larr; Back to Home
+                </button>
+                <label className={styles.deletedCheckboxLabel}>
+                  <input
+                    type="checkbox"
+                    checked={showDeleted}
+                    onChange={(e) => setShowDeleted(e.target.checked)}
+                  />
+                  Show Deleted
+                </label>
+              </div>
               <h1 className={styles.title}>Manage Products</h1>
             </div>
-            <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
-              <label
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "8px",
-                  cursor: "pointer",
-                  fontSize: "14px",
-                  color: "#6b7280",
-                }}
-              >
-                <input
-                  type="checkbox"
-                  checked={showDeleted}
-                  onChange={(e) => setShowDeleted(e.target.checked)}
-                />
-                Show Deleted
-              </label>
+
+            <div className={styles.headerControls}>
               <button
                 onClick={() => router.push("/admin/manageCategories")}
-                style={{
-                  backgroundColor: "#ffffff",
-                  color: "#374151",
-                  border: "1px solid #d1d5db",
-                  padding: "10px 18px",
-                  borderRadius: "8px",
-                  fontWeight: 600,
-                  fontSize: "14px",
-                  cursor: "pointer",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "6px",
-                  transition: "all 0.2s",
-                }}
+                className={styles.manageCategoriesBtn}
               >
                 🏷️ Manage Categories
               </button>
@@ -167,13 +154,17 @@ export default function ManageProducts() {
               {products.map((product) => (
                 <div key={product.id} className={styles.productCard}>
                   <div className={styles.imageArea}>
-                    <Image
-                      src={product.imageUrl?.[0]}
-                      alt={product.product_name}
-                      fill
-                      style={{ objectFit: "cover" }}
-                      unoptimized
-                    />
+                    {product.imageUrl?.[0] ? (
+                      <Image
+                        src={product.imageUrl[0]}
+                        alt={product.product_name}
+                        fill
+                        style={{ objectFit: "cover" }}
+                        unoptimized
+                      />
+                    ) : (
+                      <div className={styles.placeholderImage}>No Image</div>
+                    )}
                   </div>
                   <div className={styles.cardContent}>
                     <h2 className={styles.productTitle}>
@@ -182,9 +173,16 @@ export default function ManageProducts() {
                     <p className={styles.tamilTitle}>
                       {product.product_name_tamil}
                     </p>
-                    <span className={styles.price}>
-                      ₹{Math.round(parseFloat(product.selling_price))}
-                    </span>
+                    <div style={{ display: 'flex', alignItems: 'center', marginBottom: 14 }}>
+                      <span className={styles.price}>
+                        ₹{Math.round(parseFloat(product.selling_price))}
+                      </span>
+                      {product.variants && product.variants.length > 0 && (
+                        <span className={styles.variantPill}>
+                          {product.variants.length} Variation{product.variants.length > 1 ? 's' : ''}
+                        </span>
+                      )}
+                    </div>
                     <div className={styles.actions}>
                       {product.isDeleted ? (
                         <button

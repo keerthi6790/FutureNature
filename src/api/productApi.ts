@@ -1,6 +1,17 @@
 import apiClient from "./apiClient";
 
-interface IAddProductPayload {
+export interface IProductVariant {
+  id?: string;
+  name: string;
+  imageUrl?: string | null;
+  price: string;
+  discountedType?: string;
+  discountedAmount?: string;
+  sellingPrice?: string;
+  availableQuantity?: number | string;
+}
+
+export interface IAddProductPayload {
   productName: string;
   productNameTamil: string;
   description: string;
@@ -11,6 +22,7 @@ interface IAddProductPayload {
   imageUrl: string[];
   availableQuantity: string;
   categoryId?: string | null;
+  variants?: IProductVariant[];
 }
 
 export const productApi = {

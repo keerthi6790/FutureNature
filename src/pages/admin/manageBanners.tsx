@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import Image from "next/image";
 import toast from "react-hot-toast";
 import { Banner, bannerApi } from "@/api/bannerApi";
+import { uploadImageToAWS, deleteImageFromAWS } from "@/utils/uploadToAws";
 import styles from "@/styles/ManageBanners.module.scss";
 import AdminGuard from "@/components/AdminGuard";
 
@@ -21,6 +22,8 @@ export default function ManageBanners() {
   const [order, setOrder] = useState<number>(0);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isUploadingDesktop, setIsUploadingDesktop] = useState(false);
+  const [isUploadingMobile, setIsUploadingMobile] = useState(false);
 
   // Drag states
   const [desktopDragActive, setDesktopDragActive] = useState(false);
@@ -45,22 +48,37 @@ export default function ManageBanners() {
     }
   };
 
-  const handleProcessFile = (file: File, target: "desktop" | "mobile") => {
+  const handleProcessFile = async (file: File, target: "desktop" | "mobile") => {
     if (!file.type.startsWith("image/")) {
       toast.error("Please upload a valid image file");
       return;
     }
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      if (event.target?.result) {
-        if (target === "desktop") {
-          setDesktopImageUrl(event.target.result as string);
-        } else {
-          setMobileImageUrl(event.target.result as string);
-        }
+
+    if (target === "desktop") {
+      setIsUploadingDesktop(true);
+    } else {
+      setIsUploadingMobile(true);
+    }
+
+    const toastId = toast.loading(`Uploading ${target} banner to AWS S3...`);
+    try {
+      const s3Url = await uploadImageToAWS(file, "banners");
+      if (target === "desktop") {
+        setDesktopImageUrl(s3Url);
+      } else {
+        setMobileImageUrl(s3Url);
       }
-    };
-    reader.readAsDataURL(file);
+      toast.success(`${target === "desktop" ? "Desktop" : "Mobile"} banner uploaded to AWS S3!`, { id: toastId });
+    } catch (err: any) {
+      console.error("AWS S3 Upload Error:", err);
+      toast.error(err?.message || `Failed to upload ${target} banner to AWS S3`, { id: toastId });
+    } finally {
+      if (target === "desktop") {
+        setIsUploadingDesktop(false);
+      } else {
+        setIsUploadingMobile(false);
+      }
+    }
   };
 
   const handleDesktopFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -156,12 +174,35 @@ export default function ManageBanners() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  const handleRemoveDesktopImage = async () => {
+    const toDelete = desktopImageUrl;
+    setDesktopImageUrl("");
+    if (toDelete) {
+      await deleteImageFromAWS(toDelete);
+    }
+  };
+
+  const handleRemoveMobileImage = async () => {
+    const toDelete = mobileImageUrl;
+    setMobileImageUrl("");
+    if (toDelete) {
+      await deleteImageFromAWS(toDelete);
+    }
+  };
+
   const handleDelete = async (id: string) => {
     if (!window.confirm("Are you sure you want to delete this banner?")) return;
 
     try {
+      const bannerToDelete = banners.find((b) => b.id === id);
       const response = await bannerApi.deleteBanner(id);
       if (response.status) {
+        if (bannerToDelete?.desktopImageUrl) {
+          await deleteImageFromAWS(bannerToDelete.desktopImageUrl);
+        }
+        if (bannerToDelete?.mobileImageUrl) {
+          await deleteImageFromAWS(bannerToDelete.mobileImageUrl);
+        }
         toast.success("Banner deleted successfully");
         setBanners(banners.filter((b) => b.id !== id));
       }
@@ -248,9 +289,15 @@ export default function ManageBanners() {
                         </svg>
                       </div>
                       <div className={styles.text}>
-                        <strong>Upload Desktop Banner</strong>
+                        <strong>
+                          {isUploadingDesktop
+                            ? "Uploading to AWS S3..."
+                            : "Upload Desktop Banner"}
+                        </strong>
                         <p style={{ marginTop: "4px", fontSize: "12px", color: "#9ca3af" }}>
-                          Landscape format (1560 × 360px recommended)
+                          {isUploadingDesktop
+                            ? "Please wait while desktop banner is stored in AWS S3"
+                            : "Landscape format (1560 × 360px recommended) - Stored in AWS S3"}
                         </p>
                       </div>
                       <input
@@ -258,6 +305,7 @@ export default function ManageBanners() {
                         type="file"
                         accept="image/*"
                         onChange={handleDesktopFileChange}
+                        disabled={isUploadingDesktop}
                         style={{ display: "none" }}
                       />
                     </div>
@@ -267,8 +315,8 @@ export default function ManageBanners() {
                       <button
                         type="button"
                         className={styles.removeBtn}
-                        onClick={() => setDesktopImageUrl("")}
-                        title="Remove image"
+                        onClick={handleRemoveDesktopImage}
+                        title="Remove image from AWS S3"
                       >
                         &times;
                       </button>
@@ -318,9 +366,15 @@ export default function ManageBanners() {
                         </svg>
                       </div>
                       <div className={styles.text}>
-                        <strong>Upload Mobile Banner</strong>
+                        <strong>
+                          {isUploadingMobile
+                            ? "Uploading to AWS S3..."
+                            : "Upload Mobile Banner"}
+                        </strong>
                         <p style={{ marginTop: "4px", fontSize: "12px", color: "#9ca3af" }}>
-                          Vertically lengthy / portrait format (1080 × 1920px or 750 × 1200px, 9:16 / 3:4 ratio)
+                          {isUploadingMobile
+                            ? "Please wait while mobile banner is stored in AWS S3"
+                            : "Vertically lengthy / portrait format (1080 × 1920px or 750 × 1200px) - Stored in AWS S3"}
                         </p>
                       </div>
                       <input
@@ -328,6 +382,7 @@ export default function ManageBanners() {
                         type="file"
                         accept="image/*"
                         onChange={handleMobileFileChange}
+                        disabled={isUploadingMobile}
                         style={{ display: "none" }}
                       />
                     </div>
@@ -337,8 +392,8 @@ export default function ManageBanners() {
                       <button
                         type="button"
                         className={styles.removeBtn}
-                        onClick={() => setMobileImageUrl("")}
-                        title="Remove image"
+                        onClick={handleRemoveMobileImage}
+                        title="Remove image from AWS S3"
                       >
                         &times;
                       </button>
@@ -400,9 +455,11 @@ export default function ManageBanners() {
                 <button
                   type="submit"
                   className={styles.submitBtn}
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || isUploadingDesktop || isUploadingMobile}
                 >
-                  {isSubmitting
+                  {isUploadingDesktop || isUploadingMobile
+                    ? "Uploading Image..."
+                    : isSubmitting
                     ? "Saving Banner..."
                     : editingId
                       ? "Update Banner"

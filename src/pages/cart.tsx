@@ -329,7 +329,7 @@ export default function Cart() {
               <div className={styles.cartItemsSection}>
                 <div className={styles.itemsList}>
                   {cart.map((item: CartItem) => (
-                    <div key={item.id} className={styles.cartItemCard}>
+                    <div key={item.cartItemId || item.id} className={styles.cartItemCard}>
                       <div className={styles.itemImage}>
                         <Image
                           src={item.image || "/Assets/Products/15.png"}
@@ -349,6 +349,11 @@ export default function Cart() {
                             >
                               {item.name}
                             </Link>
+                            {item.variantName && (
+                              <div style={{ fontSize: "12px", color: "#d97706", fontWeight: 600, marginTop: "2px" }}>
+                                Variant: {item.variantName}
+                              </div>
+                            )}
                           </div>
                           <button
                             onClick={() =>
@@ -368,6 +373,7 @@ export default function Cart() {
                                 updateQuantity(
                                   item.id,
                                   Math.max(1, item.quantity - 1),
+                                  item.cartItemId,
                                 )
                               }
                               disabled={item.quantity <= 1}
@@ -380,7 +386,11 @@ export default function Cart() {
                             </span>
                             <button
                               onClick={() =>
-                                updateQuantity(item.id, item.quantity + 1)
+                                updateQuantity(
+                                  item.id,
+                                  item.quantity + 1,
+                                  item.cartItemId,
+                                )
                               }
                               className={styles.qtyBtn}
                             >

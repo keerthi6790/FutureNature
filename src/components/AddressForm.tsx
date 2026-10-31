@@ -56,6 +56,9 @@ export default function AddressForm({
   const validate = () => {
     const newErrors: Record<string, string> = {};
 
+    if (!formData.receiverName || !formData.receiverName.trim()) {
+      newErrors.receiverName = "Receiver's Name is required";
+    }
     if (!formData.address1.trim())
       newErrors.address1 = "Address Line 1 is required";
     if (!formData.address2.trim())
@@ -86,7 +89,10 @@ export default function AddressForm({
 
     setIsSubmitting(true);
     try {
-      await onSubmit(formData);
+      await onSubmit({
+        ...formData,
+        receiverName: (formData.receiverName || "").trim(),
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -101,6 +107,8 @@ export default function AddressForm({
           value={formData.receiverName || ""}
           onChange={handleChange}
           placeholder="e.g. John Doe"
+          error={errors.receiverName}
+          required
         />
         <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
           <label

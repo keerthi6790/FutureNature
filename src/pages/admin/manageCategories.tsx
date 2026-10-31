@@ -4,6 +4,7 @@ import Image from "next/image";
 import toast from "react-hot-toast";
 import { categoryApi, ICategory } from "@/api/categoryApi";
 import { productApi } from "@/api/productApi";
+import { uploadImageToAWS, deleteImageFromAWS } from "@/utils/uploadToAws";
 import AdminGuard from "@/components/AdminGuard";
 import styles from "@/styles/ManageCategories.module.scss";
 
@@ -33,6 +34,7 @@ export default function ManageCategories() {
   const [categoryName, setCategoryName] = useState("");
   const [categoryImage, setCategoryImage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
 
   // Assign Products Modal state
   const [showAssignModal, setShowAssignModal] = useState(false);
@@ -81,20 +83,26 @@ export default function ManageCategories() {
     setShowCategoryModal(true);
   };
 
-  const handleImageFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      if (!file.type.startsWith("image/")) {
-        toast.error("Please upload an image file");
-        return;
-      }
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        if (event.target?.result) {
-          setCategoryImage(event.target.result as string);
-        }
-      };
-      reader.readAsDataURL(file);
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      toast.error("Please upload an image file");
+      return;
+    }
+
+    setIsUploadingImage(true);
+    const toastId = toast.loading("Uploading category image to AWS S3...");
+    try {
+      const s3Url = await uploadImageToAWS(file, "categories");
+      setCategoryImage(s3Url);
+      toast.success("Category image uploaded to AWS S3!", { id: toastId });
+    } catch (err: any) {
+      console.error("AWS S3 Upload Error:", err);
+      toast.error(err?.message || "Failed to upload image to AWS S3", { id: toastId });
+    } finally {
+      setIsUploadingImage(false);
     }
   };
 
@@ -141,14 +149,27 @@ export default function ManageCategories() {
     }
   };
 
+  const handleRemoveCategoryImage = async () => {
+    const toDelete = categoryImage;
+    setCategoryImage("");
+    if (toDelete) {
+      await deleteImageFromAWS(toDelete);
+    }
+  };
+
   const handleDeleteCategory = async (id: string, name: string) => {
     if (!window.confirm(`Are you sure you want to delete category "${name}"? Products in this category will become unassigned.`)) {
       return;
     }
 
     try {
+      const catToDelete = categories.find((c) => c.id === id);
       const res = await categoryApi.deleteCategory(id);
       if (res.data?.status) {
+        const imgToDelete = catToDelete?.image_url || catToDelete?.category_image;
+        if (imgToDelete) {
+          await deleteImageFromAWS(imgToDelete);
+        }
         toast.success("Category deleted successfully!");
         fetchData();
       } else {
@@ -395,9 +416,16 @@ export default function ManageCategories() {
                       <polyline points="21 15 16 10 5 21"></polyline>
                     </svg>
                     <div className={styles.uploadText}>
-                      <span>Click to upload</span> or drag and drop
+                      <span>
+                        {isUploadingImage ? "Uploading to AWS S3..." : "Click to upload"}
+                      </span>{" "}
+                      {!isUploadingImage && "or drag and drop"}
                     </div>
-                    <div className={styles.uploadHint}>PNG, JPG, WEBP up to 5MB</div>
+                    <div className={styles.uploadHint}>
+                      {isUploadingImage
+                        ? "Please wait while image is stored in AWS S3"
+                        : "PNG, JPG, WEBP up to 5MB (Saved to AWS S3)"}
+                    </div>
                   </label>
 
                   {categoryImage && (
@@ -411,8 +439,8 @@ export default function ManageCategories() {
                       <button
                         type="button"
                         className={styles.removeImgBtn}
-                        onClick={() => setCategoryImage("")}
-                        title="Remove image"
+                        onClick={handleRemoveCategoryImage}
+                        title="Remove image from AWS S3"
                       >
                         &times;
                       </button>
@@ -431,9 +459,11 @@ export default function ManageCategories() {
                   <button
                     type="submit"
                     className={styles.submitBtn}
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || isUploadingImage}
                   >
-                    {isSubmitting
+                    {isUploadingImage
+                      ? "Uploading Image..."
+                      : isSubmitting
                       ? "Saving..."
                       : editingCategory
                       ? "Save Changes"

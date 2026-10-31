@@ -13,6 +13,20 @@ import { wishlistApi } from "@/api/wishlistApi";
 import Cookies from "js-cookie";
 import styles from "@/styles/Details.module.scss";
 import SkeletonDetail from "@/components/SkeletonDetail";
+import VariantSelectionDrawer, {
+  IVariantOption,
+} from "@/components/VariantSelectionDrawer";
+
+export interface IProductVariant {
+  id?: string;
+  name: string;
+  imageUrl?: string;
+  price: string;
+  discounted_type?: string;
+  discounted_amount?: string;
+  selling_price: string;
+  available_quantity: number;
+}
 
 interface Product {
   id: string;
@@ -40,6 +54,7 @@ interface Product {
   isBestSeller?: boolean;
   benefits?: string[];
   benefitsTamil?: string[];
+  variants?: IProductVariant[];
 }
 
 export default function ViewProduct() {
@@ -48,6 +63,8 @@ export default function ViewProduct() {
   const { cart, addToCart, updateQuantity } = useCart();
 
   const [product, setProduct] = useState<Product | null>(null);
+  const [selectedVariant, setSelectedVariant] = useState<IProductVariant | null>(null);
+  const [selectedImageOverride, setSelectedImageOverride] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
@@ -64,6 +81,7 @@ export default function ViewProduct() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [pendingWishlist, setPendingWishlist] = useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -72,8 +90,15 @@ export default function ViewProduct() {
       try {
         const response = await productApi.getProductById(id as string);
         if (response.data.status) {
-          setProduct(response.data.data);
-          setReviews(response.data.data.reviews || []);
+          const prodData = response.data.data;
+          setProduct(prodData);
+          setReviews(prodData.reviews || []);
+          if (prodData.variants && prodData.variants.length > 0) {
+            setSelectedVariant(prodData.variants[0]);
+            if (prodData.variants[0].imageUrl) {
+              setSelectedImageOverride(prodData.variants[0].imageUrl);
+            }
+          }
         } else {
           toast.error("Product not found");
         }
@@ -133,8 +158,14 @@ export default function ViewProduct() {
     }
   }, [pendingWishlist, handleToggleWishlist]);
 
-  const cartItem = product ? cart.find((item) => item.id === product.id) : null;
-  const isInCart = !!cartItem;
+  const cartItem = product
+    ? cart.find(
+        (item) =>
+          item.id === product.id &&
+          (selectedVariant?.id ? item.variantId === selectedVariant.id : true)
+      )
+    : null;
+  const isInCart = !cartItem;
 
   useEffect(() => {
     if (cartItem) {
@@ -142,7 +173,7 @@ export default function ViewProduct() {
     } else {
       setQuantity(1);
     }
-  }, [cartItem]);
+  }, [cartItem, selectedVariant]);
 
   // Prevent background scrolling when modal is open
   useEffect(() => {
@@ -157,22 +188,46 @@ export default function ViewProduct() {
   const handleQuantityChange = (change: number) => {
     if (!product) return;
     const newQty = quantity + change;
-    if (newQty <= 0) {
-      updateQuantity(product.id, 0);
-      setQuantity(1);
+    if (cartItem) {
+      if (newQty <= 0) {
+        updateQuantity(product.id, 0, cartItem.cartItemId);
+        setQuantity(1);
+      } else {
+        setQuantity(newQty);
+        updateQuantity(product.id, newQty, cartItem.cartItemId);
+      }
     } else {
-      setQuantity(newQty);
-      updateQuantity(product.id, newQty);
+      setQuantity(Math.max(1, newQty));
     }
   };
 
   const handleAddToCart = () => {
     if (!product) return;
+    // Always open drawer on Add to Cart click irrespective of previous choice
+    setIsDrawerOpen(true);
+  };
+
+  const handleDrawerAddToCart = (
+    _prod: any,
+    variantOption: IVariantOption
+  ) => {
+    if (!product) return;
+    const currentPrice = parseFloat(variantOption.selling_price);
+    const currentImage = variantOption.imageUrl || product.imageUrl[0];
     addToCart(product.id, quantity, {
-      name: product.product_name,
-      price: parseFloat(product.selling_price),
-      image: product.imageUrl[0],
+      name: `${product.product_name} (${variantOption.name})`,
+      price: currentPrice,
+      image: currentImage,
+      variantId: variantOption.id,
+      variantName: variantOption.name,
     });
+    const matching = product.variants?.find((v) => v.id === variantOption.id);
+    if (matching) {
+      setSelectedVariant(matching);
+      if (matching.imageUrl) {
+        setSelectedImageOverride(matching.imageUrl);
+      }
+    }
     toast.success("Added to cart!");
   };
 
@@ -276,6 +331,19 @@ export default function ViewProduct() {
   const descLimit = 150;
   const benefitsLimit = 100;
 
+  const currentPrice = selectedVariant
+    ? parseFloat(selectedVariant.selling_price)
+    : parseFloat(product.selling_price);
+  const currentOriginalPrice = selectedVariant
+    ? parseFloat(selectedVariant.price)
+    : parseFloat(product.price);
+  const currentDiscount = selectedVariant
+    ? selectedVariant.discounted_amount
+    : product.discounted_amount;
+  const currentStock = selectedVariant
+    ? selectedVariant.available_quantity
+    : product.available_quantity;
+
   return (
     <>
       <Head>
@@ -304,7 +372,7 @@ export default function ViewProduct() {
               <div className={styles.imageCard}>
                 {product.isBestSeller && <div className={styles.badge}>Most Popular</div>}
                 <Image
-                  src={product.imageUrl[selectedImageIndex]}
+                  src={selectedImageOverride || product.imageUrl[selectedImageIndex] || product.imageUrl[0]}
                   alt={product.product_name}
                   fill
                   unoptimized
@@ -316,8 +384,11 @@ export default function ViewProduct() {
                 {product.imageUrl.map((img, idx) => (
                   <button
                     key={idx}
-                    className={`${styles.thumbBtn} ${idx === selectedImageIndex ? styles.thumbActive : ""}`}
-                    onClick={() => setSelectedImageIndex(idx)}
+                    className={`${styles.thumbBtn} ${!selectedImageOverride && idx === selectedImageIndex ? styles.thumbActive : ""}`}
+                    onClick={() => {
+                      setSelectedImageIndex(idx);
+                      setSelectedImageOverride(null);
+                    }}
                   >
                     <Image unoptimized src={img} alt={`View ${idx + 1}`} fill className={styles.thumbImg} />
                   </button>
@@ -350,12 +421,73 @@ export default function ViewProduct() {
 
                 {/* Price & Green Discount */}
                 <div className={styles.priceRow}>
-                  <span className={styles.sellingPrice}>₹{Math.round(parseFloat(product.selling_price))}</span>
-                  <span className={styles.originalPrice}>₹{Math.round(parseFloat(product.price))}</span>
-                  {product.discounted_amount && (
-                    <span className={styles.discountText}>{product.discounted_amount}% Discount</span>
+                  <span className={styles.sellingPrice}>₹{Math.round(currentPrice)}</span>
+                  {currentOriginalPrice > currentPrice && (
+                    <span className={styles.originalPrice}>₹{Math.round(currentOriginalPrice)}</span>
+                  )}
+                  {currentDiscount && parseFloat(currentDiscount) > 0 && (
+                    <span className={styles.discountText}>{Math.round(parseFloat(currentDiscount))}% Discount</span>
                   )}
                 </div>
+
+                {/* Variant Selector */}
+                {product.variants && product.variants.length > 0 && (
+                  <div className={styles.variantSection}>
+                    <div className={styles.variantSectionHeader}>
+                      <span className={styles.variantSectionLabel}>Variation / Option:</span>
+                      {selectedVariant && (
+                        <span className={styles.variantSelectedName}>{selectedVariant.name}</span>
+                      )}
+                    </div>
+                    <div className={styles.variantChips}>
+                      {product.variants.map((v) => {
+                        const isSelected = selectedVariant?.id
+                          ? selectedVariant.id === v.id
+                          : selectedVariant?.name === v.name;
+                        const isOutOfStock = v.available_quantity <= 0;
+                        return (
+                          <button
+                            key={v.id || v.name}
+                            type="button"
+                            className={`${styles.variantChip} ${isSelected ? styles.variantChipActive : ""} ${isOutOfStock ? styles.variantChipDisabled : ""}`}
+                            onClick={() => {
+                              setSelectedVariant(v);
+                              if (v.imageUrl) {
+                                const idx = product.imageUrl.indexOf(v.imageUrl);
+                                if (idx !== -1) {
+                                  setSelectedImageIndex(idx);
+                                  setSelectedImageOverride(null);
+                                } else {
+                                  setSelectedImageOverride(v.imageUrl);
+                                }
+                              }
+                            }}
+                          >
+                            {v.imageUrl && (
+                              <div className={styles.variantThumbWrap}>
+                                <Image
+                                  src={v.imageUrl}
+                                  alt={v.name}
+                                  width={34}
+                                  height={34}
+                                  className={styles.variantThumb}
+                                  unoptimized
+                                />
+                              </div>
+                            )}
+                            <div className={styles.variantChipInfo}>
+                              <span className={styles.variantChipName}>{v.name}</span>
+                              <span className={styles.variantChipPrice}>₹{Math.round(parseFloat(v.selling_price))}</span>
+                            </div>
+                            {isOutOfStock ? (
+                              <span className={styles.variantOutOfStockBadge}>Out of Stock</span>
+                            ) : null}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
 
                 {/* Bottom Stars */}
                 <div className={styles.bottomRatingRow}>
@@ -427,7 +559,7 @@ export default function ViewProduct() {
                 </div>
 
                 <div className={styles.actionButtons}>
-                  {product.available_quantity <= 0 ? (
+                  {currentStock <= 0 ? (
                     <button disabled className={styles.btnDisabled}>Out of Stock</button>
                   ) : (
                     <button onClick={handleAddToCart} className={styles.btnPrimary}>
@@ -528,6 +660,24 @@ export default function ViewProduct() {
               </button>
             </div>
           </div>
+        )}
+
+        {product && (
+          <VariantSelectionDrawer
+            isOpen={isDrawerOpen}
+            product={{
+              id: product.id,
+              name: product.product_name,
+              nameTamil: product.product_name_tamil,
+              image: product.imageUrl?.[0] || "",
+              price: parseFloat(product.selling_price),
+              originalPrice: parseFloat(product.price),
+              variants: (product.variants as any) || [],
+            }}
+            initialVariantId={selectedVariant?.id}
+            onClose={() => setIsDrawerOpen(false)}
+            onAddToCart={handleDrawerAddToCart}
+          />
         )}
 
         <Footer />
